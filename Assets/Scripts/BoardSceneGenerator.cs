@@ -16,8 +16,10 @@ public class BoardSceneGenerator : MonoBehaviour
         BoardGraph boardGraph = new BoardGraph(_height, _width);
         foreach (var item in boardGraph.GetNodes)
         {
-            Debug.Log(item.AllNeighBoursToString());
-            Instantiate(_prefab, new Vector3(item.Coordinates.y * 3f, 0, item.Coordinates.x), _prefab.transform.rotation);
+            var obj = Instantiate(_prefab, new Vector3(item.Coordinates.y * 3f, 0, item.Coordinates.x), _prefab.transform.rotation);
+            GameCell gameCell = obj.GetComponent<GameCell>();
+            item.GameCell = gameCell;
+            gameCell.Init(item);
         }
     }
 
