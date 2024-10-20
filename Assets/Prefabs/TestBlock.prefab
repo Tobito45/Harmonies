@@ -473,10 +473,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _selecter: {fileID: 7085285678075076996}
-  _objetsToSpawn:
+  _blocksToSpawn:
   - {fileID: 2989395281925507648, guid: 585cdd12f45539843bd00c059a1b4ac4, type: 3}
   - {fileID: 2989395281925507648, guid: 293b3d08c85647a4f8fd36d5f0dffff0, type: 3}
   - {fileID: 2989395281925507648, guid: 300c82f9341f4e54c9797be9c13e86f9, type: 3}
+  _animalsToSpawn:
+  - {fileID: 7868598518499055946, guid: 0eeb43eb52aa1f242b410a43c62742cf, type: 3}
+  - {fileID: 7868598518499055946, guid: 0ae1b1358d88c3b4abc96504a5a89ade, type: 3}
+  - {fileID: 7868598518499055946, guid: a56f722cb1883f5448af5fb29f7b22ad, type: 3}
 --- !u!136 &6382624862848587214
 CapsuleCollider:
   m_ObjectHideFlags: 0

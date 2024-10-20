@@ -1,3 +1,7 @@
+using Harmonies.Selectors;
+using Harmonies.Structures;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameCell : MonoBehaviour
@@ -5,21 +9,24 @@ public class GameCell : MonoBehaviour
     [SerializeField]
     private GameObject _selecter;
     [SerializeField]
-    private GameObject[] _objetsToSpawn;
+    private GameObject[] _animalsToSpawn;
 
-    private BlockController _actualBlock;
+    private ElementSelectorController _actualBlock;
     private BoardNode _node;
+    private bool _isAnimalOn = false;
     public void Init(BoardNode node) => _node = node;
 
-    private void Start()
-    {
-        _selecter.SetActive(false);
-    }
-
+    private void Start() => _selecter.SetActive(false);
     private void OnTriggerEnter(Collider other)
     {
-        if (_actualBlock == null && other.TryGetComponent(out BlockController block))
+        if (_isAnimalOn)
+            return;
+
+        if (_actualBlock == null && other.TryGetComponent(out ElementSelectorController block))
         {
+            if(block.SelectExceptions(_node))  
+                return;
+
             _actualBlock = block;
             _actualBlock.GameCell = this;
             _selecter.SetActive(true);
@@ -28,7 +35,10 @@ public class GameCell : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent(out BlockController block))
+        if (_isAnimalOn)
+            return;
+
+        if (other.TryGetComponent(out ElementSelectorController block))
         {
             if (block == _actualBlock)
             {
@@ -39,11 +49,19 @@ public class GameCell : MonoBehaviour
         }
     }
 
-    public void SpawnBlock(BlockController block) //in future will change on something like block info
+    public void SpawnBlock(GameBlock block) //in future will change on something like block info
     {
         _selecter.SetActive(false);
-        GameObject randomObj = _objetsToSpawn[Random.Range(0, _objetsToSpawn.Length)];
+        _node.AddNewIndex(block.Index);
+        var obj = Instantiate(block.Prefab, _selecter.transform.position, block.Prefab.transform.rotation);
+        _selecter.transform.position += new Vector3(0, block.Prefab.transform.localScale.y * 2, 0);
+    }
+
+    public void SpawnAnimal(ElementSelectorController block) //in future will change on something like block info
+    {
+        _selecter.SetActive(false);
+        _isAnimalOn = true;
+        GameObject randomObj = _animalsToSpawn[Random.Range(0, _animalsToSpawn.Length)];
         var obj = Instantiate(randomObj, _selecter.transform.position, randomObj.transform.rotation);
-        _selecter.transform.position += new Vector3(0, randomObj.transform.localScale.y * 2, 0);
     }
 }

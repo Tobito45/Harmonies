@@ -1,3 +1,4 @@
+using Harmonies.Structures;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,8 +24,4 @@ public class BoardSceneGenerator : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        
-    }
 }
