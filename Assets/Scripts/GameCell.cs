@@ -55,6 +55,7 @@ public class GameCell : MonoBehaviour
         _node.AddNewIndex(block.Index);
         var obj = Instantiate(block.Prefab, _selecter.transform.position, block.Prefab.transform.rotation);
         _selecter.transform.position += new Vector3(0, block.Prefab.transform.localScale.y * 2, 0);
+        Destroy(block.gameObject);
     }
 
     public void SpawnAnimal(ElementSelectorController block) //in future will change on something like block info

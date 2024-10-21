@@ -7,20 +7,18 @@ using UnityEngine.Events;
 
 public class GameAnimal : MonoBehaviour
 {
-    
-
     [SerializeField]
     private MeshRenderer[] _animalsGameObjects;
     private Material[] _basicMaterials;
 
     [SerializeField] // in future in Resoursec
     private Material _materialUnIterractble;
-
+    private EnvironmentController _environmentController;
     private int _index;
-    private void Start() => Init();
 
-    private void Init()
+    public void Init(EnvironmentController environmentController)
     {
+        _environmentController = environmentController;
         _basicMaterials = new Material[_animalsGameObjects.Length];
         _index = -1;
         for (int i = 0; i < _animalsGameObjects.Length; i++)
@@ -48,7 +46,11 @@ public class GameAnimal : MonoBehaviour
     public void ActiveNextAnimal()
     {
         _index++;
-        if (_index >= _animalsGameObjects.Length) return;
+        if (_index >= _animalsGameObjects.Length)
+        {
+            _environmentController.DeletePlayerSelectableEnviroment(this);
+            return;
+        }
 
         _animalsGameObjects[_index].material = _basicMaterials[_index];
         _animalsGameObjects[_index].GetComponent<SphereCollider>().enabled = true;
