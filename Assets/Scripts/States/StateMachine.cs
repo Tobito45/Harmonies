@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,9 +6,11 @@ using UnityEngine;
 namespace Harmonies.States {
     public class StateMachine
     {
-        private IState _blocksSelectState;
+        private IState _blocksPlaceState;
         private IState _environmentSelectState;
         private IState _animalsSelectState;
+        private IState _blockSelectState;
+        public Action<IState> OnStateChange;
 
         public TurnManager TurnManager { get; set; }
 
@@ -15,9 +18,10 @@ namespace Harmonies.States {
 
         public StateMachine()
         {
-            _blocksSelectState = new BlocksSelectState(this);
+            _blocksPlaceState = new BlocksPlaceSelectState(this);
             _animalsSelectState = new AnimalsSelectState(this);
             _environmentSelectState = new AnimalsEnvironmentSelectState(this);
+            _blockSelectState = new BlockSelectState(this);
         }
 
         public void SelectState(IState state)
@@ -27,11 +31,12 @@ namespace Harmonies.States {
 
             ActualState = state;
             ActualState.Entry();
+            OnStateChange(ActualState);
         }
 
-        public void BlocksSelectState() => SelectState(_blocksSelectState);
-
+        public void BlocksPlaceState() => SelectState(_blocksPlaceState);
         public void AnimalsEnvironmentSelectState() => SelectState(_environmentSelectState);
         public void AnimalsSelectState() => SelectState(_animalsSelectState);
+        public void BlocksSelectState() => SelectState(_blockSelectState);
     }
 }

@@ -1,4 +1,7 @@
+using Harmonies.Environment;
+using Harmonies.Selectors;
 using Harmonies.States;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,45 +9,55 @@ using Zenject;
 
 public class TurnManager : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject[] _spawnObjects; //to controller
-
-    [SerializeField]
+    private SpawnBlocksController _spawnBlocksController;
     private EnvironmentController _environmentController;
 
     private StateMachine _stateMachine;
 
 
     [Inject]
-    public void Construct(StateMachine stateMachine)
+    public void Construct(StateMachine stateMachine, SpawnBlocksController spawnBlocksController, EnvironmentController environmentController)
     {
-        if(_environmentController == null)
-            _environmentController = FindObjectOfType<EnvironmentController>();
-        
+        _spawnBlocksController = spawnBlocksController;
+        _environmentController = environmentController;
+
         _stateMachine = stateMachine;
         stateMachine.TurnManager = this;
+        StartCoroutine(StartGame());
     }
 
     private void Update()
     {
-        if(Input.GetKeyUp(KeyCode.A))
-            _stateMachine.BlocksSelectState();
+        if(_stateMachine.ActualState is AnimalsEnvironmentSelectState)
+            if(Input.GetKeyUp(KeyCode.A))
+                WasSelectedOrSkipedAnimalsEnviroment();
 
-        if (Input.GetKeyUp(KeyCode.S))
-            _stateMachine.AnimalsSelectState();
-
-        if (Input.GetKeyUp(KeyCode.D))
-            _stateMachine.AnimalsEnvironmentSelectState();
+        if(_stateMachine.ActualState is AnimalsSelectState)
+            if (Input.GetKeyUp(KeyCode.S))
+                WasAnimalsSkiped();
     }
 
-    public void SpawnBlocks()
+    public IEnumerator StartGame()
     {
-        for(int i = 0; i < 3; i++)
-        {
-           GameObject obj = Instantiate(_spawnObjects[i]);
-           obj.SetActive(true);
-        }
+        yield return new WaitForSeconds(1);
+        _stateMachine.BlocksSelectState();
     }
 
+    public void SubsribeOnStateMachine(Action<IState> action) => _stateMachine.OnStateChange += action;
+
+    public void WasSpawnedBlock()
+    {
+        if(_spawnBlocksController.IsAnyBlockNotPlaced()) return;
+
+        _stateMachine.AnimalsEnvironmentSelectState();
+    }
+
+    public void WasSelectedOrSkipedAnimalsEnviroment() =>
+        _stateMachine.AnimalsSelectState();
+
+    public void WasAnimalsSkiped() => _stateMachine.BlocksSelectState();
     public void SpawnEnvironmentToPlayerZone() => _environmentController.CreatePlayerSelectableEnvironment();
+    public void WasSelectedBlocksSelector() => _stateMachine.BlocksPlaceState();
+
+    public bool IsAnyEnviroment() => _environmentController.IsAnyEnviroment();
 }
