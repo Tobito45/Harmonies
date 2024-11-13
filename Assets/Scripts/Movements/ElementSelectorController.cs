@@ -1,13 +1,14 @@
 using Harmonies.States;
 using Harmonies.Structures;
 using UnityEngine;
+using Zenject;
 
 namespace Harmonies.Selectors
 {
     public abstract class ElementSelectorController : MonoBehaviour
     {
         [SerializeField]
-        private TurnManager turnManager;
+        private TurnManager _turnManager;
 
         private Camera _camera;
         private Vector3 _startPosition;
@@ -19,11 +20,15 @@ namespace Harmonies.Selectors
         {
             _camera = Camera.main;
             _startPosition = transform.position;
-            if(turnManager == null)
-                turnManager = FindObjectOfType<TurnManager>();
-
-            turnManager.SubsribeOnStateMachine(OnStatusChange);
+            _turnManager.SubsribeOnStateMachine(OnStatusChange);
         }
+
+        [Inject]
+        public void Construct(TurnManager turnManager)
+        {
+            _turnManager = turnManager;
+        }
+
         private void Update()
         {
             if (_isDragging && Input.GetMouseButtonUp(0))

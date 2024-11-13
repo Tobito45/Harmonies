@@ -10,26 +10,29 @@ namespace Harmonies.Environment
         private TurnManager _turnManager;
 
         [SerializeField]
-        private Transform[] _spawnPoints;
-
-        [SerializeField]
         private GameObject _prefabEnviroment;
-        private GameAnimal[] _environments = new GameAnimal[4];
+        private GameAnimal[][] _environments;
 
         [Inject]
-        public void Construct(TurnManager turnManager) => _turnManager = turnManager;
+        public void Construct(TurnManager turnManager)
+        {
+            _turnManager = turnManager;
+            _environments = new GameAnimal[4][];
+            for (int i = 0; i < _environments.Length; i++)
+                _environments[i] = new GameAnimal[_turnManager.MaxPlayersCount];
+        }
 
         public void CreatePlayerSelectableEnvironment()
         {
             for (int i = 0; i < _environments.Length; i++)
             {
-                if (_environments[i] == null)
+                if (_environments[i][_turnManager.IndexActualPlayer] == null)
                 {
-                    GameObject obj = Instantiate(_prefabEnviroment, _spawnPoints[i].position, _prefabEnviroment.transform.rotation);
+                    GameObject obj = Instantiate(_prefabEnviroment, _turnManager.GetActualPlayerInfo().GetEnvironmentSpawn(i).position, _prefabEnviroment.transform.rotation);
                     obj.SetActive(true);
                     GameAnimal gameAnimal = obj.GetComponent<GameAnimal>();
                     gameAnimal.Init(this, _turnManager);
-                    _environments[i] = gameAnimal;
+                    _environments[i][_turnManager.IndexActualPlayer] = gameAnimal;
 
                     _turnManager.WasSelectedOrSkipedAnimalsEnviroment();
                     return;
@@ -41,7 +44,7 @@ namespace Harmonies.Environment
         {
             for (int i = 0; i < _environments.Length; i++)
             {
-                if (_environments[i] == animal)
+                if (_environments[i][_turnManager.IndexActualPlayer] == animal)
                     _environments[i] = null;
 
                 Destroy(animal.gameObject);
@@ -52,7 +55,7 @@ namespace Harmonies.Environment
         public bool CanCreate()
         {
             for (int i = 0; i < _environments.Length; i++)
-                if (_environments[i] == null) return true;
+                if (_environments[i][_turnManager.IndexActualPlayer] == null) return true;
 
             return false;
         }
@@ -60,7 +63,7 @@ namespace Harmonies.Environment
         public bool IsAnyEnviroment()
         {
             for (int i = 0; i < _environments.Length; i++)
-                if (_environments[i] != null) return true;
+                if (_environments[i][_turnManager.IndexActualPlayer] != null) return true;
 
             return false;
         }

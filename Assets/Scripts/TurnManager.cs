@@ -14,16 +14,27 @@ public class TurnManager : MonoBehaviour
 
     private StateMachine _stateMachine;
 
+    //starts with 0
+    public int IndexActualPlayer { get; private set; }
+    public int MaxPlayersCount  { get; private set; }
+    [SerializeField]
+    private PlayerInfo[] _playerInfo;
+    /// <summary>
+    /// int - previous player, int - actual player
+    /// </summary>
+    public Action<int, int> OnRoundEnded; 
+    public PlayerInfo GetActualPlayerInfo() => _playerInfo[IndexActualPlayer];
 
     [Inject]
     public void Construct(StateMachine stateMachine, SpawnBlocksController spawnBlocksController, EnvironmentController environmentController)
     {
-        _spawnBlocksController = spawnBlocksController;
-        _environmentController = environmentController;
-
         _stateMachine = stateMachine;
         stateMachine.TurnManager = this;
+        MaxPlayersCount = 2;
         StartCoroutine(StartGame());
+
+        _spawnBlocksController = spawnBlocksController;
+        _environmentController = environmentController;
     }
 
     private void Update()
@@ -55,9 +66,27 @@ public class TurnManager : MonoBehaviour
     public void WasSelectedOrSkipedAnimalsEnviroment() =>
         _stateMachine.AnimalsSelectState();
 
-    public void WasAnimalsSkiped() => _stateMachine.BlocksSelectState();
+    public void WasAnimalsSkiped() {
+        int previousPlayerIndex = IndexActualPlayer;
+        IndexActualPlayer++;
+        if (IndexActualPlayer >= MaxPlayersCount)
+            IndexActualPlayer = 0;
+
+        OnRoundEnded?.Invoke(previousPlayerIndex, IndexActualPlayer);
+        _stateMachine.BlocksSelectState();
+    }
     public void SpawnEnvironmentToPlayerZone() => _environmentController.CreatePlayerSelectableEnvironment();
     public void WasSelectedBlocksSelector() => _stateMachine.BlocksPlaceState();
 
     public bool IsAnyEnviroment() => _environmentController.IsAnyEnviroment();
+}
+
+
+[System.Serializable]
+public class PlayerInfo
+{
+    [SerializeField]
+    private Transform[] _environmnetsSpawns;
+
+    public Transform GetEnvironmentSpawn(int index) => _environmnetsSpawns[index];
 }
