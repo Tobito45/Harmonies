@@ -30,7 +30,9 @@ namespace Harmonies.States {
                ActualState.Exit();
 
             ActualState = state;
-            ActualState.Entry();
+            if (ActualState != null)
+                ActualState.Entry();
+
             OnStateChange(ActualState);
         }
 

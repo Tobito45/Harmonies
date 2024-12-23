@@ -2,6 +2,7 @@ using Harmonies.Selectors;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
@@ -46,6 +47,7 @@ namespace Harmonies.Environment
         {
             _animalsGameObjects[_index].material = _basicMaterials[_index];
             _animalsGameObjects[_index].gameObject.SetActive(false);
+            //_animalsGameObjects[_index].gameObject.GetComponent<NetworkObject>().Despawn();
 
             ActiveNextAnimal();
             

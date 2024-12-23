@@ -3,11 +3,11 @@ using Harmonies.Selectors;
 using Harmonies.States;
 using System;
 using System.Collections;
-using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using Zenject;
 
-public class TurnManager : MonoBehaviour
+public class TurnManager : NetworkBehaviour //to singlton?
 {
     private SpawnBlocksController _spawnBlocksController;
     private EnvironmentController _environmentController;
@@ -15,15 +15,18 @@ public class TurnManager : MonoBehaviour
     private StateMachine _stateMachine;
 
     //starts with 0
-    public int IndexActualPlayer { get; private set; }
-    public int MaxPlayersCount  { get; private set; }
+    private int _indexActualPlayer = -1;
+    public int IndexActualPlayer => _indexActualPlayer;
+    public int MaxPlayersCount { get; private set; }
     [SerializeField]
     private PlayerInfo[] _playerInfo;
+
     /// <summary>
-    /// int - previous player, int - actual player
+    /// int - previous player, int - actual player.
     /// </summary>
-    public Action<int, int> OnRoundEnded; 
-    public PlayerInfo GetActualPlayerInfo() => _playerInfo[IndexActualPlayer];
+    public Action<int, int> OnRoundEnded;
+    public Action<int> OnGameStarted;
+    public PlayerInfo GetActualPlayerInfo() => _playerInfo[_indexActualPlayer];
 
     [Inject]
     public void Construct(StateMachine stateMachine, SpawnBlocksController spawnBlocksController, EnvironmentController environmentController)
@@ -31,7 +34,6 @@ public class TurnManager : MonoBehaviour
         _stateMachine = stateMachine;
         stateMachine.TurnManager = this;
         MaxPlayersCount = 2;
-        StartCoroutine(StartGame());
 
         _spawnBlocksController = spawnBlocksController;
         _environmentController = environmentController;
@@ -39,26 +41,41 @@ public class TurnManager : MonoBehaviour
 
     private void Update()
     {
-        if(_stateMachine.ActualState is AnimalsEnvironmentSelectState)
-            if(Input.GetKeyUp(KeyCode.A))
+        if (_stateMachine.ActualState is AnimalsEnvironmentSelectState)
+            if (Input.GetKeyUp(KeyCode.E))
                 WasSelectedOrSkipedAnimalsEnviroment();
 
-        if(_stateMachine.ActualState is AnimalsSelectState)
-            if (Input.GetKeyUp(KeyCode.S))
+        if (_stateMachine.ActualState is AnimalsSelectState)
+            if (Input.GetKeyUp(KeyCode.R))
                 WasAnimalsSkiped();
+
+        if (Input.GetKeyDown(KeyCode.O) && IsOwner)
+            StartCoroutine(StartGame());
     }
 
     public IEnumerator StartGame()
     {
         yield return new WaitForSeconds(1);
+        foreach (var item in _playerInfo)
+            item.Board.Init();
+
         _stateMachine.BlocksSelectState();
+
+        StartGameForAllClientRpc();
+    }
+
+    [ClientRpc]
+    public void StartGameForAllClientRpc()
+    {
+        _indexActualPlayer = 0;
+        OnGameStarted?.Invoke(_indexActualPlayer);
     }
 
     public void SubsribeOnStateMachine(Action<IState> action) => _stateMachine.OnStateChange += action;
 
     public void WasSpawnedBlock()
     {
-        if(_spawnBlocksController.IsAnyBlockNotPlaced()) return;
+        if (_spawnBlocksController.IsAnyBlockNotPlaced()) return;
 
         _stateMachine.AnimalsEnvironmentSelectState();
     }
@@ -66,14 +83,37 @@ public class TurnManager : MonoBehaviour
     public void WasSelectedOrSkipedAnimalsEnviroment() =>
         _stateMachine.AnimalsSelectState();
 
-    public void WasAnimalsSkiped() {
-        int previousPlayerIndex = IndexActualPlayer;
-        IndexActualPlayer++;
-        if (IndexActualPlayer >= MaxPlayersCount)
-            IndexActualPlayer = 0;
+    public void WasAnimalsSkiped()
+    {
+        SelectNextPlayerServerRpc();
 
-        OnRoundEnded?.Invoke(previousPlayerIndex, IndexActualPlayer);
-        _stateMachine.BlocksSelectState();
+        //_stateMachine.BlocksSelectState();
+    }
+
+    [ServerRpc]
+    private void SelectNextPlayerServerRpc()
+    {
+        int previousPlayerIndex = _indexActualPlayer;
+        _indexActualPlayer++;
+        if (IndexActualPlayer >= MaxPlayersCount)
+            _indexActualPlayer = 0;
+
+        RoundEndedFroAllClientRpc(previousPlayerIndex, IndexActualPlayer);
+    }
+
+    [ClientRpc]
+    private void RoundEndedFroAllClientRpc(int prev, int next)
+    {
+        _indexActualPlayer = next;
+        OnRoundEnded?.Invoke(prev, next);
+
+
+        //need?
+        if (_indexActualPlayer == (int)NetworkManager.Singleton.LocalClientId)
+            _stateMachine.BlocksSelectState();
+        else
+            _stateMachine.SelectState(null);
+
     }
     public void SpawnEnvironmentToPlayerZone() => _environmentController.CreatePlayerSelectableEnvironment();
     public void WasSelectedBlocksSelector() => _stateMachine.BlocksPlaceState();
@@ -88,5 +128,7 @@ public class PlayerInfo
     [SerializeField]
     private Transform[] _environmnetsSpawns;
 
+    [field: SerializeField]
+    public BoardSceneGenerator Board { get; private set; }
     public Transform GetEnvironmentSpawn(int index) => _environmnetsSpawns[index];
 }

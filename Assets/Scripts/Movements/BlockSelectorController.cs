@@ -2,6 +2,7 @@ using Harmonies.States;
 using Harmonies.Structures;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Harmonies.Selectors
@@ -11,10 +12,14 @@ namespace Harmonies.Selectors
         private GameBlock _blockInfo;
         private SpawnBlocksController _spawnBlocksController;
         public bool IsSpawned { get; private set; }
-        public void Init(SpawnBlocksController spawnBlocksController)
+
+        public void Init() => InitClientRpc();
+
+        [ClientRpc]
+        public void InitClientRpc()
         {
             _blockInfo = GetComponent<GameBlock>();
-            _spawnBlocksController = spawnBlocksController;
+            _spawnBlocksController = FindObjectOfType<SpawnBlocksController>();//spawnBlocksController;
             base.Start();
         }
 

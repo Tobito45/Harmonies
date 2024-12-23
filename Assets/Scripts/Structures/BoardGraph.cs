@@ -9,7 +9,13 @@ namespace Harmonies.Structures
         private int _height, _width, _size;
         private BoardNode[] _nodes;
 
-        public IEnumerable<BoardNode> GetNodes => _nodes;
+        public IEnumerable<BoardNode> GetNodes =>  _nodes;
+        public IEnumerable<(BoardNode node, int index)> GetNodesWithIndex()
+        {
+            for (int i = 0; i < _nodes.Length; i++)
+                yield return (_nodes[i], i);
+        }
+        public BoardNode GetNodeByIndex(int index) => _nodes[index];
         public BoardGraph(int height, int width)
         {
             _height = height;

@@ -1,11 +1,12 @@
 using Harmonies.States;
 using Harmonies.Structures;
+using Unity.Netcode;
 using UnityEngine;
 using Zenject;
 
 namespace Harmonies.Selectors
 {
-    public abstract class ElementSelectorController : MonoBehaviour
+    public abstract class ElementSelectorController : NetworkBehaviour
     {
         [SerializeField]
         private TurnManager _turnManager;
@@ -20,6 +21,9 @@ namespace Harmonies.Selectors
         {
             _camera = Camera.main;
             _startPosition = transform.position;
+            if(_turnManager == null)
+            _turnManager = FindObjectOfType<TurnManager>();
+            
             _turnManager.SubsribeOnStateMachine(OnStatusChange);
         }
 
@@ -33,7 +37,9 @@ namespace Harmonies.Selectors
         {
             if (_isDragging && Input.GetMouseButtonUp(0))
             {
-                transform.position = _startPosition;
+                //transform.position = _startPosition;
+                MoveObjectServerRpc(_startPosition);
+
                 if (GameCell != null)
                 {
                     OnSpawnElementOnCell(GameCell);
@@ -50,11 +56,21 @@ namespace Harmonies.Selectors
 
             if (Input.GetMouseButton(0))
             {
+
+                if (_camera == null)
+                    _camera = Camera.main;
+
                 Vector3 mousePosition = GetMouseWorldPosition();
-                transform.position = new Vector3(mousePosition.x, 1, mousePosition.z);
+                Vector3 newPosition = new Vector3(mousePosition.x, 1, mousePosition.z);
+                //transform.position = newPosition;
+                MoveObjectServerRpc(newPosition);
                 _isDragging = true;
             }
         }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void MoveObjectServerRpc(Vector3 newPosition) => transform.position = newPosition;
+
 
         private Vector3 GetMouseWorldPosition()
         {

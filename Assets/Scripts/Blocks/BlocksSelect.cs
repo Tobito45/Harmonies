@@ -1,11 +1,12 @@
 using Harmonies.Selectors;
 using Harmonies.States;
+using Unity.Netcode;
 using UnityEngine;
 using Zenject;
 
 namespace Harmonies.Blocks
 {
-    public class BlocksSelect : MonoBehaviour
+    public class BlocksSelect : NetworkBehaviour
     {
         [SerializeField]
         private MeshRenderer _meshRenderer;
@@ -50,38 +51,64 @@ namespace Harmonies.Blocks
 
         public void ActualizeSpawndeObjects()
         {
+            if (!IsOwner) return;
+
             for (int i = 0; i < _spawnPoints.Length; i++)
             {
                 if (_spawnedObjects[i] == null)
                 {
-                    GameObject obj = _spawnObjectsPrefabs[Random.Range(0, _spawnObjectsPrefabs.Length)];
+                    GameObject obj = _spawnObjectsPrefabs[UnityEngine.Random.Range(0, _spawnObjectsPrefabs.Length)];
                     var created = Instantiate(obj, _spawnPoints[i].transform.position, _spawnPoints[i].transform.rotation);
                     created.SetActive(true);
-                    var select = created.GetComponent<BlockSelectorController>();
-                    select.Init(_spawnBlocksController);
-                    _spawnedObjects[i] = select;
+                    //var select = created.GetComponent<BlockSelectorController>();
+                    created.GetComponent<NetworkObject>().Spawn();
+                    SyncForClientRpc(i, created.GetComponent<NetworkObject>().NetworkObjectId);
+                    //select.Init();
+                    //_spawnedObjects[i] = select;
                 }
             }
         }
 
+        [ClientRpc]
+        private void SyncForClientRpc(int index, ulong networkIndex)
+        {
+            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkIndex, out var networkObject))
+            {
+                var select = networkObject.GetComponent<BlockSelectorController>();
+                select.Init();
+                _spawnedObjects[index] = select;
+            }
+            else
+            {
+                Debug.LogError("ERROR");
+            }
+        }
+
+
         private void OnMouseDown()
         {
+            if (_turnManager.IndexActualPlayer != (int)NetworkManager.Singleton.LocalClientId)
+                return;
+
             if (!_isActive)
                 return;
 
-            ActiveBlocksSelector(true);
+            ActiveBlocksSelectorServerRpc(true);
             _spawnBlocksController.SetAlreadySpawnedBlocks(_spawnedObjects);
             _turnManager.WasSelectedBlocksSelector();
         }
 
-        public void ActiveBlocksSelector(bool enabled)
+        [ServerRpc(RequireOwnership = false)]
+        public void ActiveBlocksSelectorServerRpc(bool enabled) => ChangeColorClientRpc(enabled);
+
+        [ClientRpc]
+        public void ChangeColorClientRpc(bool enabled)
         {
             _collider.enabled = !enabled;
             if (enabled)
                 _meshRenderer.material = _selectMaterial;
             else
                 _meshRenderer.material = _baseMaterial;
-
         }
 
         private void OnStatusChange(IState newState)
@@ -91,7 +118,7 @@ namespace Harmonies.Blocks
             if (newState is BlockSelectState)
                 ActualizeSpawndeObjects();
             else if (newState is AnimalsEnvironmentSelectState) //not is BlocksPlaceSelectState dint work??
-                ActiveBlocksSelector(false);
+                ActiveBlocksSelectorServerRpc(false);
         }
     }
 }

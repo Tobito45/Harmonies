@@ -1,13 +1,14 @@
 using Harmonies.States;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using Zenject;
 
 
 namespace Harmonies.Environment
 {
-    public class EnvironmentSelect : MonoBehaviour
+    public class EnvironmentSelect : NetworkBehaviour
     {
         private EnvironmentController _environmentController;
         private TurnManager _turnManager;
@@ -27,11 +28,14 @@ namespace Harmonies.Environment
 
         private void OnMouseDown()
         {
+            if (!IsOwner) return;
+
             if (_unableInteraction) return;
 
             if (_environmentController.CanCreate())
             {
                 _environmentController.CreatePlayerSelectableEnvironment();
+                GetComponent<NetworkObject>().Despawn();
                 Destroy(gameObject);
             }
         }

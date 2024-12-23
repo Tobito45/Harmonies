@@ -16,6 +16,8 @@ public class CameraController : MonoBehaviour
     private TurnManager _turnManager;
     private Vector3 _targetPosition;
     private bool _isMoving;
+    
+    
     [Inject]
     public void Construct(TurnManager turnManager)
     {
@@ -30,12 +32,14 @@ public class CameraController : MonoBehaviour
     }
     private void Update()
     {
-        if (_isMoving)
+        /*if (_isMoving)
         {
             transform.position = Vector3.Lerp(transform.position, _targetPosition, _smoothSpeed * Time.deltaTime);
 
             if (Vector3.Distance(transform.position, _targetPosition) < 0.1f)
                 _isMoving = false; 
-        }
+        }*/
+
+
     }
 }

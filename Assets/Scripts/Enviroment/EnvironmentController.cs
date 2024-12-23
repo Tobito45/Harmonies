@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using Zenject;
 
 namespace Harmonies.Environment
 {
-    public class EnvironmentController : MonoBehaviour
+    public class EnvironmentController : NetworkBehaviour
     {
         private TurnManager _turnManager;
 
@@ -24,12 +25,15 @@ namespace Harmonies.Environment
 
         public void CreatePlayerSelectableEnvironment()
         {
+            if (!IsOwner) return;
+            
             for (int i = 0; i < _environments.Length; i++)
             {
                 if (_environments[i][_turnManager.IndexActualPlayer] == null)
                 {
                     GameObject obj = Instantiate(_prefabEnviroment, _turnManager.GetActualPlayerInfo().GetEnvironmentSpawn(i).position, _prefabEnviroment.transform.rotation);
                     obj.SetActive(true);
+                    obj.GetComponent<NetworkObject>().Spawn();
                     GameAnimal gameAnimal = obj.GetComponent<GameAnimal>();
                     gameAnimal.Init(this, _turnManager);
                     _environments[i][_turnManager.IndexActualPlayer] = gameAnimal;
@@ -45,7 +49,7 @@ namespace Harmonies.Environment
             for (int i = 0; i < _environments.Length; i++)
             {
                 if (_environments[i][_turnManager.IndexActualPlayer] == animal)
-                    _environments[i] = null;
+                    _environments[i][_turnManager.IndexActualPlayer] = null;
 
                 Destroy(animal.gameObject);
             }

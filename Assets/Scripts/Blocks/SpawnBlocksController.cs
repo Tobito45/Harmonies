@@ -2,6 +2,7 @@ using Harmonies.Selectors;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 using Zenject;
 
@@ -17,11 +18,11 @@ namespace Harmonies.Selectors
         [Inject]
         public void Construct(TurnManager turnManager) => _turnManager = turnManager;
 
-        public void SetAlreadySpawnedBlocks(BlockSelectorController[] spawned) =>
-            _alreadySpawnedBlocks = spawned;
+        public void SetAlreadySpawnedBlocks(BlockSelectorController[] spawned) => _alreadySpawnedBlocks = spawned;
 
         public bool IsAnyBlockNotPlaced()
         {
+            Debug.Log( string.Join(',', _alreadySpawnedBlocks.Select(n => n)));
             for (int i = 0; i < _alreadySpawnedBlocks.Length; i++)
                 if (!_alreadySpawnedBlocks[i].IsSpawned)
                     return true;
