@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
 
@@ -25,24 +28,46 @@ namespace Harmonies.Environment
 
         public void CreatePlayerSelectableEnvironment()
         {
-            if (!IsOwner) return;
-            
             for (int i = 0; i < _environments.Length; i++)
             {
                 if (_environments[i][_turnManager.IndexActualPlayer] == null)
                 {
-                    GameObject obj = Instantiate(_prefabEnviroment, _turnManager.GetActualPlayerInfo().GetEnvironmentSpawn(i).position, _prefabEnviroment.transform.rotation);
-                    obj.SetActive(true);
-                    obj.GetComponent<NetworkObject>().Spawn();
-                    GameAnimal gameAnimal = obj.GetComponent<GameAnimal>();
-                    gameAnimal.Init(this, _turnManager);
-                    _environments[i][_turnManager.IndexActualPlayer] = gameAnimal;
-
-                    _turnManager.WasSelectedOrSkipedAnimalsEnviroment();
+                    CreateEnveromentServerRpc(i, _turnManager.IndexActualPlayer);
+                    StartCoroutine(WaitForServer(i, _turnManager.IndexActualPlayer));
                     return;
                 }
             }
         }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void CreateEnveromentServerRpc(int index, int actual)
+        {
+            GameObject obj = Instantiate(_prefabEnviroment, _turnManager.GetActualPlayerInfo().GetEnvironmentSpawn(index).position, _prefabEnviroment.transform.rotation);
+            obj.SetActive(true);
+            obj.GetComponent<NetworkObject>().Spawn();
+            GameAnimal gameAnimal = obj.GetComponent<GameAnimal>();
+            gameAnimal.Init(this, _turnManager);
+            SyncForClientRpc(index, actual, obj.GetComponent<NetworkObject>().NetworkObjectId);
+
+        }
+
+        [ClientRpc]
+        private void SyncForClientRpc(int index, int actual, ulong networkIndex)
+        {
+            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkIndex, out var networkObject))
+                _environments[index][actual] = networkObject.gameObject.GetComponent<GameAnimal>();
+            else
+                Debug.LogError("ERROR");
+        }
+
+        public IEnumerator WaitForServer(int index, int actual)
+        {
+            while(_environments[index][actual] == null)
+                yield return null;  
+
+            _turnManager.WasSelectedOrSkipedAnimalsEnviroment();
+        }
+
 
         public void DeletePlayerSelectableEnviroment(GameAnimal animal)
         {
@@ -51,9 +76,18 @@ namespace Harmonies.Environment
                 if (_environments[i][_turnManager.IndexActualPlayer] == animal)
                     _environments[i][_turnManager.IndexActualPlayer] = null;
 
-                Destroy(animal.gameObject);
+                DestroyServerRpc(animal.GetComponent<NetworkObject>().NetworkObjectId);
+                //Destroy(animal.gameObject);
             }
+        }
 
+        [ServerRpc(RequireOwnership = false)]
+        private void DestroyServerRpc(ulong networkIndex)
+        {
+            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkIndex, out var networkObject))
+                networkObject.Despawn();
+            else
+                Debug.LogError("ERROR");
         }
 
         public bool CanCreate()

@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 134636180}
   - component: {fileID: 134636179}
   - component: {fileID: 134636178}
+  - component: {fileID: 134636182}
   m_Layer: 0
   m_Name: EviromentSelect
   m_TagString: Untagged
@@ -241,6 +242,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 134636176}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &134636182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134636176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 2913382868
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &188399418
 GameObject:
   m_ObjectHideFlags: 0
@@ -1162,7 +1183,7 @@ Transform:
   m_GameObject: {fileID: 631349416}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.550001, y: 0, z: 2.5}
+  m_LocalPosition: {x: 1.2500019, y: 0, z: 0.67999995}
   m_LocalScale: {x: 1.5, y: 1, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1396,7 +1417,7 @@ Transform:
   m_GameObject: {fileID: 681912426}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.550001, y: 0, z: 0}
+  m_LocalPosition: {x: 1.2500019, y: 0, z: -1.82}
   m_LocalScale: {x: 1.5, y: 1, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1821,6 +1842,7 @@ GameObject:
   - component: {fileID: 766496100}
   - component: {fileID: 766496099}
   - component: {fileID: 766496098}
+  - component: {fileID: 766496102}
   m_Layer: 0
   m_Name: EviromentSelect (2)
   m_TagString: Untagged
@@ -1926,6 +1948,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 766496096}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &766496102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 766496096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 2007647171
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &782628375
 GameObject:
   m_ObjectHideFlags: 0
@@ -3489,6 +3531,7 @@ GameObject:
   - component: {fileID: 1308397680}
   - component: {fileID: 1308397679}
   - component: {fileID: 1308397678}
+  - component: {fileID: 1308397682}
   m_Layer: 0
   m_Name: EviromentSelect (1)
   m_TagString: Untagged
@@ -3594,6 +3637,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1308397676}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1308397682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1308397676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1640349357
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &1315155570
 GameObject:
   m_ObjectHideFlags: 0
@@ -4682,6 +4745,7 @@ GameObject:
   - component: {fileID: 1895723070}
   - component: {fileID: 1895723069}
   - component: {fileID: 1895723068}
+  - component: {fileID: 1895723072}
   m_Layer: 0
   m_Name: EviromentSelect (3)
   m_TagString: Untagged
@@ -4787,6 +4851,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1895723066}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1895723072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1895723066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 4079591069
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &1901246918
 GameObject:
   m_ObjectHideFlags: 0
@@ -5010,7 +5094,7 @@ Transform:
   m_GameObject: {fileID: 2007786517}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.300001, y: 0, z: 2.5}
+  m_LocalPosition: {x: 4.000002, y: 0, z: 0.67999995}
   m_LocalScale: {x: 1.5, y: 1, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7775,7 +7859,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6302392588369859878, guid: 20d04d1815e99d044bd5911b2119e025, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6302392588369859878, guid: 20d04d1815e99d044bd5911b2119e025, type: 3}
       propertyPath: m_LocalPosition.y
@@ -7783,7 +7867,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6302392588369859878, guid: 20d04d1815e99d044bd5911b2119e025, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -1.82
       objectReference: {fileID: 0}
     - target: {fileID: 6302392588369859878, guid: 20d04d1815e99d044bd5911b2119e025, type: 3}
       propertyPath: m_LocalRotation.w

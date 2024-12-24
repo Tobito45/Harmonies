@@ -22,7 +22,6 @@ namespace Harmonies.Selectors
 
         public bool IsAnyBlockNotPlaced()
         {
-            Debug.Log( string.Join(',', _alreadySpawnedBlocks.Select(n => n)));
             for (int i = 0; i < _alreadySpawnedBlocks.Length; i++)
                 if (!_alreadySpawnedBlocks[i].IsSpawned)
                     return true;

@@ -81,11 +81,13 @@ public class GameCell : NetworkBehaviour
     {
         _selecter.SetActive(false);
         _node.AddNewIndex(block.Index);
+        Vector3 sync = _selecter.transform.position + new Vector3(0, block.Prefab.transform.localScale.y * 2, 0);
         CreateBlockServerRpc(block.Index);
-        _selecter.transform.position += new Vector3(0, block.Prefab.transform.localScale.y * 2, 0);
+        
+        if(_selecter.transform.position != sync)
+            _selecter.transform.position += new Vector3(0, block.Prefab.transform.localScale.y * 2, 0);
+        
         block.DisableServerRpc();
-        //block.GetComponent<NetworkObject>().Despawn();
-        //Destroy(block.gameObject);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -93,18 +95,24 @@ public class GameCell : NetworkBehaviour
     {
         GameObject block = _blocksToSpawn[index];
         var obj = Instantiate(block, _selecter.transform.position, block.transform.rotation);
+        _selecter.transform.position += new Vector3(0, block.transform.localScale.y * 2, 0);
         obj.GetComponent<NetworkObject>().Spawn();
     }
 
     public void SpawnAnimal(ElementSelectorController block) //in future will change on something like block info
     {
-        if (!IsOwner)
-            return;
-        
         _selecter.SetActive(false);
         _isAnimalOn = true;
+
+        CreateAnimalServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void CreateAnimalServerRpc()
+    {
         GameObject randomObj = _animalsToSpawn[UnityEngine.Random.Range(0, _animalsToSpawn.Length)];
         var obj = Instantiate(randomObj, _selecter.transform.position, randomObj.transform.rotation);
         obj.GetComponent<NetworkObject>().Spawn();
     }
+
 }

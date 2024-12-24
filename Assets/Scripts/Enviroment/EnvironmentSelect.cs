@@ -28,17 +28,22 @@ namespace Harmonies.Environment
 
         private void OnMouseDown()
         {
-            if (!IsOwner) return;
+            if (_turnManager.IndexActualPlayer != (int)NetworkManager.Singleton.LocalClientId)
+                return;
 
             if (_unableInteraction) return;
 
             if (_environmentController.CanCreate())
             {
                 _environmentController.CreatePlayerSelectableEnvironment();
-                GetComponent<NetworkObject>().Despawn();
-                Destroy(gameObject);
+                DespawnServerRpc();
+                //Destroy(gameObject);
             }
         }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void DespawnServerRpc() => GetComponent<NetworkObject>().Despawn();
+
         private void OnStatusChange(IState newState) => _unableInteraction = newState is not AnimalsEnvironmentSelectState;
     }
 }

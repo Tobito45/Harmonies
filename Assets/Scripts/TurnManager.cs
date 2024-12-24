@@ -90,7 +90,7 @@ public class TurnManager : NetworkBehaviour //to singlton?
         //_stateMachine.BlocksSelectState();
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void SelectNextPlayerServerRpc()
     {
         int previousPlayerIndex = _indexActualPlayer;

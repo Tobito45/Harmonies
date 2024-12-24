@@ -22,6 +22,14 @@ namespace Harmonies.Environment
                 if (node.IndexesCount == 1 && node.GetIndex(0) == 0
                     && neighbour.IndexesCount == 1 && neighbour.GetIndex(0) == 0)
                     return true;
+
+                if (node.IndexesCount == 1 && node.GetIndex(0) == 1
+                    && neighbour.IndexesCount == 1 && neighbour.GetIndex(0) == 1)
+                    return true;
+
+                if (node.IndexesCount == 1 && node.GetIndex(0) == 2
+                    && neighbour.IndexesCount == 1 && neighbour.GetIndex(0) == 2)
+                    return true;
             }
             return false;
         }

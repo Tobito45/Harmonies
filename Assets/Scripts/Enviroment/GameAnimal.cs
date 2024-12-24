@@ -2,6 +2,7 @@ using Harmonies.Selectors;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,7 +11,7 @@ using Zenject;
 
 namespace Harmonies.Environment
 {
-    public class GameAnimal : MonoBehaviour
+    public class GameAnimal : NetworkBehaviour
     {
         [SerializeField]
         private MeshRenderer[] _animalsGameObjects;
@@ -24,8 +25,15 @@ namespace Harmonies.Environment
 
         public void Init(EnvironmentController environmentController, TurnManager turnManager)
         {
-            _environmentController = environmentController;
-            _turnManager = turnManager;
+            InitClientRpc();
+
+        }
+
+        [ClientRpc]
+        private void InitClientRpc()
+        {
+            _environmentController = FindObjectOfType<EnvironmentController>();
+            _turnManager = FindObjectOfType<TurnManager>();
 
             _basicMaterials = new Material[_animalsGameObjects.Length];
             _index = -1;
@@ -39,15 +47,18 @@ namespace Harmonies.Environment
 
                 _animalsGameObjects[i].material = _materialUnIterractble;
             }
-            ActiveNextAnimal();
+
+            if (_turnManager.IndexActualPlayer == (int)NetworkManager.Singleton.LocalClientId)
+                ActiveNextAnimal();
         }
 
 
         public void AnimalWasSelected()
         {
             _animalsGameObjects[_index].material = _basicMaterials[_index];
-            _animalsGameObjects[_index].gameObject.SetActive(false);
             //_animalsGameObjects[_index].gameObject.GetComponent<NetworkObject>().Despawn();
+            _animalsGameObjects[_index].gameObject.SetActive(false);
+            DisableServerRpc(_index);
 
             ActiveNextAnimal();
             
@@ -55,6 +66,16 @@ namespace Harmonies.Environment
                 _turnManager.WasAnimalsSkiped();
 
         }
+
+        [ServerRpc]
+        private void DisableServerRpc(int index)
+        {
+            _animalsGameObjects[index].gameObject.SetActive(false);
+            DisableClientRpc(index);
+        }
+
+        [ClientRpc]
+        private void DisableClientRpc(int index) => _animalsGameObjects[index].gameObject.SetActive(false);
 
         public void ActiveNextAnimal()
         {
