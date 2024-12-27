@@ -3,6 +3,8 @@ using Harmonies.Selectors;
 using Harmonies.States;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
@@ -26,7 +28,8 @@ public class TurnManager : NetworkBehaviour //to singlton?
     /// </summary>
     public Action<int, int> OnRoundEnded;
     public Action<int> OnGameStarted;
-    public PlayerInfo GetActualPlayerInfo() => _playerInfo[_indexActualPlayer];
+    public PlayerInfo GetActualPlayerInfo => _playerInfo[_indexActualPlayer];
+    public IEnumerable<BoardSceneGenerator> GetAllBoardSceneGenerators => _playerInfo.Select(n => n.Board);
 
     [Inject]
     public void Construct(StateMachine stateMachine, SpawnBlocksController spawnBlocksController, EnvironmentController environmentController)
@@ -56,8 +59,8 @@ public class TurnManager : NetworkBehaviour //to singlton?
     public IEnumerator StartGame()
     {
         yield return new WaitForSeconds(1);
-        foreach (var item in _playerInfo)
-            item.Board.Init();
+        for (int i = 0; i < _playerInfo.Length; i++)
+            _playerInfo[i].Board.Init(i);
 
         _stateMachine.BlocksSelectState();
 

@@ -60,11 +60,8 @@ namespace Harmonies.Blocks
                     GameObject obj = _spawnObjectsPrefabs[UnityEngine.Random.Range(0, _spawnObjectsPrefabs.Length)];
                     var created = Instantiate(obj, _spawnPoints[i].transform.position, _spawnPoints[i].transform.rotation);
                     created.SetActive(true);
-                    //var select = created.GetComponent<BlockSelectorController>();
                     created.GetComponent<NetworkObject>().Spawn();
                     SyncForClientRpc(i, created.GetComponent<NetworkObject>().NetworkObjectId);
-                    //select.Init();
-                    //_spawnedObjects[i] = select;
                 }
             }
         }
@@ -79,9 +76,7 @@ namespace Harmonies.Blocks
                 _spawnedObjects[index] = select;
             }
             else
-            {
                 Debug.LogError("ERROR");
-            }
         }
 
 

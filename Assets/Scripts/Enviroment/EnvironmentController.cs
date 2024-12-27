@@ -42,11 +42,11 @@ namespace Harmonies.Environment
         [ServerRpc(RequireOwnership = false)]
         private void CreateEnveromentServerRpc(int index, int actual)
         {
-            GameObject obj = Instantiate(_prefabEnviroment, _turnManager.GetActualPlayerInfo().GetEnvironmentSpawn(index).position, _prefabEnviroment.transform.rotation);
+            GameObject obj = Instantiate(_prefabEnviroment, _turnManager.GetActualPlayerInfo.GetEnvironmentSpawn(index).position, _prefabEnviroment.transform.rotation);
             obj.SetActive(true);
             obj.GetComponent<NetworkObject>().Spawn();
             GameAnimal gameAnimal = obj.GetComponent<GameAnimal>();
-            gameAnimal.Init(this, _turnManager);
+            gameAnimal.Init();
             SyncForClientRpc(index, actual, obj.GetComponent<NetworkObject>().NetworkObjectId);
 
         }

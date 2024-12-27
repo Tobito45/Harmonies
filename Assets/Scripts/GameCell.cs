@@ -1,12 +1,11 @@
+using Harmonies.InitObjets;
 using Harmonies.Selectors;
 using Harmonies.Structures;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
-using static Unity.Collections.AllocatorManager;
 
 public class GameCell : NetworkBehaviour
 {
@@ -18,36 +17,30 @@ public class GameCell : NetworkBehaviour
     private GameObject[] _blocksToSpawn;
 
     private ElementSelectorController _actualBlock;
+    private TurnManager _turnManager;
     private BoardNode _node;
     private bool _isAnimalOn = false;
-    public void Init(BoardNode node) => _node = node;
-    public void Init(int index) => StartCoroutine(WaitForBoardGraphInitialization(index));// InitClientRpc(index);
-
-    [ClientRpc]
-    private void InitClientRpc(int index)
+    public void Init(BoardNode node, TurnManager turnManager)
     {
-        Debug.Log(FindObjectOfType<BoardSceneGenerator>().BoardGraph);
-        _node = FindObjectOfType<BoardSceneGenerator>().BoardGraph.GetNodeByIndex(index);
+        _turnManager = turnManager;
+        _node = node;
     }
 
-    private IEnumerator WaitForBoardGraphInitialization(int index)
-    {
-        float timer = 0f;
-        while (FindObjectOfType<BoardSceneGenerator>().BoardGraph == null)
-        {
-            timer += 0.1f;
-            yield return null;
-            if (timer > 5000)
-                break;
-        }
+    public void Init(int index, int i) =>
+        StartCoroutine(InitObjectsFactory.WaitForCallbackWithPredicate(typeof(GameCell),
+            (this, index, i), () => InitClientRpc(index, i)));
 
-        InitClientRpc(index);
+    [ClientRpc]
+    private void InitClientRpc(int index, int i)
+    {
+        if (InitObjectsFactory.InitObject.TryGetValue(GetType(), out Action<object> method))
+            method((this, index, i));
     }
 
     private void Start() => _selecter.SetActive(false);
     private void OnTriggerEnter(Collider other)
     {
-        if (_isAnimalOn || FindObjectOfType<TurnManager>().IndexActualPlayer != (int)NetworkManager.Singleton.LocalClientId)
+        if (_isAnimalOn || _turnManager.IndexActualPlayer != (int)NetworkManager.Singleton.LocalClientId)
             return;
 
         if (_actualBlock == null && other.TryGetComponent(out ElementSelectorController block))
@@ -63,7 +56,7 @@ public class GameCell : NetworkBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (_isAnimalOn || FindObjectOfType<TurnManager>().IndexActualPlayer != (int)NetworkManager.Singleton.LocalClientId)
+        if (_isAnimalOn || _turnManager.IndexActualPlayer != (int)NetworkManager.Singleton.LocalClientId)
             return;
 
         if (other.TryGetComponent(out ElementSelectorController block))

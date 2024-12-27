@@ -22,29 +22,24 @@ namespace Harmonies.Selectors
             _camera = Camera.main;
             _startPosition = transform.position;
             if(_turnManager == null)
-            _turnManager = FindObjectOfType<TurnManager>();
+                _turnManager = FindObjectOfType<TurnManager>();
             
             _turnManager.SubsribeOnStateMachine(OnStatusChange);
         }
 
         [Inject]
-        public void Construct(TurnManager turnManager)
-        {
-            _turnManager = turnManager;
-        }
+        public void Construct(TurnManager turnManager) => _turnManager = turnManager;
 
         private void Update()
         {
             if (_isDragging && Input.GetMouseButtonUp(0))
             {
-                //transform.position = _startPosition;
                 MoveObjectServerRpc(_startPosition);
 
                 if (GameCell != null)
                 {
                     OnSpawnElementOnCell(GameCell);
                     GameCell = null;
-                    //Destroy(gameObject); //object pool in future
                 }
 
             }
@@ -62,7 +57,6 @@ namespace Harmonies.Selectors
 
                 Vector3 mousePosition = GetMouseWorldPosition();
                 Vector3 newPosition = new Vector3(mousePosition.x, 1, mousePosition.z);
-                //transform.position = newPosition;
                 MoveObjectServerRpc(newPosition);
                 _isDragging = true;
             }

@@ -17,7 +17,7 @@ public class BoardSceneGenerator : NetworkBehaviour
     [SerializeField]
     private int _width = 5;
     public BoardGraph BoardGraph { get; private set; }
-    public void Init()
+    public void Init(int i)
     {
         if (!IsOwner) return;
 
@@ -29,16 +29,14 @@ public class BoardSceneGenerator : NetworkBehaviour
             obj.GetComponent<NetworkObject>().Spawn();
             GameCell gameCell = obj.GetComponent<GameCell>();
             item.GameCell = gameCell;
-            gameCell.Init(index);
+            gameCell.Init(index, i);
         }
-        //InitAllBoardClientRpc();
     }
 
     [ClientRpc]
     private void CreateBoardGraphClientRpc(int _height, int _width) {
         BoardGraph boardGraph = new BoardGraph(_height, _width);
         BoardGraph = boardGraph;
-        Debug.Log(boardGraph);
     }
 
 }

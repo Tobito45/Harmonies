@@ -1,5 +1,7 @@
+using Harmonies.InitObjets;
 using Harmonies.States;
 using Harmonies.Structures;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -13,13 +15,16 @@ namespace Harmonies.Selectors
         private SpawnBlocksController _spawnBlocksController;
         public bool IsSpawned { get; private set; }
 
+        public void Init(SpawnBlocksController spawnBlocksController) => _spawnBlocksController = spawnBlocksController;
         public void Init() => InitClientRpc();
 
         [ClientRpc]
         public void InitClientRpc()
         {
             _blockInfo = GetComponent<GameBlock>();
-            _spawnBlocksController = FindObjectOfType<SpawnBlocksController>();//spawnBlocksController;
+
+            if (InitObjectsFactory.InitObject.TryGetValue(GetType(), out Action<object> method))
+                method(this);
             base.Start();
         }
 

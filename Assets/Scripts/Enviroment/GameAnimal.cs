@@ -1,3 +1,4 @@
+using Harmonies.InitObjets;
 using Harmonies.Selectors;
 using System;
 using System.Collections;
@@ -25,15 +26,17 @@ namespace Harmonies.Environment
 
         public void Init(EnvironmentController environmentController, TurnManager turnManager)
         {
-            InitClientRpc();
-
+            _environmentController = environmentController;
+            _turnManager = turnManager;
         }
+
+        public void Init() => InitClientRpc();
 
         [ClientRpc]
         private void InitClientRpc()
         {
-            _environmentController = FindObjectOfType<EnvironmentController>();
-            _turnManager = FindObjectOfType<TurnManager>();
+            if (InitObjectsFactory.InitObject.TryGetValue(GetType(), out Action<object> method))
+                method(this);
 
             _basicMaterials = new Material[_animalsGameObjects.Length];
             _index = -1;
@@ -67,7 +70,7 @@ namespace Harmonies.Environment
 
         }
 
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void DisableServerRpc(int index)
         {
             _animalsGameObjects[index].gameObject.SetActive(false);
