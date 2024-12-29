@@ -1,15 +1,18 @@
+using Harmonies.Conditions;
 using Harmonies.Selectors;
 using System;
 
 namespace Harmonies.InitObjets
 {
-    internal class BlockSelectorControllerObject : InitObjectBase, IInitObject
+    internal class BlockSelectorControllerObject : InitObjectBase, IInitObject, IPredicateObject
     {
         private SpawnBlocksController _spawnBlocksController;
+        private TurnManager _turnManager;
 
-        public BlockSelectorControllerObject(SpawnBlocksController spawnBlocksController)
+        public BlockSelectorControllerObject(SpawnBlocksController spawnBlocksController, TurnManager turnManager)
         {
             _spawnBlocksController = spawnBlocksController;
+            _turnManager = turnManager;
             MainType = typeof(BlockSelectorController);
         }
 
@@ -18,7 +21,15 @@ namespace Harmonies.InitObjets
             if (obj is not BlockSelectorController block)
                 throw new Exception("Bad type action");
 
-            block.Init(_spawnBlocksController);
+            block.Init(_spawnBlocksController, _turnManager);
+        }
+
+        public bool PredicateGameCell(object obj)
+        {
+            if (obj is not (GameAnimal[][] environment, int index, int actual))
+                throw new Exception("Bad type predicate");
+
+            return (environment[index][actual] != null);
         }
     }
 }

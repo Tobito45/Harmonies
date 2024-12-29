@@ -479,9 +479,12 @@ MonoBehaviour:
   - {fileID: 7868598518499055946, guid: 0ae1b1358d88c3b4abc96504a5a89ade, type: 3}
   - {fileID: 7868598518499055946, guid: a56f722cb1883f5448af5fb29f7b22ad, type: 3}
   _blocksToSpawn:
-  - {fileID: 2989395281925507648, guid: 585cdd12f45539843bd00c059a1b4ac4, type: 3}
-  - {fileID: 2989395281925507648, guid: 293b3d08c85647a4f8fd36d5f0dffff0, type: 3}
-  - {fileID: 2989395281925507648, guid: 300c82f9341f4e54c9797be9c13e86f9, type: 3}
+  - {fileID: 2451363905762387084, guid: d9c1ab52a0534544bb5a52aedbe95827, type: 3}
+  - {fileID: 8291157654163290820, guid: 03efe692143d1ef43a679c4a2d6b759b, type: 3}
+  - {fileID: 2930890917698457906, guid: 3bc2f30c5ad58f844904de1fb30053ba, type: 3}
+  - {fileID: 397900768808923968, guid: 607cf0b49f3a4944583204957d0b8df7, type: 3}
+  - {fileID: 153247350584491493, guid: 353552298d97af64a862adcf22e01e4c, type: 3}
+  - {fileID: 6294143606445710538, guid: ad5c9e569e7096e4fbfdd2b1d2c9bc54, type: 3}
 --- !u!136 &6382624862848587214
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -684,8 +687,8 @@ Transform:
   m_GameObject: {fileID: 7085285678075076996}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0000000095336, y: 0.715, z: -0.000000017471}
-  m_LocalScale: {x: 0.82322, y: 0.25042352, z: 0.82322}
+  m_LocalPosition: {x: 0.0000000095336, y: 0.617, z: -0.000000017471}
+  m_LocalScale: {x: 0.612204, y: 0.13748227, z: 0.612204}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1523870662824725756}

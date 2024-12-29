@@ -69,14 +69,12 @@ namespace Harmonies.Blocks
         [ClientRpc]
         private void SyncForClientRpc(int index, ulong networkIndex)
         {
-            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkIndex, out var networkObject))
-            {
-                var select = networkObject.GetComponent<BlockSelectorController>();
-                select.Init();
-                _spawnedObjects[index] = select;
-            }
-            else
-                Debug.LogError("ERROR");
+            NetworkTools.FindNetworkObjectAndMakeAction(networkIndex,
+               (networkObject) => {
+                   var select = networkObject.GetComponent<BlockSelectorController>();
+                   select.Init();
+                   _spawnedObjects[index] = select;
+               });
         }
 
 

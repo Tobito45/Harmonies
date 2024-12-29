@@ -10,7 +10,7 @@ using UnityEngine.Events;
 using Zenject;
 
 
-namespace Harmonies.Environment
+namespace Harmonies.Conditions
 {
     public class GameAnimal : NetworkBehaviour
     {
@@ -42,6 +42,9 @@ namespace Harmonies.Environment
             _index = -1;
             for (int i = 0; i < _animalsGameObjects.Length; i++)
             {
+                if (InitObjectsFactory.InitObject.TryGetValue(typeof(AnimalSelectorController), out Action<object> methodAnimal))
+                    methodAnimal(_animalsGameObjects[i].GetComponent<AnimalSelectorController>());
+
                 _animalsGameObjects[i].gameObject.SetActive(true);
                 _animalsGameObjects[i].GetComponent<SphereCollider>().enabled = false;
 
@@ -59,7 +62,6 @@ namespace Harmonies.Environment
         public void AnimalWasSelected()
         {
             _animalsGameObjects[_index].material = _basicMaterials[_index];
-            //_animalsGameObjects[_index].gameObject.GetComponent<NetworkObject>().Despawn();
             _animalsGameObjects[_index].gameObject.SetActive(false);
             DisableServerRpc(_index);
 

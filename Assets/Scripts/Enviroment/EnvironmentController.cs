@@ -1,13 +1,11 @@
+using Harmonies.InitObjets;
+using Harmonies.Selectors;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
 
-namespace Harmonies.Environment
+namespace Harmonies.Conditions
 {
     public class EnvironmentController : NetworkBehaviour
     {
@@ -33,7 +31,9 @@ namespace Harmonies.Environment
                 if (_environments[i][_turnManager.IndexActualPlayer] == null)
                 {
                     CreateEnveromentServerRpc(i, _turnManager.IndexActualPlayer);
-                    StartCoroutine(WaitForServer(i, _turnManager.IndexActualPlayer));
+                    InitObjectsFactory.WaitForCallbackWithPredicate(typeof(BlockSelectorController), 
+                            (_environments, i, _turnManager.IndexActualPlayer), () =>
+                           _turnManager.WasSelectedOrSkipedAnimalsEnviroment());
                     return;
                 }
             }
@@ -48,46 +48,33 @@ namespace Harmonies.Environment
             GameAnimal gameAnimal = obj.GetComponent<GameAnimal>();
             gameAnimal.Init();
             SyncForClientRpc(index, actual, obj.GetComponent<NetworkObject>().NetworkObjectId);
-
         }
 
         [ClientRpc]
         private void SyncForClientRpc(int index, int actual, ulong networkIndex)
         {
-            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkIndex, out var networkObject))
-                _environments[index][actual] = networkObject.gameObject.GetComponent<GameAnimal>();
-            else
-                Debug.LogError("ERROR");
+            NetworkTools.FindNetworkObjectAndMakeAction(networkIndex,
+                (networkObject) => _environments[index][actual] = networkObject.gameObject.GetComponent<GameAnimal>());
         }
-
-        public IEnumerator WaitForServer(int index, int actual)
-        {
-            while(_environments[index][actual] == null)
-                yield return null;  
-
-            _turnManager.WasSelectedOrSkipedAnimalsEnviroment();
-        }
-
 
         public void DeletePlayerSelectableEnviroment(GameAnimal animal)
         {
             for (int i = 0; i < _environments.Length; i++)
             {
                 if (_environments[i][_turnManager.IndexActualPlayer] == animal)
+                {
                     _environments[i][_turnManager.IndexActualPlayer] = null;
-
-                DestroyServerRpc(animal.GetComponent<NetworkObject>().NetworkObjectId);
-                //Destroy(animal.gameObject);
+                    DestroyServerRpc(animal.GetComponent<NetworkObject>().NetworkObjectId);
+                    break;
+                }
             }
         }
 
         [ServerRpc(RequireOwnership = false)]
         private void DestroyServerRpc(ulong networkIndex)
         {
-            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkIndex, out var networkObject))
-                networkObject.Despawn();
-            else
-                Debug.LogError("ERROR");
+            NetworkTools.FindNetworkObjectAndMakeAction(networkIndex,
+                (networkObject) => networkObject.Despawn());
         }
 
         public bool CanCreate()

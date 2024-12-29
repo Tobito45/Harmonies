@@ -1,4 +1,4 @@
-using Harmonies.Environment;
+using Harmonies.Conditions;
 using Harmonies.InitObjets;
 using Harmonies.Selectors;
 using Harmonies.States;
@@ -29,6 +29,7 @@ public class SceneInstaller : MonoInstaller
 
         InitObjectsFactory.Init(_turnManager, _environmentController, 
             _spawnBlocksController, _turnManager.GetAllBoardSceneGenerators.ToArray());
+
     }
 
     private void FindAllObjects()

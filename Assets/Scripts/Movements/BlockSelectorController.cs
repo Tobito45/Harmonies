@@ -15,7 +15,12 @@ namespace Harmonies.Selectors
         private SpawnBlocksController _spawnBlocksController;
         public bool IsSpawned { get; private set; }
 
-        public void Init(SpawnBlocksController spawnBlocksController) => _spawnBlocksController = spawnBlocksController;
+        public void Init(SpawnBlocksController spawnBlocksController, TurnManager turnManager)
+        {
+            _spawnBlocksController = spawnBlocksController;
+            _turnManager = turnManager;
+        }
+
         public void Init() => InitClientRpc();
 
         [ClientRpc]
@@ -25,7 +30,7 @@ namespace Harmonies.Selectors
 
             if (InitObjectsFactory.InitObject.TryGetValue(GetType(), out Action<object> method))
                 method(this);
-            base.Start();
+            InitBase();
         }
 
         protected override void OnSpawnElementOnCell(GameCell gameCell)

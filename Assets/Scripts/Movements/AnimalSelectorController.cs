@@ -1,4 +1,4 @@
-using Harmonies.Environment;
+using Harmonies.Conditions;
 using Harmonies.States;
 using Harmonies.Structures;
 using UnityEngine;
@@ -12,10 +12,11 @@ namespace Harmonies.Selectors
 
         private GameAnimal _gameAnimal;
         
-        protected override void Start()
+        public void Init(TurnManager turnManager)
         {
+            _turnManager = turnManager;
             _gameAnimal = transform.parent.GetComponent<GameAnimal>();
-            base.Start();
+            InitBase();
         }
 
         protected override void OnSpawnElementOnCell(GameCell gameCell)
@@ -24,8 +25,7 @@ namespace Harmonies.Selectors
             _gameAnimal.AnimalWasSelected();
         }
 
-        public bool IsConditionToSpawn(BoardNode node) => AnimalsConditions.GetConditionFunction(_conditionName)(node);
-
+        public bool IsConditionToSpawn(BoardNode node) => BaseConditions.GetConditionFunction(_conditionName)(node);
         public override bool SelectExceptions(BoardNode node) => node.IndexesCount == 0 || !IsConditionToSpawn(node);
         protected override void OnStatusChange(IState newState) => _unableInteraction = newState is not AnimalsSelectState;
     }

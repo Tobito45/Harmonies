@@ -1,17 +1,17 @@
 using Harmonies.Structures;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 
-namespace Harmonies.Environment
+namespace Harmonies.Conditions
 {
-    public static class AnimalsConditions
+    internal class AnimalsConditions
     {
-        //true if its correct
-        private static Dictionary<string, Func<BoardNode, bool>> _ñonditionsdDictionary = new Dictionary<string, Func<BoardNode, bool>>()
+        public AnimalsConditions()
         {
-            { "First", FirstCondition }
-        };
+            BaseConditions.AddToDictionary("First", FirstCondition);
+        }
 
         private static bool FirstCondition(BoardNode node)
         {
@@ -33,8 +33,5 @@ namespace Harmonies.Environment
             }
             return false;
         }
-
-        public static Func<BoardNode, bool> GetConditionFunction(string name) => _ñonditionsdDictionary[name];
-
     }
 }

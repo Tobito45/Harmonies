@@ -6,7 +6,7 @@ using UnityEngine;
 using Zenject;
 
 
-namespace Harmonies.Environment
+namespace Harmonies.Conditions
 {
     public class EnvironmentSelect : NetworkBehaviour
     {
@@ -37,7 +37,6 @@ namespace Harmonies.Environment
             {
                 _environmentController.CreatePlayerSelectableEnvironment();
                 DespawnServerRpc();
-                //Destroy(gameObject);
             }
         }
 

@@ -8,8 +8,7 @@ namespace Harmonies.Selectors
 {
     public abstract class ElementSelectorController : NetworkBehaviour
     {
-        [SerializeField]
-        private TurnManager _turnManager;
+        protected TurnManager _turnManager;
 
         private Camera _camera;
         private Vector3 _startPosition;
@@ -17,12 +16,10 @@ namespace Harmonies.Selectors
 
         protected bool _unableInteraction;
         public GameCell GameCell { get; set; }
-        protected virtual void Start()
+        protected void InitBase()
         {
             _camera = Camera.main;
             _startPosition = transform.position;
-            if(_turnManager == null)
-                _turnManager = FindObjectOfType<TurnManager>();
             
             _turnManager.SubsribeOnStateMachine(OnStatusChange);
         }

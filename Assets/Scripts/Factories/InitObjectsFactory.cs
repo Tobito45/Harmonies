@@ -1,4 +1,4 @@
-using Harmonies.Environment;
+using Harmonies.Conditions;
 using Harmonies.Selectors;
 using System;
 using System.Collections;
@@ -21,7 +21,8 @@ namespace Harmonies.InitObjets
             {
                 new GameCellObject(boardSceneGenerator, turnManager),
                 new GameAnimalObject(environmentController, turnManager),
-                new BlockSelectorControllerObject(spawnBlocksController)
+                new BlockSelectorControllerObject(spawnBlocksController, turnManager),
+                new AnimalSelectorControllerObject(turnManager)
             };
 
             InitAllDictionaries(initObjectBases);
