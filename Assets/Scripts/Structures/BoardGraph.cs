@@ -4,18 +4,18 @@ using UnityEngine;
 
 namespace Harmonies.Structures
 {
-    public class BoardGraph
+    public class BoardGraph<T>
     {
         private int _height, _width, _size;
-        private BoardNode[] _nodes;
+        private BoardNode<T>[] _nodes;
 
-        public IEnumerable<BoardNode> GetNodes =>  _nodes;
-        public IEnumerable<(BoardNode node, int index)> GetNodesWithIndex()
+        public IEnumerable<BoardNode<T>> GetNodes =>  _nodes;
+        public IEnumerable<(BoardNode<T> node, int index)> GetNodesWithIndex()
         {
             for (int i = 0; i < _nodes.Length; i++)
                 yield return (_nodes[i], i);
         }
-        public BoardNode GetNodeByIndex(int index) => _nodes[index];
+        public BoardNode<T> GetNodeByIndex(int index) => _nodes[index];
         public BoardGraph(int height, int width)
         {
             _height = height;
@@ -26,7 +26,7 @@ namespace Harmonies.Structures
         private void CreateNodes()
         {
             _size = _height * _width - (_width / 2);
-            _nodes = new BoardNode[_size];
+            _nodes = new BoardNode<T>[_size];
 
             InitNodes();
             CreateDownConnect();
@@ -100,7 +100,7 @@ namespace Harmonies.Structures
             int x = 1, y = 1;
             for (int i = 0; i < _nodes.Length; i++)
             {
-                _nodes[i] = new BoardNode(i + 1, (x, y));
+                _nodes[i] = new BoardNode<T>(i + 1, (x, y));
                 x += 2;
                 if (i == breakIndex)
                 {

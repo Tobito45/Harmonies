@@ -119,8 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ed4e08859e354d41ac0cf39586a3875, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _turnManager: {fileID: 0}
-  _conditionName: First
+  _conditionName: 2
 --- !u!114 &6863335681354785598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,8 +414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ed4e08859e354d41ac0cf39586a3875, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _turnManager: {fileID: 0}
-  _conditionName: First
+  _conditionName: 2
 --- !u!114 &8376120852005693767
 MonoBehaviour:
   m_ObjectHideFlags: 0

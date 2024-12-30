@@ -1,3 +1,4 @@
+using Harmonies.Enums;
 using Harmonies.InitObjets;
 using Harmonies.Selectors;
 using Harmonies.Structures;
@@ -18,9 +19,9 @@ public class GameCell : NetworkBehaviour
 
     private ElementSelectorController _actualBlock;
     private TurnManager _turnManager;
-    private BoardNode _node;
+    private BoardNode<BlockType> _node;
     private bool _isAnimalOn = false;
-    public void Init(BoardNode node, TurnManager turnManager)
+    public void Init(BoardNode<BlockType> node, TurnManager turnManager)
     {
         _turnManager = turnManager;
         _node = node;
@@ -75,7 +76,7 @@ public class GameCell : NetworkBehaviour
         _selecter.SetActive(false);
         _node.AddNewIndex(block.Index);
         Vector3 sync = _selecter.transform.position + new Vector3(0, block.Prefab.transform.localScale.y * 2, 0);
-        CreateBlockServerRpc(block.Index);
+        CreateBlockServerRpc((int)block.Index);
         
         if(_selecter.transform.position != sync)
             _selecter.transform.position += new Vector3(0, block.Prefab.transform.localScale.y * 2, 0);

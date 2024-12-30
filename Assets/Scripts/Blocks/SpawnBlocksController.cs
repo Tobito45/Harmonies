@@ -23,7 +23,7 @@ namespace Harmonies.Selectors
         public bool IsAnyBlockNotPlaced()
         {
             for (int i = 0; i < _alreadySpawnedBlocks.Length; i++)
-                if (!_alreadySpawnedBlocks[i].IsSpawned)
+                if (!_alreadySpawnedBlocks[i].IsSpawnedInGame)
                     return true;
 
             return false;

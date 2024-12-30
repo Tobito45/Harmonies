@@ -1,3 +1,4 @@
+using Harmonies.Enums;
 using Harmonies.Structures;
 using System;
 using System.Collections;
@@ -10,28 +11,20 @@ namespace Harmonies.Conditions
     {
         public BlocksConditions()
         {
-            //BaseConditions.AddToDictionary("First", FirstCondition);
+            BaseConditions.AddToDictionary(ConditionName.Empty, EmptyCondition);
+            BaseConditions.AddToDictionary(ConditionName.OneStone, OneStoneCondition);
+            BaseConditions.AddToDictionary(ConditionName.TwoStone, TwoStoneCondition);
+            BaseConditions.AddToDictionary(ConditionName.OneWood, OneWoodCondition);
+            BaseConditions.AddToDictionary(ConditionName.TwoWood, TwoWoodCondition);
+            BaseConditions.AddToDictionary(ConditionName.OneBuilding, OneBuildingCondition);
         }
 
-        private static bool FirstCondition(BoardNode node)
-        {
-            foreach (BoardNode neighbour in node)
-            {
-                if (neighbour == null) continue;
+        private static bool EmptyCondition(BoardNode<BlockType> node) => node.IndexesCount == 0;
+        private static bool OneStoneCondition(BoardNode<BlockType> node) => node.IndexesCount == 1 && node.GetIndex(0) == BlockType.Stone;
+        private static bool TwoStoneCondition(BoardNode<BlockType> node) => node.IndexesCount == 2 && node.GetIndex(0) == BlockType.Stone && node.GetIndex(1) == BlockType.Stone;
+        private static bool OneWoodCondition(BoardNode<BlockType> node) => node.IndexesCount == 1 && node.GetIndex(0) == BlockType.Wood;
+        private static bool TwoWoodCondition(BoardNode<BlockType> node) => node.IndexesCount == 2 && node.GetIndex(0) == BlockType.Wood && node.GetIndex(1) == BlockType.Wood;
+        private static bool OneBuildingCondition(BoardNode<BlockType> node) => node.IndexesCount == 1 && node.GetIndex(0) == BlockType.Building;
 
-                if (node.IndexesCount == 1 && node.GetIndex(0) == 0
-                    && neighbour.IndexesCount == 1 && neighbour.GetIndex(0) == 0)
-                    return true;
-
-                if (node.IndexesCount == 1 && node.GetIndex(0) == 1
-                    && neighbour.IndexesCount == 1 && neighbour.GetIndex(0) == 1)
-                    return true;
-
-                if (node.IndexesCount == 1 && node.GetIndex(0) == 2
-                    && neighbour.IndexesCount == 1 && neighbour.GetIndex(0) == 2)
-                    return true;
-            }
-            return false;
-        }
     }
 }

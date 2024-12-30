@@ -1,5 +1,8 @@
+using Harmonies.Conditions;
+using Harmonies.Enums;
 using Harmonies.States;
 using Harmonies.Structures;
+using System;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
@@ -8,6 +11,9 @@ namespace Harmonies.Selectors
 {
     public abstract class ElementSelectorController : NetworkBehaviour
     {
+        [SerializeField]
+        private ConditionName _conditionName = ConditionName.None;
+
         protected TurnManager _turnManager;
 
         private Camera _camera;
@@ -71,7 +77,22 @@ namespace Harmonies.Selectors
         }
 
         protected abstract void OnSpawnElementOnCell(GameCell gameCell);
-        public abstract bool SelectExceptions(BoardNode node);
+        public virtual bool SelectExceptions(BoardNode<BlockType> node)
+        {
+            foreach (ConditionName condition in Enum.GetValues(typeof(ConditionName)))
+            {
+                if (condition == ConditionName.None)
+                    continue;
+
+                if ((_conditionName & condition) != 0)
+                {
+                    if (BaseConditions.GetConditionFunction(condition)(node))
+                        return false;
+                }
+            }
+
+            return true;
+        }
         protected abstract void OnStatusChange(IState newState);
     }
 }
