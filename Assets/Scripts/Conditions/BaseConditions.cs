@@ -26,7 +26,11 @@ namespace Harmonies.Conditions
         OneWood = 1 << 3,
         TwoWood = 1 << 4,
         OneBuilding = 1 << 5,
-        First = 1 << 6,
-        
+        Boar = 1 << 6,
+        Bear = 1 << 7,
+        Tucan = 1 << 8,
+        Crocodile = 1 << 9,
+        Fox = 1 << 10,
+        Meerkat = 1 << 11,
     }
 }

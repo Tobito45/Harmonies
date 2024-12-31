@@ -241,7 +241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ed4e08859e354d41ac0cf39586a3875, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _conditionName: 42
+  _conditionName: 128
 --- !u!135 &2805554084070415771
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -476,7 +476,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ed4e08859e354d41ac0cf39586a3875, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _conditionName: 42
+  _conditionName: 128
 --- !u!135 &714806745734370307
 SphereCollider:
   m_ObjectHideFlags: 0

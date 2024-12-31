@@ -21,10 +21,22 @@ public class SettingUI : MonoBehaviour
 
     private void Start()
     {
-        // Получаем доступные разрешения
+        ResolutionSetup();
+
+        float volume;
+        //audioMixer.GetFloat("MasterVolume", out volume);
+        //volumeSlider.value = Mathf.Pow(10, volume / 20); // Преобразуем из логарифмической шкалы
+        _volumeSlider.onValueChanged.AddListener(SetVolume);
+
+        _toggleWindow.onValueChanged.AddListener((x) => ToggleFullscreen());
+
+        SetResolution(_resolutions.Length - 1);
+    }
+
+    private void ResolutionSetup()
+    {
         _resolutions = Screen.resolutions;
 
-        // Очищаем и наполняем Dropdown
         _resolutionDropdown.ClearOptions();
         var options = new System.Collections.Generic.List<string>();
 
@@ -43,19 +55,10 @@ public class SettingUI : MonoBehaviour
         _resolutionDropdown.RefreshShownValue();
 
         _resolutionDropdown.onValueChanged.AddListener(SetResolution);
-
-        float volume;
-        //audioMixer.GetFloat("MasterVolume", out volume);
-        //volumeSlider.value = Mathf.Pow(10, volume / 20); // Преобразуем из логарифмической шкалы
-        _volumeSlider.onValueChanged.AddListener(SetVolume);
-
-        _toggleWindow.onValueChanged.AddListener((x) => ToggleFullscreen());
-    
     }
 
     private void SetResolution(int resolutionIndex)
     {
-        // Устанавливаем выбранное разрешение
         Resolution resolution = _resolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreenMode);
     }
@@ -63,7 +66,6 @@ public class SettingUI : MonoBehaviour
 
     private void ToggleFullscreen()
     {
-        // Переключаем между оконным и полноэкранным режимами
         if (Screen.fullScreenMode == FullScreenMode.FullScreenWindow)
             Screen.fullScreenMode = FullScreenMode.Windowed;
         else

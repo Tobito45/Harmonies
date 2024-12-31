@@ -42,6 +42,8 @@ namespace Harmonies.Structures
         /// </summary>
         public BoardNode<T> GetNode(int index) => _neighbours[index - 1];
 
+        public int GetMaxNeighbours => _neighbours.Length;
+
         public string AllNeighBoursToString() => $"{Id}, {Coordinates}: 1 - {_neighbours[0]?.Id}, 2 - {_neighbours[1]?.Id}, 3 - {_neighbours[2]?.Id}" +
             $", 4 - {_neighbours[3]?.Id}, 5 - {_neighbours[4]?.Id}, 6 - {_neighbours[5]?.Id}";
 

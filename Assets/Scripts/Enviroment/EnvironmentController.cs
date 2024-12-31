@@ -33,9 +33,11 @@ namespace Harmonies.Enviroment
                 if (_environments[i][_turnManager.IndexActualPlayer] == null)
                 {
                     CreateEnveromentServerRpc(i, _turnManager.IndexActualPlayer);
-                    InitObjectsFactory.WaitForCallbackWithPredicate(typeof(BlockSelectorController), 
+                    StartCoroutine(InitObjectsFactory.WaitForCallbackWithPredicate(typeof(BlockSelectorController), 
                             (_environments, i, _turnManager.IndexActualPlayer), () =>
-                           _turnManager.WasSelectedOrSkipedAnimalsEnviroment());
+                            {
+                                _turnManager.WasSelectedOrSkipedAnimalsEnviroment();
+                            }));
                     return;
                 }
             }
