@@ -7,66 +7,70 @@ using UnityEngine.UI;
 
 public class SettingUI : MonoBehaviour
 {
-    public TMP_Dropdown resolutionDropdown; // Привяжите Dropdown через инспектор
-    private Resolution[] resolutions;
+    [SerializeField]
+    private Toggle _toggleWindow;
+
+    [SerializeField]
+    private TMP_Dropdown _resolutionDropdown;
+    private Resolution[] _resolutions;
 
     //public AudioMixer audioMixer; // Привяжите ваш AudioMixer через инспектор
-    public Slider volumeSlider;  // Привяжите Slider через инспектор
+    [SerializeField]
+    private Slider _volumeSlider; 
 
 
     private void Start()
     {
         // Получаем доступные разрешения
-        resolutions = Screen.resolutions;
+        _resolutions = Screen.resolutions;
 
         // Очищаем и наполняем Dropdown
-        resolutionDropdown.ClearOptions();
+        _resolutionDropdown.ClearOptions();
         var options = new System.Collections.Generic.List<string>();
 
-        for (int i = 0; i < resolutions.Length; i++)
+        for (int i = 0; i < _resolutions.Length; i++)
         {
-            string option = resolutions[i].width + " x " + resolutions[i].height;
+            string option = _resolutions[i].width + " x " + _resolutions[i].height;
             options.Add(option);
         }
 
-        resolutionDropdown.AddOptions(options);
+        _resolutionDropdown.AddOptions(options);
 
-        // Устанавливаем текущее разрешение
-        int currentResolutionIndex = System.Array.FindIndex(resolutions, r =>
+        int currentResolutionIndex = System.Array.FindIndex(_resolutions, r =>
             r.width == Screen.currentResolution.width &&
             r.height == Screen.currentResolution.height);
-        resolutionDropdown.value = currentResolutionIndex;
-        resolutionDropdown.RefreshShownValue();
+        _resolutionDropdown.value = currentResolutionIndex;
+        _resolutionDropdown.RefreshShownValue();
 
+        _resolutionDropdown.onValueChanged.AddListener(SetResolution);
 
-        // Устанавливаем слайдер на текущее значение громкости
         float volume;
         //audioMixer.GetFloat("MasterVolume", out volume);
         //volumeSlider.value = Mathf.Pow(10, volume / 20); // Преобразуем из логарифмической шкалы
+        _volumeSlider.onValueChanged.AddListener(SetVolume);
+
+        _toggleWindow.onValueChanged.AddListener((x) => ToggleFullscreen());
+    
     }
 
-    public void SetResolution(int resolutionIndex)
+    private void SetResolution(int resolutionIndex)
     {
         // Устанавливаем выбранное разрешение
-        Resolution resolution = resolutions[resolutionIndex];
+        Resolution resolution = _resolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreenMode);
     }
 
 
-    public void ToggleFullscreen()
+    private void ToggleFullscreen()
     {
         // Переключаем между оконным и полноэкранным режимами
         if (Screen.fullScreenMode == FullScreenMode.FullScreenWindow)
-        {
             Screen.fullScreenMode = FullScreenMode.Windowed;
-        }
         else
-        {
             Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
-        }
     }
 
-    public void SetVolume(float volume)
+    private void SetVolume(float volume)
     {
         // Устанавливаем громкость (логарифмическая шкала для точности)
         //audioMixer.SetFloat("MasterVolume", Mathf.Log10(volume) * 20);
