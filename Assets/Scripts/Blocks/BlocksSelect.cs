@@ -22,9 +22,6 @@ namespace Harmonies.Blocks
         [SerializeField]
         private Transform[] _spawnPoints;
 
-        [SerializeField]
-        private GameObject[] _spawnObjectsPrefabs;
-
         private BlockSelectorController[] _spawnedObjects;
         private SpawnBlocksController _spawnBlocksController;
         private TurnManager _turnManager;
@@ -57,7 +54,7 @@ namespace Harmonies.Blocks
             {
                 if (_spawnedObjects[i] == null)
                 {
-                    GameObject obj = _spawnObjectsPrefabs[UnityEngine.Random.Range(0, _spawnObjectsPrefabs.Length)];
+                    GameObject obj = _spawnBlocksController.GetRandomSpawnBlock;
                     var created = Instantiate(obj, _spawnPoints[i].transform.position, _spawnPoints[i].transform.rotation);
                     created.SetActive(true);
                     created.GetComponent<NetworkObject>().Spawn();

@@ -1,12 +1,9 @@
 using Harmonies.States;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Netcode;
-using UnityEngine;
 using Zenject;
 
 
-namespace Harmonies.Conditions
+namespace Harmonies.Enviroment
 {
     public class EnvironmentSelect : NetworkBehaviour
     {

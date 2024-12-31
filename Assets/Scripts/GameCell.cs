@@ -1,30 +1,30 @@
 using Harmonies.Enums;
+using Harmonies.Enviroment;
 using Harmonies.InitObjets;
 using Harmonies.Selectors;
 using Harmonies.Structures;
 using System;
-using System.Collections;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameCell : NetworkBehaviour
 {
     [SerializeField]
     private GameObject _selecter;
-    [SerializeField]
-    private GameObject[] _animalsToSpawn;
-    [SerializeField]
-    private GameObject[] _blocksToSpawn;
 
     private ElementSelectorController _actualBlock;
+    private SpawnBlocksController _spawnBlocksController;
+    private EnvironmentController _environmentController;
     private TurnManager _turnManager;
     private BoardNode<BlockType> _node;
     private bool _isAnimalOn = false;
-    public void Init(BoardNode<BlockType> node, TurnManager turnManager)
+    public void Init(BoardNode<BlockType> node, TurnManager turnManager, 
+        SpawnBlocksController spawnBlocksController, EnvironmentController environmentController)
     {
         _turnManager = turnManager;
         _node = node;
+        _spawnBlocksController = spawnBlocksController;
+        _environmentController = environmentController;
     }
 
     public void Init(int index, int i) =>
@@ -71,7 +71,7 @@ public class GameCell : NetworkBehaviour
         }
     }
 
-    public void SpawnBlock(GameBlock block) //in future will change on something like block info
+    public void SpawnBlock(GameBlock block) 
     {
         _selecter.SetActive(false);
         _node.AddNewIndex(block.Index);
@@ -87,24 +87,24 @@ public class GameCell : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void CreateBlockServerRpc(int index)
     {
-        GameObject block = _blocksToSpawn[index];
+        GameObject block = _spawnBlocksController.GetSpawnedBlock(index);
         var obj = Instantiate(block, _selecter.transform.position, block.transform.rotation);
         _selecter.transform.position += new Vector3(0, block.transform.localScale.y * 2, 0);
         obj.GetComponent<NetworkObject>().Spawn();
     }
 
-    public void SpawnAnimal(ElementSelectorController block) //in future will change on something like block info
+    public void SpawnAnimal(GameAnimal animal) //in future will change on something like block info
     {
         _selecter.SetActive(false);
         _isAnimalOn = true;
 
-        CreateAnimalServerRpc();
+        CreateAnimalServerRpc((int)animal.Index);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void CreateAnimalServerRpc()
+    private void CreateAnimalServerRpc(int index)
     {
-        GameObject randomObj = _animalsToSpawn[UnityEngine.Random.Range(0, _animalsToSpawn.Length)];
+        GameObject randomObj = _environmentController.GetAnimalByIndex(index);
         var obj = Instantiate(randomObj, _selecter.transform.position, randomObj.transform.rotation);
         obj.GetComponent<NetworkObject>().Spawn();
     }

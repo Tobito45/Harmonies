@@ -1,25 +1,23 @@
-using Harmonies.Conditions;
+using Harmonies.Enviroment;
 using Harmonies.States;
-using Harmonies.Structures;
-using UnityEngine;
 
 namespace Harmonies.Selectors
 {
     public class AnimalSelectorController : ElementSelectorController
     {
-        private GameAnimal _gameAnimal;
+        private GameAnimalsController _gameAnimalsController;
         
         public void Init(TurnManager turnManager)
         {
             _turnManager = turnManager;
-            _gameAnimal = transform.parent.GetComponent<GameAnimal>();
+            _gameAnimalsController = transform.parent.GetComponent<GameAnimalsController>();
             InitBase();
         }
 
         protected override void OnSpawnElementOnCell(GameCell gameCell)
         {
-            gameCell.SpawnAnimal(this);
-            _gameAnimal.AnimalWasSelected();
+            gameCell.SpawnAnimal(_gameAnimalsController.GameAnimal);
+            _gameAnimalsController.AnimalWasSelected();
         }
 
         protected override void OnStatusChange(IState newState) => _unableInteraction = newState is not AnimalsSelectState;

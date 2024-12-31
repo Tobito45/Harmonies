@@ -23,7 +23,7 @@ namespace Polyperfect.Common
     {
       if (animalSound)
       {
-        Common_AudioManager.PlaySound(animalSound, transform.position);
+        //Common_AudioManager.PlaySound(animalSound, transform.position);
       }
     }
 
@@ -31,7 +31,7 @@ namespace Polyperfect.Common
     {
       if (walking)
       {
-        Common_AudioManager.PlaySound(walking, transform.position);
+        //Common_AudioManager.PlaySound(walking, transform.position);
       }
     }
 
@@ -39,7 +39,7 @@ namespace Polyperfect.Common
     {
       if (eating)
       {
-                Common_AudioManager.PlaySound(eating, transform.position);
+                //Common_AudioManager.PlaySound(eating, transform.position);
       }
     }
 
@@ -47,7 +47,7 @@ namespace Polyperfect.Common
     {
       if (running)
       {
-                Common_AudioManager.PlaySound(running, transform.position);
+                //Common_AudioManager.PlaySound(running, transform.position);
       }
     }
 
@@ -55,7 +55,7 @@ namespace Polyperfect.Common
     {
       if (attacking)
       {
-                Common_AudioManager.PlaySound(attacking, transform.position);
+                //Common_AudioManager.PlaySound(attacking, transform.position);
       }
     }
 
@@ -63,7 +63,7 @@ namespace Polyperfect.Common
     {
       if (death)
       {
-                Common_AudioManager.PlaySound(death, transform.position);
+                //Common_AudioManager.PlaySound(death, transform.position);
       }
     }
 
@@ -71,7 +71,7 @@ namespace Polyperfect.Common
     {
       if (sleeping)
       {
-                Common_AudioManager.PlaySound(sleeping, transform.position);
+                //Common_AudioManager.PlaySound(sleeping, transform.position);
       }
     }
   }

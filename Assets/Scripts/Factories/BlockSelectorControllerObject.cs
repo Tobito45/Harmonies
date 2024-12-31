@@ -1,4 +1,4 @@
-using Harmonies.Conditions;
+using Harmonies.Enviroment;
 using Harmonies.Selectors;
 using System;
 
@@ -26,7 +26,7 @@ namespace Harmonies.InitObjets
 
         public bool PredicateGameCell(object obj)
         {
-            if (obj is not (GameAnimal[][] environment, int index, int actual))
+            if (obj is not (GameAnimalsController[][] environment, int index, int actual))
                 throw new Exception("Bad type predicate");
 
             return (environment[index][actual] != null);

@@ -9,8 +9,14 @@ using Zenject;
 
 namespace Harmonies.Selectors
 {
-    public class SpawnBlocksController : MonoBehaviour //not need be monobehaviour
+    public class SpawnBlocksController : MonoBehaviour
     {
+        [SerializeField]
+        private GameObject[] _spawnBlocksPrefabs;
+
+        [SerializeField]
+        private GameObject[] _spawnedBlocksPrefabs;
+
         private TurnManager _turnManager;
 
         private BlockSelectorController[] _alreadySpawnedBlocks;
@@ -29,5 +35,8 @@ namespace Harmonies.Selectors
             return false;
         }
         public void WasSpawnedBlock() => _turnManager.WasSpawnedBlock();
+
+        public GameObject GetRandomSpawnBlock => _spawnBlocksPrefabs[Random.Range(0, _spawnBlocksPrefabs.Length)];     
+        public GameObject GetSpawnedBlock(int index) => _spawnedBlocksPrefabs[index];     
     }
 }

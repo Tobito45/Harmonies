@@ -271,9 +271,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2200c8c250cb2a044a2e5a6455cc74bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animalsGameObjects:
+  _animalsMeshRenders:
   - {fileID: 4967987883714867019}
   - {fileID: 3325923085698043058}
+  _animalsObjects:
+  - {fileID: 1280750131993290929}
+  - {fileID: 8478354781115781339}
   _materialUnIterractble: {fileID: 2100000, guid: 82797aa3d496e7b44b9aa134005abf35, type: 2}
 --- !u!114 &4113530360299088814
 MonoBehaviour:

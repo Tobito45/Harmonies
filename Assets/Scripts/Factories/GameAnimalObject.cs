@@ -1,4 +1,4 @@
-using Harmonies.Conditions;
+using Harmonies.Enviroment;
 using System;
 
 namespace Harmonies.InitObjets
@@ -12,12 +12,12 @@ namespace Harmonies.InitObjets
         {
             _environmentController = environmentController;
             _turnManager = turnManager;
-            MainType = typeof(GameAnimal);
+            MainType = typeof(GameAnimalsController);
         }
 
         public void Init(object obj)
         {
-            if (obj is not GameAnimal animal)
+            if (obj is not GameAnimalsController animal)
                 throw new Exception("Bad type action");
 
             animal.Init(_environmentController, _turnManager);

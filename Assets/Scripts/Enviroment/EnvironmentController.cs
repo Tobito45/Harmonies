@@ -1,27 +1,29 @@
 using Harmonies.InitObjets;
 using Harmonies.Selectors;
-using System;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
 
-namespace Harmonies.Conditions
+namespace Harmonies.Enviroment
 {
     public class EnvironmentController : NetworkBehaviour
     {
         private TurnManager _turnManager;
 
         [SerializeField]
-        private GameObject _prefabEnviroment;
-        private GameAnimal[][] _environments;
+        private GameObject[] _prefabEnviroments;
+        [SerializeField]
+        private GameObject[] _prefabAnimalsSpawn;
+
+        private GameAnimalsController[][] _environments;
 
         [Inject]
         public void Construct(TurnManager turnManager)
         {
             _turnManager = turnManager;
-            _environments = new GameAnimal[4][];
+            _environments = new GameAnimalsController[4][];
             for (int i = 0; i < _environments.Length; i++)
-                _environments[i] = new GameAnimal[_turnManager.MaxPlayersCount];
+                _environments[i] = new GameAnimalsController[_turnManager.MaxPlayersCount];
         }
 
         public void CreatePlayerSelectableEnvironment()
@@ -42,10 +44,13 @@ namespace Harmonies.Conditions
         [ServerRpc(RequireOwnership = false)]
         private void CreateEnveromentServerRpc(int index, int actual)
         {
-            GameObject obj = Instantiate(_prefabEnviroment, _turnManager.GetActualPlayerInfo.GetEnvironmentSpawn(index).position, _prefabEnviroment.transform.rotation);
+            int randomIndex = Random.Range(0, _prefabEnviroments.Length);
+            GameObject obj = Instantiate(_prefabEnviroments[randomIndex],
+                _turnManager.GetActualPlayerInfo.GetEnvironmentSpawn(index).position,
+                _prefabEnviroments[randomIndex].transform.rotation);
             obj.SetActive(true);
             obj.GetComponent<NetworkObject>().Spawn();
-            GameAnimal gameAnimal = obj.GetComponent<GameAnimal>();
+            GameAnimalsController gameAnimal = obj.GetComponent<GameAnimalsController>();
             gameAnimal.Init();
             SyncForClientRpc(index, actual, obj.GetComponent<NetworkObject>().NetworkObjectId);
         }
@@ -54,10 +59,10 @@ namespace Harmonies.Conditions
         private void SyncForClientRpc(int index, int actual, ulong networkIndex)
         {
             NetworkTools.FindNetworkObjectAndMakeAction(networkIndex,
-                (networkObject) => _environments[index][actual] = networkObject.gameObject.GetComponent<GameAnimal>());
+                (networkObject) => _environments[index][actual] = networkObject.gameObject.GetComponent<GameAnimalsController>());
         }
 
-        public void DeletePlayerSelectableEnviroment(GameAnimal animal)
+        public void DeletePlayerSelectableEnviroment(GameAnimalsController animal)
         {
             for (int i = 0; i < _environments.Length; i++)
             {
@@ -92,5 +97,7 @@ namespace Harmonies.Conditions
 
             return false;
         }
+
+        public GameObject GetAnimalByIndex(int index) => _prefabAnimalsSpawn[index];
     }
 }

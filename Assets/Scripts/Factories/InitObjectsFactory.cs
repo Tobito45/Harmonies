@@ -1,4 +1,4 @@
-using Harmonies.Conditions;
+using Harmonies.Enviroment;
 using Harmonies.Selectors;
 using System;
 using System.Collections;
@@ -19,7 +19,7 @@ namespace Harmonies.InitObjets
         {
             List<InitObjectBase> initObjectBases = new()
             {
-                new GameCellObject(boardSceneGenerator, turnManager),
+                new GameCellObject(boardSceneGenerator, turnManager, spawnBlocksController, environmentController),
                 new GameAnimalObject(environmentController, turnManager),
                 new BlockSelectorControllerObject(spawnBlocksController, turnManager),
                 new AnimalSelectorControllerObject(turnManager)
