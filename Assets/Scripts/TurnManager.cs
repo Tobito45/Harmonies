@@ -13,33 +13,42 @@ public class TurnManager : NetworkBehaviour //to singlton?
 {
     private SpawnBlocksController _spawnBlocksController;
     private EnvironmentController _environmentController;
+    private NetworkPlayersController _networkPlayersController;
 
     private StateMachine _stateMachine;
 
     //starts with 0
     private int _indexActualPlayer = -1;
-    public int IndexActualPlayer => _indexActualPlayer;
-    public int MaxPlayersCount { get; private set; }
+    public ulong IndexActualPlayer => PlayersId[_indexActualPlayer];
+    public int GetActualPlayerNumber => _indexActualPlayer;
+    //public int MaxPlayersCount { get; private set; }
+    public List<ulong> PlayersId { get; set; } = new List<ulong>();
+    public int PlayersCount => PlayersId.Count;
+
     [SerializeField]
     private PlayerInfo[] _playerInfo;
 
     /// <summary>
-    /// int - previous player, int - actual player.
+    /// ulong - previous player, ulong - actual player
     /// </summary>
-    public Action<int, int> OnRoundEnded;
-    public Action<int> OnGameStarted;
+    public Action<ulong, ulong> OnRoundEnded;
+    public Action<ulong> OnGameStarted;
     public PlayerInfo GetActualPlayerInfo => _playerInfo[_indexActualPlayer];
     public IEnumerable<BoardSceneGenerator> GetAllBoardSceneGenerators => _playerInfo.Select(n => n.Board);
 
     [Inject]
-    public void Construct(StateMachine stateMachine, SpawnBlocksController spawnBlocksController, EnvironmentController environmentController)
+    public void Construct(StateMachine stateMachine, 
+        SpawnBlocksController spawnBlocksController, 
+        EnvironmentController environmentController,
+        NetworkPlayersController networkPlayersController)
     {
         _stateMachine = stateMachine;
         stateMachine.TurnManager = this;
-        MaxPlayersCount = 2;
+        //MaxPlayersCount = 2;
 
         _spawnBlocksController = spawnBlocksController;
         _environmentController = environmentController;
+        _networkPlayersController = networkPlayersController;
     }
 
     private void Update()
@@ -59,6 +68,7 @@ public class TurnManager : NetworkBehaviour //to singlton?
     public IEnumerator StartGame()
     {
         yield return new WaitForSeconds(1);
+        _networkPlayersController.SyncAllPlayersInfoServerRpc();
         for (int i = 0; i < _playerInfo.Length; i++)
             _playerInfo[i].Board.Init(i);
 
@@ -71,7 +81,8 @@ public class TurnManager : NetworkBehaviour //to singlton?
     public void StartGameForAllClientRpc()
     {
         _indexActualPlayer = 0;
-        OnGameStarted?.Invoke(_indexActualPlayer);
+        _networkPlayersController.ShowPlayerElement(IndexActualPlayer, true);
+        OnGameStarted?.Invoke(IndexActualPlayer);
     }
 
     public void SubsribeOnStateMachine(Action<IState> action) => _stateMachine.OnStateChange += action;
@@ -96,23 +107,24 @@ public class TurnManager : NetworkBehaviour //to singlton?
     [ServerRpc(RequireOwnership = false)]
     private void SelectNextPlayerServerRpc()
     {
-        int previousPlayerIndex = _indexActualPlayer;
+        ulong previousPlayerIndex = PlayersId[_indexActualPlayer];
         _indexActualPlayer++;
-        if (IndexActualPlayer >= MaxPlayersCount)
+        if (_indexActualPlayer >= PlayersId.Count)
             _indexActualPlayer = 0;
 
-        RoundEndedFroAllClientRpc(previousPlayerIndex, IndexActualPlayer);
+        RoundEndedFroAllClientRpc(previousPlayerIndex, IndexActualPlayer, _indexActualPlayer);
     }
 
     [ClientRpc]
-    private void RoundEndedFroAllClientRpc(int prev, int next)
+    private void RoundEndedFroAllClientRpc(ulong prev, ulong next, int index)
     {
-        _indexActualPlayer = next;
+        _indexActualPlayer = index;
         OnRoundEnded?.Invoke(prev, next);
 
-
-        //need?
-        if (_indexActualPlayer == (int)NetworkManager.Singleton.LocalClientId)
+        _networkPlayersController.ShowPlayerElement(next, true);
+        _networkPlayersController.ShowPlayerElement(prev, false);
+        
+        if (next == NetworkManager.Singleton.LocalClientId)
             _stateMachine.BlocksSelectState();
         else
             _stateMachine.SelectState(null);
@@ -122,6 +134,7 @@ public class TurnManager : NetworkBehaviour //to singlton?
     public void WasSelectedBlocksSelector() => _stateMachine.BlocksPlaceState();
 
     public bool IsAnyEnviroment() => _environmentController.IsAnyEnviroment();
+
 }
 
 

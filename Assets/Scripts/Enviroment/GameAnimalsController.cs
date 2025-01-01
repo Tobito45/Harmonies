@@ -57,7 +57,7 @@ namespace Harmonies.Enviroment
                 _animalsObjects[i].gameObject.SetActive(true);
                 _animalsObjects[i].GetComponent<SphereCollider>().enabled = false;
 
-                if (_turnManager.IndexActualPlayer == (int)NetworkManager.Singleton.LocalClientId)
+                if (_turnManager.IndexActualPlayer == NetworkManager.Singleton.LocalClientId)
                 {
                     if (_basicMaterials[i] == null)
                         _basicMaterials[i] = _animalsMeshRenders[i].material;
@@ -66,7 +66,7 @@ namespace Harmonies.Enviroment
                 }
             }
 
-            if (_turnManager.IndexActualPlayer == (int)NetworkManager.Singleton.LocalClientId)
+            if (_turnManager.IndexActualPlayer == NetworkManager.Singleton.LocalClientId)
                 ActiveNextAnimal();
         }
 

@@ -17,6 +17,11 @@ public class SceneInstaller : MonoInstaller
     [SerializeField]
     private EnvironmentController _environmentController;
 
+    [SerializeField]
+    private NetworkManagerUI _networkManagerUI;
+
+    [SerializeField]
+    private NetworkPlayersController _networkPlayersController;
 
     public override void InstallBindings()
     {
@@ -24,6 +29,8 @@ public class SceneInstaller : MonoInstaller
         Container.Bind<TurnManager>().FromComponentInHierarchy(_turnManager).AsSingle();
         Container.Bind<SpawnBlocksController>().FromComponentInHierarchy(_spawnBlocksController).AsSingle();
         Container.Bind<EnvironmentController>().FromComponentInHierarchy(_environmentController).AsSingle();
+        Container.Bind<NetworkManagerUI>().FromComponentInHierarchy(_networkManagerUI).AsSingle();
+        Container.Bind<NetworkPlayersController>().FromComponentInHierarchy(_networkPlayersController).AsSingle();
 
         InitObjectsFactory.Init(_turnManager, _environmentController, 
             _spawnBlocksController, _turnManager.GetAllBoardSceneGenerators.ToArray());

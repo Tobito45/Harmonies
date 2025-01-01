@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour
         _turnManager.OnRoundEnded += OnRoundEnded;
     }
 
-    private void OnRoundEnded(int previous, int actual)
+    private void OnRoundEnded(ulong previous, ulong actual)
     {
         _targetPosition = _playersPosition[actual].position;
         _isMoving = true;

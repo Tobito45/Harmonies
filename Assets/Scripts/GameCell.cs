@@ -41,7 +41,7 @@ public class GameCell : NetworkBehaviour
     private void Start() => _selecter.SetActive(false);
     private void OnTriggerEnter(Collider other)
     {
-        if (_isAnimalOn || _turnManager.IndexActualPlayer != (int)NetworkManager.Singleton.LocalClientId)
+        if (_isAnimalOn || _turnManager.IndexActualPlayer != NetworkManager.Singleton.LocalClientId)
             return;
 
         if (_actualBlock == null && other.TryGetComponent(out ElementSelectorController block))
@@ -57,7 +57,7 @@ public class GameCell : NetworkBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (_isAnimalOn || _turnManager.IndexActualPlayer != (int)NetworkManager.Singleton.LocalClientId)
+        if (_isAnimalOn || _turnManager.IndexActualPlayer != NetworkManager.Singleton.LocalClientId)
             return;
 
         if (other.TryGetComponent(out ElementSelectorController block))

@@ -23,18 +23,18 @@ namespace Harmonies.Enviroment
             _turnManager = turnManager;
             _environments = new GameAnimalsController[4][];
             for (int i = 0; i < _environments.Length; i++)
-                _environments[i] = new GameAnimalsController[_turnManager.MaxPlayersCount];
+                _environments[i] = new GameAnimalsController[4]; //TODO
         }
 
         public void CreatePlayerSelectableEnvironment()
         {
             for (int i = 0; i < _environments.Length; i++)
             {
-                if (_environments[i][_turnManager.IndexActualPlayer] == null)
+                if (_environments[i][_turnManager.GetActualPlayerNumber] == null)
                 {
-                    CreateEnveromentServerRpc(i, _turnManager.IndexActualPlayer);
+                    CreateEnveromentServerRpc(i, _turnManager.GetActualPlayerNumber);
                     StartCoroutine(InitObjectsFactory.WaitForCallbackWithPredicate(typeof(BlockSelectorController), 
-                            (_environments, i, _turnManager.IndexActualPlayer), () =>
+                            (_environments, i, _turnManager.GetActualPlayerNumber), () =>
                             {
                                 _turnManager.WasSelectedOrSkipedAnimalsEnviroment();
                             }));
@@ -68,9 +68,9 @@ namespace Harmonies.Enviroment
         {
             for (int i = 0; i < _environments.Length; i++)
             {
-                if (_environments[i][_turnManager.IndexActualPlayer] == animal)
+                if (_environments[i][_turnManager.GetActualPlayerNumber] == animal)
                 {
-                    _environments[i][_turnManager.IndexActualPlayer] = null;
+                    _environments[i][_turnManager.GetActualPlayerNumber] = null;
                     DestroyServerRpc(animal.GetComponent<NetworkObject>().NetworkObjectId);
                     break;
                 }
@@ -87,7 +87,7 @@ namespace Harmonies.Enviroment
         public bool CanCreate()
         {
             for (int i = 0; i < _environments.Length; i++)
-                if (_environments[i][_turnManager.IndexActualPlayer] == null) return true;
+                if (_environments[i][_turnManager.GetActualPlayerNumber] == null) return true;
 
             return false;
         }
@@ -95,7 +95,7 @@ namespace Harmonies.Enviroment
         public bool IsAnyEnviroment()
         {
             for (int i = 0; i < _environments.Length; i++)
-                if (_environments[i][_turnManager.IndexActualPlayer] != null) return true;
+                if (_environments[i][_turnManager.GetActualPlayerNumber] != null) return true;
 
             return false;
         }

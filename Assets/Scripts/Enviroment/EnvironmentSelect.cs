@@ -25,7 +25,7 @@ namespace Harmonies.Enviroment
 
         private void OnMouseDown()
         {
-            if (_turnManager.IndexActualPlayer != (int)NetworkManager.Singleton.LocalClientId)
+            if (_turnManager.IndexActualPlayer != NetworkManager.Singleton.LocalClientId)
                 return;
 
             if (_unableInteraction) return;
