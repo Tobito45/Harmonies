@@ -18,6 +18,8 @@ public class GameCell : NetworkBehaviour
     private TurnManager _turnManager;
     private BoardNode<BlockType> _node;
     private bool _isAnimalOn = false;
+    public int HelperNumberScore { get; set; } = 0;
+    public BoardNode<BlockType> Node => _node;
     public void Init(BoardNode<BlockType> node, TurnManager turnManager, 
         SpawnBlocksController spawnBlocksController, EnvironmentController environmentController)
     {

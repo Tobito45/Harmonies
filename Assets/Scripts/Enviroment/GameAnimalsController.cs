@@ -30,6 +30,7 @@ namespace Harmonies.Enviroment
         private TurnManager _turnManager;
         private int _index;
 
+        public int Index => _index;
         public void Init(EnvironmentController environmentController, TurnManager turnManager)
         {
             _environmentController = environmentController;

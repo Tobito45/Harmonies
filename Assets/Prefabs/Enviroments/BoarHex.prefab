@@ -94,6 +94,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Index>k__BackingField: 1
+  scores: 04000000080000000d000000
 --- !u!1001 &370463013203015896
 PrefabInstance:
   m_ObjectHideFlags: 0

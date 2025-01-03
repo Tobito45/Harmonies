@@ -20,7 +20,10 @@ public class NetworkManagerUI : NetworkBehaviour
     [SerializeField]
     private GameObject _prefabPlayer;
 
-    private Dictionary<ulong, GameObject> _playersElements = new Dictionary<ulong, GameObject>();
+    private Dictionary<ulong, PlayerInfoElement> _playersElements = new Dictionary<ulong, PlayerInfoElement>();
+
+    [Inject]
+    private void Construct(NetworkPlayersController networkPlayersController) => networkPlayersController.OnIdPlayersCreate += CreatePlayersElements;
 
     private void Awake()
     {
@@ -61,20 +64,25 @@ public class NetworkManagerUI : NetworkBehaviour
     public void CreatePlayersElements(List<ulong> ids)
     {
         for(int i  = 0; i < ids.Count; i++)
-            _playersElements.Add(ids[i], _panelPlayers.GetChild(i).gameObject);
+        {
+            _playersElements.Add(ids[i], _panelPlayers.GetChild(i).gameObject.GetComponent<PlayerInfoElement>());
+            _playersElements[ids[i]].UpdateInfo(ids[i], 0);
+        }
 
-        _playersElements[NetworkManager.Singleton.LocalClientId].GetComponent<Image>().color = Color.green;
+        _playersElements[NetworkManager.Singleton.LocalClientId].Image.color = Color.green;
     }
 
     public void MakePlayerSelected(ulong id, bool enable)
     {
         if(enable) 
-            _playersElements[id].GetComponent<Image>().color = Color.yellow;
+            _playersElements[id].Image.color = Color.yellow;
         else {
-            _playersElements[id].GetComponent<Image>().color = Color.white;
+            _playersElements[id].Image.color = Color.white;
 
             if(id == NetworkManager.Singleton.LocalClientId)
-                _playersElements[id].GetComponent<Image>().color = Color.green;
+                _playersElements[id].Image.color = Color.green;
         }
     }
+
+    public void UpdatePlayerInfo(ulong id, int newScore) => _playersElements[id].UpdateInfo(id, newScore);
 }
