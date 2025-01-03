@@ -1,4 +1,5 @@
 using Harmonies.InitObjets;
+using Harmonies.Score;
 using Harmonies.States;
 using System;
 using Unity.Netcode;
@@ -34,11 +35,14 @@ namespace Harmonies.Selectors
         protected override void OnSpawnElementOnCell(GameCell gameCell)
         {
             gameCell.SpawnBlock(_blockInfo);
-            IsSpawnedInGame = true;
-            _scoreController.UpdateScore(_blockInfo.CalculateChangesOnMap(gameCell.Node));
-            (int score, int help) = _blockInfo.GetNewScore(gameCell.Node);
+            if (gameCell.Node.IndexesCount == 1)
+                _scoreController.CountFreeCells--;
 
-            _scoreController.UpdateScore(score);
+            IsSpawnedInGame = true;
+            int upd = ScoreBlockCalculator.CalculateChangesOnMap(gameCell.Node);
+            (int score, int help) = ScoreBlockCalculator.GetNewScore(gameCell.Node);
+
+            _scoreController.UpdateScore(score + upd);
             gameCell.HelperNumberScore = help;
 
             _spawnBlocksController.WasSpawnedBlock();

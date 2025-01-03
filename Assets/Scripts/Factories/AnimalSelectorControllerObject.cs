@@ -1,4 +1,4 @@
-using Harmonies.Conditions;
+using Harmonies.Score;
 using Harmonies.Selectors;
 using System;
 

@@ -1,4 +1,5 @@
 using Harmonies.Enviroment;
+using Harmonies.Score;
 using Harmonies.Selectors;
 using System;
 using System.Collections;

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Harmonies.States
@@ -20,33 +18,22 @@ namespace Harmonies.States
         public abstract void Exit();
     }
 
-
     public class BlocksPlaceSelectState : BaseState
     {
         public BlocksPlaceSelectState(StateMachine stateMachine) : base(stateMachine) { }
 
-        public override void Entry()
-        {
-            Debug.Log(nameof(BlocksPlaceSelectState) + " entry");
-        }
+        public override void Entry() => Debug.Log(nameof(BlocksPlaceSelectState) + " entry");
 
-        public override void Exit()
-        {
-        }
+        public override void Exit() { }
     }
 
     public class AnimalsEnvironmentSelectState : BlocksPlaceSelectState
     {
         public AnimalsEnvironmentSelectState(StateMachine stateMachine) : base(stateMachine) { }
 
-        public override void Entry()
-        {
-            Debug.Log(nameof(AnimalsEnvironmentSelectState) + " entry");
-        }
+        public override void Entry() => Debug.Log(nameof(AnimalsEnvironmentSelectState) + " entry");
 
-        public override void Exit()
-        {
-        }
+        public override void Exit() { }
     }
 
     public class AnimalsSelectState : BlocksPlaceSelectState
@@ -62,22 +49,40 @@ namespace Harmonies.States
 
         }
 
-        public override void Exit()
-        {
-        }
+        public override void Exit() { }
     }
 
     public class BlockSelectState : BlocksPlaceSelectState
     {
         public BlockSelectState(StateMachine stateMachine) : base(stateMachine) { }
 
+        public override void Entry() => Debug.Log(nameof(BlockSelectState) + " entry");
+
+        public override void Exit() { }
+    }
+
+    public class EndRoundState : BlocksPlaceSelectState
+    {
+        public EndRoundState(StateMachine stateMachine) : base(stateMachine) { }
+
         public override void Entry()
         {
-            Debug.Log(nameof(BlockSelectState) + " entry");
+            Debug.Log(nameof(EndGameState) + " entry");
+            if (TurnManager.IsPlayerEnded())
+                TurnManager.PlayerEndsPlay();
+            else
+                TurnManager.SelectNextPlayer();
         }
 
-        public override void Exit()
-        {
-        }
+        public override void Exit() { }
+    }
+
+    public class EndGameState : BlocksPlaceSelectState
+    {
+        public EndGameState(StateMachine stateMachine) : base(stateMachine) { }
+
+        public override void Entry() => Debug.Log(nameof(EndGameState) + " entry");
+
+        public override void Exit() { }
     }
 }

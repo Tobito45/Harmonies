@@ -10,6 +10,8 @@ namespace Harmonies.States {
         private IState _environmentSelectState;
         private IState _animalsSelectState;
         private IState _blockSelectState;
+        private IState _endRoundState;
+        private IState _endGameState;
         public Action<IState> OnStateChange;
 
         public TurnManager TurnManager { get; set; }
@@ -22,6 +24,8 @@ namespace Harmonies.States {
             _animalsSelectState = new AnimalsSelectState(this);
             _environmentSelectState = new AnimalsEnvironmentSelectState(this);
             _blockSelectState = new BlockSelectState(this);
+            _endRoundState = new EndRoundState(this);
+            _endGameState = new EndGameState(this);
         }
 
         public void SelectState(IState state)
@@ -40,5 +44,7 @@ namespace Harmonies.States {
         public void AnimalsEnvironmentSelectState() => SelectState(_environmentSelectState);
         public void AnimalsSelectState() => SelectState(_animalsSelectState);
         public void BlocksSelectState() => SelectState(_blockSelectState);
+        public void EndGameState() => SelectState(_endGameState);
+        public void EndRoundState() => SelectState(_endRoundState);
     }
 }

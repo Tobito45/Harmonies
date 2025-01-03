@@ -1,5 +1,6 @@
 using Harmonies.Enviroment;
 using Harmonies.InitObjets;
+using Harmonies.Score;
 using Harmonies.Selectors;
 using Harmonies.States;
 using System.Linq;
@@ -34,6 +35,7 @@ public class SceneInstaller : MonoInstaller
         Container.Bind<EnvironmentController>().FromComponentInHierarchy(_environmentController).AsSingle();
         Container.Bind<NetworkManagerUI>().FromComponentInHierarchy(_networkManagerUI).AsSingle();
         Container.Bind<NetworkPlayersController>().FromComponentInHierarchy(_networkPlayersController).AsSingle();
+        Container.Bind<ScoreController>().FromComponentInHierarchy(_scoreController).AsSingle();
 
         InitObjectsFactory.Init(_turnManager, _environmentController, 
             _spawnBlocksController, _turnManager.GetAllBoardSceneGenerators.ToArray(), _scoreController);

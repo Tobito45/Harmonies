@@ -1,4 +1,5 @@
 using Harmonies.Enviroment;
+using Harmonies.Score;
 using Harmonies.Selectors;
 using Harmonies.States;
 using System;
@@ -9,11 +10,12 @@ using Unity.Netcode;
 using UnityEngine;
 using Zenject;
 
-public class TurnManager : NetworkBehaviour //to singlton?
+public class TurnManager : NetworkBehaviour 
 {
     private SpawnBlocksController _spawnBlocksController;
     private EnvironmentController _environmentController;
     private NetworkPlayersController _networkPlayersController;
+    private ScoreController _scoreController;
 
     private StateMachine _stateMachine;
 
@@ -24,6 +26,8 @@ public class TurnManager : NetworkBehaviour //to singlton?
     //public int MaxPlayersCount { get; private set; }
     private List<ulong> _playersId = new List<ulong>();
     public int PlayersCount => _playersId.Count;
+
+    private int _turnNumber = 0;
 
     [SerializeField]
     private PlayerInfo[] _playerInfo;
@@ -40,7 +44,8 @@ public class TurnManager : NetworkBehaviour //to singlton?
     public void Construct(StateMachine stateMachine, 
         SpawnBlocksController spawnBlocksController, 
         EnvironmentController environmentController,
-        NetworkPlayersController networkPlayersController)
+        NetworkPlayersController networkPlayersController,
+        ScoreController scoreController)
     {
         _stateMachine = stateMachine;
         stateMachine.TurnManager = this;
@@ -49,6 +54,7 @@ public class TurnManager : NetworkBehaviour //to singlton?
         _spawnBlocksController = spawnBlocksController;
         _environmentController = environmentController;
         _networkPlayersController = networkPlayersController;
+        _scoreController = scoreController;
         _networkPlayersController.OnIdPlayersCreate += (ids) => _playersId = ids;
     }
 
@@ -84,6 +90,9 @@ public class TurnManager : NetworkBehaviour //to singlton?
         _indexActualPlayer = 0;
         _networkPlayersController.ShowPlayerElement(IndexActualPlayer, true);
         OnGameStarted?.Invoke(IndexActualPlayer);
+
+        if (IndexActualPlayer == NetworkManager.Singleton.LocalClientId)
+            _turnNumber++;
     }
 
     public void SubsribeOnStateMachine(Action<IState> action) => _stateMachine.OnStateChange += action;
@@ -98,12 +107,9 @@ public class TurnManager : NetworkBehaviour //to singlton?
     public void WasSelectedOrSkipedAnimalsEnviroment() =>
         _stateMachine.AnimalsSelectState();
 
-    public void WasAnimalsSkiped()
-    {
-        SelectNextPlayerServerRpc();
+    public void WasAnimalsSkiped() => _stateMachine.EndRoundState();
 
-        //_stateMachine.BlocksSelectState();
-    }
+    public void SelectNextPlayer() => SelectNextPlayerServerRpc();
 
     [ServerRpc(RequireOwnership = false)]
     private void SelectNextPlayerServerRpc()
@@ -126,16 +132,41 @@ public class TurnManager : NetworkBehaviour //to singlton?
         _networkPlayersController.ShowPlayerElement(prev, false);
         
         if (next == NetworkManager.Singleton.LocalClientId)
+        {
             _stateMachine.BlocksSelectState();
+            _turnNumber++;
+        }
         else
             _stateMachine.SelectState(null);
 
     }
+
+    public void PlayerEndsPlay()
+    {
+        bool wasLast = _indexActualPlayer == _playersId.Count - 1;
+        PlayerEndedServerRpc(IndexActualPlayer, wasLast);
+
+        if (!wasLast)
+            SelectNextPlayerServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void PlayerEndedServerRpc(ulong id, bool wasLast)
+    {
+        Debug.Log($"{id} ends his game");
+        if (wasLast)
+        {
+            _stateMachine.EndGameState();
+            Debug.Log($"The game is over");
+        }
+        else
+            Debug.Log($"Other players has other turn");
+    }
+
     public void SpawnEnvironmentToPlayerZone() => _environmentController.CreatePlayerSelectableEnvironment();
     public void WasSelectedBlocksSelector() => _stateMachine.BlocksPlaceState();
-
     public bool IsAnyEnviroment() => _environmentController.IsAnyEnviroment();
-
+    public bool IsPlayerEnded() => _scoreController.IsGameEnd;
 }
 
 

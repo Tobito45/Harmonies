@@ -8,7 +8,7 @@ namespace Harmonies.Structures
     {
         private int _height, _width, _size;
         private BoardNode<T>[] _nodes;
-
+        public int Count => _nodes.Length;
         public IEnumerable<BoardNode<T>> GetNodes =>  _nodes;
         public IEnumerable<(BoardNode<T> node, int index)> GetNodesWithIndex()
         {
