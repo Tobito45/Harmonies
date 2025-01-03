@@ -9,12 +9,14 @@ namespace Harmonies.Selectors
     {
         private GameBlock _blockInfo;
         private SpawnBlocksController _spawnBlocksController;
+        private ScoreController _scoreController;
         public bool IsSpawnedInGame { get; private set; }
 
-        public void Init(SpawnBlocksController spawnBlocksController, TurnManager turnManager)
+        public void Init(SpawnBlocksController spawnBlocksController, TurnManager turnManager, ScoreController scoreController)
         {
             _spawnBlocksController = spawnBlocksController;
             _turnManager = turnManager;
+            _scoreController = scoreController;
         }
 
         public void Init() => InitClientRpc();
@@ -33,6 +35,12 @@ namespace Harmonies.Selectors
         {
             gameCell.SpawnBlock(_blockInfo);
             IsSpawnedInGame = true;
+            _scoreController.UpdateScore(_blockInfo.CalculateChangesOnMap(gameCell.Node));
+            (int score, int help) = _blockInfo.GetNewScore(gameCell.Node);
+
+            _scoreController.UpdateScore(score);
+            gameCell.HelperNumberScore = help;
+
             _spawnBlocksController.WasSpawnedBlock();
         }
         protected override void OnStatusChange(IState newState) => _unableInteraction = newState is not BlocksPlaceSelectState;

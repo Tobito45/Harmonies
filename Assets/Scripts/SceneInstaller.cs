@@ -23,6 +23,9 @@ public class SceneInstaller : MonoInstaller
     [SerializeField]
     private NetworkPlayersController _networkPlayersController;
 
+    [SerializeField]
+    private ScoreController _scoreController;
+
     public override void InstallBindings()
     {
         Container.Bind<StateMachine>().AsSingle().NonLazy();
@@ -33,7 +36,7 @@ public class SceneInstaller : MonoInstaller
         Container.Bind<NetworkPlayersController>().FromComponentInHierarchy(_networkPlayersController).AsSingle();
 
         InitObjectsFactory.Init(_turnManager, _environmentController, 
-            _spawnBlocksController, _turnManager.GetAllBoardSceneGenerators.ToArray());
+            _spawnBlocksController, _turnManager.GetAllBoardSceneGenerators.ToArray(), _scoreController);
 
     }
 

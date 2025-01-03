@@ -7,10 +7,12 @@ namespace Harmonies.InitObjets
     internal class AnimalSelectorControllerObject : InitObjectBase, IInitObject
     {
         private TurnManager _turnManager;
+        private ScoreController _scoreController;
 
-        public AnimalSelectorControllerObject(TurnManager turnManager)
+        public AnimalSelectorControllerObject(TurnManager turnManager, ScoreController scoreController)
         {
             _turnManager = turnManager;
+            _scoreController = scoreController;
             MainType = typeof(AnimalSelectorController);
         }
 
@@ -19,7 +21,7 @@ namespace Harmonies.InitObjets
             if (obj is not AnimalSelectorController animal)
                 throw new Exception("Bad type action");
 
-            animal.Init(_turnManager);
+            animal.Init(_turnManager, _scoreController);
         }
     }
 }

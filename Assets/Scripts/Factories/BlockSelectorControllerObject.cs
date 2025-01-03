@@ -9,11 +9,13 @@ namespace Harmonies.InitObjets
     {
         private SpawnBlocksController _spawnBlocksController;
         private TurnManager _turnManager;
+        private ScoreController _scoreController;
 
-        public BlockSelectorControllerObject(SpawnBlocksController spawnBlocksController, TurnManager turnManager)
+        public BlockSelectorControllerObject(SpawnBlocksController spawnBlocksController, TurnManager turnManager, ScoreController scoreController)
         {
             _spawnBlocksController = spawnBlocksController;
             _turnManager = turnManager;
+            _scoreController = scoreController;
             MainType = typeof(BlockSelectorController);
         }
 
@@ -22,7 +24,7 @@ namespace Harmonies.InitObjets
             if (obj is not BlockSelectorController block)
                 throw new Exception("Bad type action");
 
-            block.Init(_spawnBlocksController, _turnManager);
+            block.Init(_spawnBlocksController, _turnManager, _scoreController);
         }
 
         public bool PredicateGameCell(object obj)

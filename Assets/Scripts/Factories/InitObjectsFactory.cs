@@ -16,14 +16,15 @@ namespace Harmonies.InitObjets
         public static void Init(TurnManager turnManager,
             EnvironmentController environmentController,
             SpawnBlocksController spawnBlocksController,
-            BoardSceneGenerator[] boardSceneGenerator)
+            BoardSceneGenerator[] boardSceneGenerator,
+            ScoreController scoreController)
         {
             List<InitObjectBase> initObjectBases = new()
             {
                 new GameCellObject(boardSceneGenerator, turnManager, spawnBlocksController, environmentController),
                 new GameAnimalObject(environmentController, turnManager),
-                new BlockSelectorControllerObject(spawnBlocksController, turnManager),
-                new AnimalSelectorControllerObject(turnManager)
+                new BlockSelectorControllerObject(spawnBlocksController, turnManager, scoreController),
+                new AnimalSelectorControllerObject(turnManager, scoreController)
             };
 
             InitAllDictionaries(initObjectBases);

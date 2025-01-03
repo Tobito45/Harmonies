@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -9,6 +10,8 @@ public class NetworkPlayersController : NetworkBehaviour
     private NetworkManagerUI _networkManagerUI;
     private TurnManager _turnManager;
     private List<ulong> _idPlayers = new List<ulong>();
+
+    public event Action<List<ulong>> OnIdPlayersCreate;
 
     [Inject]
     public void Construct(NetworkManagerUI networkManagerUI, TurnManager turnManager)
@@ -46,9 +49,9 @@ public class NetworkPlayersController : NetworkBehaviour
     [ClientRpc]
     private void CreateDictElementsClientRpc()
     {
-        Debug.Log(_idPlayers.Count);
-        _networkManagerUI.CreatePlayersElements(_idPlayers);
-        _turnManager.PlayersId = _idPlayers;
+        OnIdPlayersCreate(_idPlayers);
+        //_networkManagerUI.CreatePlayersElements(_idPlayers);
+        //_turnManager.PlayersId = _idPlayers;
     }
 
     public void ShowPlayerElement(ulong id, bool enabled) => _networkManagerUI.MakePlayerSelected(id, enabled);

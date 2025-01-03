@@ -19,11 +19,11 @@ public class TurnManager : NetworkBehaviour //to singlton?
 
     //starts with 0
     private int _indexActualPlayer = -1;
-    public ulong IndexActualPlayer => PlayersId[_indexActualPlayer];
+    public ulong IndexActualPlayer => _playersId[_indexActualPlayer];
     public int GetActualPlayerNumber => _indexActualPlayer;
     //public int MaxPlayersCount { get; private set; }
-    public List<ulong> PlayersId { get; set; } = new List<ulong>();
-    public int PlayersCount => PlayersId.Count;
+    private List<ulong> _playersId = new List<ulong>();
+    public int PlayersCount => _playersId.Count;
 
     [SerializeField]
     private PlayerInfo[] _playerInfo;
@@ -49,6 +49,7 @@ public class TurnManager : NetworkBehaviour //to singlton?
         _spawnBlocksController = spawnBlocksController;
         _environmentController = environmentController;
         _networkPlayersController = networkPlayersController;
+        _networkPlayersController.OnIdPlayersCreate += (ids) => _playersId = ids;
     }
 
     private void Update()
@@ -107,9 +108,9 @@ public class TurnManager : NetworkBehaviour //to singlton?
     [ServerRpc(RequireOwnership = false)]
     private void SelectNextPlayerServerRpc()
     {
-        ulong previousPlayerIndex = PlayersId[_indexActualPlayer];
+        ulong previousPlayerIndex = _playersId[_indexActualPlayer];
         _indexActualPlayer++;
-        if (_indexActualPlayer >= PlayersId.Count)
+        if (_indexActualPlayer >= _playersId.Count)
             _indexActualPlayer = 0;
 
         RoundEndedFroAllClientRpc(previousPlayerIndex, IndexActualPlayer, _indexActualPlayer);

@@ -30,9 +30,6 @@ namespace Harmonies.Selectors
             _turnManager.SubsribeOnStateMachine(OnStatusChange);
         }
 
-        [Inject]
-        public void Construct(TurnManager turnManager) => _turnManager = turnManager;
-
         private void Update()
         {
             if (_isDragging && Input.GetMouseButtonUp(0))
