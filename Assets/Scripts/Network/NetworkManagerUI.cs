@@ -1,7 +1,12 @@
+using Harmonies.Enums;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
 using TMPro;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -13,7 +18,7 @@ public class NetworkManagerUI : NetworkBehaviour
     [SerializeField] 
     private Button _clientButton;
     [SerializeField]
-    private TextMeshProUGUI textId, textActualId;
+    private TextMeshProUGUI textId, textActualId, _textIpAdress;
 
     [SerializeField]
     private Transform _panelPlayers;
@@ -29,15 +34,82 @@ public class NetworkManagerUI : NetworkBehaviour
     {
         textId.text = string.Empty;
         textActualId.text = string.Empty;
-        _hostButton.onClick.AddListener(() =>
-        {
-            NetworkManager.Singleton.StartHost();
-        });
+        (UserType userType, string ip, ushort port) = DataConnecterController.Singlton.GetData;
 
-        _clientButton.onClick.AddListener(() =>
+        if (userType == UserType.None)
         {
-            NetworkManager.Singleton.StartClient();
-        });
+            _hostButton.onClick.AddListener(() =>
+            {
+                NetworkManager.Singleton.StartHost();
+            });
+
+            _clientButton.onClick.AddListener(() =>
+            {
+                NetworkManager.Singleton.StartClient();
+            });
+        } else
+        {
+            _textIpAdress.text += GetLocalIPAddress();
+            _hostButton.gameObject.SetActive(false);
+            _clientButton.gameObject.SetActive(false);    
+
+            if(userType == UserType.Host)
+            {
+                StartCoroutine(ConnectTimer(() =>
+                {
+                    NetworkManager.Singleton.StartHost();
+                    Debug.Log($"Host started");
+                }));
+                
+            } else if (userType == UserType.Client)
+            {
+                StartCoroutine(ConnectTimer(() =>
+                {
+                    SetConnectionData(ip, port);
+                    NetworkManager.Singleton.StartClient();
+                    Debug.Log($"Client connecting to {ip}:{port}");
+                }));
+            }
+        }
+    }
+
+    private IEnumerator ConnectTimer(Action action)
+    {
+        yield return new WaitForSeconds(1);
+        action();
+    }
+
+    private static string GetLocalIPAddress()
+    {
+        try
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork) // IPv4
+                {
+                    return ip.ToString();
+                }
+            }
+            return "No IPv4 address found";
+        }
+        catch (SocketException ex)
+        {
+            Debug.LogError($"Error retrieving local IP: {ex.Message}");
+            return "Error retrieving IP";
+        }
+    }
+    private void SetConnectionData(string ipAddress, ushort port)
+    {
+        UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+        if (transport != null)
+        {
+            transport.SetConnectionData(ipAddress, port);
+        }
+        else
+        {
+            Debug.LogError("UnityTransport is not attached to the NetworkManager!");
+        }
     }
 
     public void CreateNewPrefabPlayer(ulong id, int count)
