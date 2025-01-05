@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 2762073329625323380}
   - component: {fileID: 3847620352243040854}
   - component: {fileID: 9943494549798117}
+  - component: {fileID: 3251905287445625946}
+  - component: {fileID: 7058867976259467345}
   m_Layer: 0
   m_Name: BoarHex
   m_TagString: Untagged
@@ -95,6 +97,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Index>k__BackingField: 1
   scores: 04000000080000000d000000
+--- !u!114 &3251905287445625946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4023398451545170073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905e0c80be0799e4c894bf14b1c2b8ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _offset: {x: 0, y: 0, z: 0}
+--- !u!65 &7058867976259467345
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4023398451545170073}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.043304, y: 0.641948, z: 2.2902806}
+  m_Center: {x: -0.112362005, y: -0.17902605, z: 0.04133463}
 --- !u!1001 &370463013203015896
 PrefabInstance:
   m_ObjectHideFlags: 0

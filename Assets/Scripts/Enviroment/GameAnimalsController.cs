@@ -38,6 +38,8 @@ namespace Harmonies.Enviroment
 
             if (GameAnimal == null)
                 GameAnimal = GetComponent<GameAnimal>();
+
+            GetComponent<ConditionShower>().Init(environmentController, GameAnimal.Index);
         }
 
         public void Init() => InitClientRpc();

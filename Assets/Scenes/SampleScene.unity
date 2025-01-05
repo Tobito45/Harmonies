@@ -2042,6 +2042,13 @@ MonoBehaviour:
   - {fileID: 3846860598853044191, guid: 172d6b121abba5044bddd673f592fe99, type: 3}
   - {fileID: 3434560531640567886, guid: 25dea643fe5b4df449e400d2b8f61084, type: 3}
   - {fileID: 6402809674303974443, guid: 4da64ad75a045e3419ada5a78a910f04, type: 3}
+  _prefabConditions:
+  - {fileID: 7243820514922518058, guid: 7ddbb31980e11f742ab5fb5e869b9482, type: 3}
+  - {fileID: 3163835427326015393, guid: 5234fc10e2643384694d9a502d83a007, type: 3}
+  - {fileID: 1493095842899554526, guid: c5df93160b7d95540b8c9a3cc837a51c, type: 3}
+  - {fileID: 8550901951964162857, guid: f7a73816fd138714a9aeeb3e20ab9524, type: 3}
+  - {fileID: 7113878923625861038, guid: a6eb3bb90bcd3d94f9df8bfb771552e1, type: 3}
+  - {fileID: 439081154004895185, guid: c9f55890cc4da194aaa17679488831fa, type: 3}
 --- !u!4 &836851122
 Transform:
   m_ObjectHideFlags: 0

@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 6859209873928630458}
   - component: {fileID: 797320555497148869}
   - component: {fileID: 223190527268828265}
+  - component: {fileID: -6457262393269226688}
+  - component: {fileID: 3991719125569873417}
   m_Layer: 0
   m_Name: SurricatHex
   m_TagString: Untagged
@@ -98,6 +100,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Index>k__BackingField: 4
   scores: 0200000005000000090000000e000000
+--- !u!114 &-6457262393269226688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8314217118606396135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905e0c80be0799e4c894bf14b1c2b8ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _offset: {x: 0, y: 0, z: 0}
+--- !u!65 &3991719125569873417
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8314217118606396135}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.043304, y: 0.641948, z: 2.2902806}
+  m_Center: {x: -0.112362005, y: -0.17902605, z: 0.04133463}
 --- !u!1001 &15599148564637732
 PrefabInstance:
   m_ObjectHideFlags: 0

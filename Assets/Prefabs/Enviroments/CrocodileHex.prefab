@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 4080044214600112676}
   - component: {fileID: 7029364700536986130}
   - component: {fileID: 3617261495345446057}
+  - component: {fileID: 811429208558139784}
+  - component: {fileID: -4021102978484311015}
   m_Layer: 0
   m_Name: CrocodileHex
   m_TagString: Untagged
@@ -95,6 +97,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Index>k__BackingField: 2
   scores: 04000000090000000f000000
+--- !u!114 &811429208558139784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2372793462050533248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905e0c80be0799e4c894bf14b1c2b8ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _offset: {x: 0, y: 0, z: 0}
+--- !u!65 &-4021102978484311015
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2372793462050533248}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.043304, y: 0.641948, z: 2.2902806}
+  m_Center: {x: -0.112362005, y: -0.17902605, z: 0.04133463}
 --- !u!1001 &198366250760934458
 PrefabInstance:
   m_ObjectHideFlags: 0

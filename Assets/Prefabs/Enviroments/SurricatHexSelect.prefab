@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2794884265556447681}
   - component: {fileID: 6220882614855461616}
   - component: {fileID: 2457652003307459810}
+  - component: {fileID: 1197430550790092788}
   m_Layer: 0
   m_Name: SurricatHexSelect
   m_TagString: Untagged
@@ -94,6 +95,19 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.15
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1197430550790092788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3434560531640567886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905e0c80be0799e4c894bf14b1c2b8ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _offset: {x: 0, y: 0, z: 0}
 --- !u!1001 &250473404281240173
 PrefabInstance:
   m_ObjectHideFlags: 0

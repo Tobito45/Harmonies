@@ -19,6 +19,8 @@ namespace Harmonies.Enviroment
         private GameObject[] _prefabAnimalsSpawn;
         [SerializeField]
         private GameObject[] _prefabEnviromentsSelectSpawn;
+        [SerializeField]
+        private GameObject[] _prefabConditions;
 
         //can be one size
         private GameAnimalsController[][] _environments;
@@ -153,5 +155,6 @@ namespace Harmonies.Enviroment
         }
 
         public GameObject GetAnimalByIndex(int index) => _prefabAnimalsSpawn[index];
+        public GameObject GetPrefabCondition(int index) => _prefabConditions[index];
     }
 }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 972887557872594229}
   - component: {fileID: 2538751682041478770}
   - component: {fileID: 4300827702971765575}
+  - component: {fileID: -2442532631152676598}
   m_Layer: 0
   m_Name: BoarHexSelect
   m_TagString: Untagged
@@ -93,6 +94,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animalType: 1
+--- !u!114 &-2442532631152676598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1094994333050045693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905e0c80be0799e4c894bf14b1c2b8ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _offset: {x: 0, y: 0, z: 0}
 --- !u!1001 &151467474282593635
 PrefabInstance:
   m_ObjectHideFlags: 0
