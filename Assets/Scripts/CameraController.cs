@@ -22,12 +22,12 @@ public class CameraController : MonoBehaviour
     public void Construct(TurnManager turnManager)
     {
         _turnManager = turnManager;
-        _turnManager.OnRoundEnded += OnRoundEnded;
+        //_turnManager.OnRoundEnded += OnRoundEnded;
     }
 
     private void OnRoundEnded(ulong previous, ulong actual)
     {
-        _targetPosition = _playersPosition[actual].position;
+        //_targetPosition = _playersPosition[actual].position;
         _isMoving = true;
     }
     private void Update()

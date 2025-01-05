@@ -163,7 +163,7 @@ public class TurnManager : NetworkBehaviour
             Debug.Log($"Other players has other turn");
     }
 
-    public void SpawnEnvironmentToPlayerZone() => _environmentController.CreatePlayerSelectableEnvironment();
+    //public void SpawnEnvironmentToPlayerZone() => _environmentController.CreatePlayerSelectableEnvironment();
     public void WasSelectedBlocksSelector() => _stateMachine.BlocksPlaceState();
     public bool IsAnyEnviroment() => _environmentController.IsAnyEnviroment();
     public bool IsPlayerEnded() => _scoreController.IsGameEnd;
@@ -174,9 +174,10 @@ public class TurnManager : NetworkBehaviour
 public class PlayerInfo
 {
     [SerializeField]
-    private Transform[] _environmnetsSpawns;
+    private Transform[] _environmnetsSpawns, _enviromentsSelectSpawn;
 
     [field: SerializeField]
     public BoardSceneGenerator Board { get; private set; }
     public Transform GetEnvironmentSpawn(int index) => _environmnetsSpawns[index];
+    public Transform GetEnvironmentSelectSpawn(int index) => _enviromentsSelectSpawn[index];
 }

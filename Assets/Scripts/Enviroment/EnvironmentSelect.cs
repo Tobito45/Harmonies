@@ -1,5 +1,8 @@
+using Harmonies.Enums;
 using Harmonies.States;
+using System;
 using Unity.Netcode;
+using UnityEngine;
 using Zenject;
 
 
@@ -10,6 +13,9 @@ namespace Harmonies.Enviroment
         private EnvironmentController _environmentController;
         private TurnManager _turnManager;
         private bool _unableInteraction;
+
+        [SerializeField]
+        private AnimalType _animalType;
 
         [Inject]
         public void Construct(TurnManager turnManager, EnvironmentController environmentController)
@@ -32,7 +38,7 @@ namespace Harmonies.Enviroment
 
             if (_environmentController.CanCreate())
             {
-                _environmentController.CreatePlayerSelectableEnvironment();
+                _environmentController.CreatePlayerSelectableEnvironment(_animalType);
                 DespawnServerRpc();
             }
         }

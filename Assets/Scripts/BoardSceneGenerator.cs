@@ -22,6 +22,7 @@ public class BoardSceneGenerator : NetworkBehaviour
     private int _width = 5;
 
     private ScoreController _scoreController;
+
     public BoardGraph<BlockType> BoardGraph { get; private set; }
 
     [Inject]
@@ -35,7 +36,7 @@ public class BoardSceneGenerator : NetworkBehaviour
         
         foreach ((BoardNode<BlockType> item, int index) in BoardGraph.GetNodesWithIndex())
         {
-            var obj = Instantiate(_prefab, new Vector3(item.Coordinates.y * 3f, 0, item.Coordinates.x) + _offset.position, _prefab.transform.rotation);
+            var obj = Instantiate(_prefab, new Vector3(item.Coordinates.y * 2.2f, 0, item.Coordinates.x * 1.4f) + _offset.position, _prefab.transform.rotation);
             obj.GetComponent<NetworkObject>().Spawn();
             SyncForClientRpc(obj.GetComponent<NetworkObject>().NetworkObjectId, index, i);
         }

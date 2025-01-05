@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class FreeCamera : NetworkBehaviour
+public class FreeCameraMovement : NetworkBehaviour
 {
     private Camera _camera;
 

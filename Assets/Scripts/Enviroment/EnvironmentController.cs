@@ -1,3 +1,4 @@
+using Harmonies.Enums;
 using Harmonies.InitObjets;
 using Harmonies.Selectors;
 using Unity.Netcode;
@@ -8,12 +9,15 @@ namespace Harmonies.Enviroment
 {
     public class EnvironmentController : NetworkBehaviour
     {
+        private const int MAX_PLAYERS = 4; //TODO: other way
         private TurnManager _turnManager;
 
         [SerializeField]
         private GameObject[] _prefabEnviroments;
         [SerializeField]
         private GameObject[] _prefabAnimalsSpawn;
+        [SerializeField]
+        private GameObject[] _prefabEnviromentsSelectSpawn;
 
         private GameAnimalsController[][] _environments;
 
@@ -21,18 +25,18 @@ namespace Harmonies.Enviroment
         public void Construct(TurnManager turnManager)
         {
             _turnManager = turnManager;
-            _environments = new GameAnimalsController[4][];
+            _environments = new GameAnimalsController[MAX_PLAYERS][];
             for (int i = 0; i < _environments.Length; i++)
-                _environments[i] = new GameAnimalsController[4]; //TODO
+                _environments[i] = new GameAnimalsController[MAX_PLAYERS];
         }
 
-        public void CreatePlayerSelectableEnvironment()
+        public void CreatePlayerSelectableEnvironment(AnimalType animal)
         {
             for (int i = 0; i < _environments.Length; i++)
             {
                 if (_environments[i][_turnManager.GetActualPlayerNumber] == null)
                 {
-                    CreateEnveromentServerRpc(i, _turnManager.GetActualPlayerNumber);
+                    CreateEnveromentServerRpc(i, _turnManager.GetActualPlayerNumber, (int)animal);
                     StartCoroutine(InitObjectsFactory.WaitForCallbackWithPredicate(typeof(BlockSelectorController), 
                             (_environments, i, _turnManager.GetActualPlayerNumber), () =>
                             {
@@ -44,12 +48,11 @@ namespace Harmonies.Enviroment
         }
 
         [ServerRpc(RequireOwnership = false)]
-        private void CreateEnveromentServerRpc(int index, int actual)
+        private void CreateEnveromentServerRpc(int index, int actual, int animalIndex)
         {
-            int randomIndex = Random.Range(0, _prefabEnviroments.Length);
-            GameObject obj = Instantiate(_prefabEnviroments[randomIndex],
+            GameObject obj = Instantiate(_prefabEnviroments[animalIndex],
                 _turnManager.GetActualPlayerInfo.GetEnvironmentSpawn(index).position,
-                _prefabEnviroments[randomIndex].transform.rotation);
+                _turnManager.GetActualPlayerInfo.GetEnvironmentSpawn(index).rotation);// _prefabEnviroments[randomIndex].transform.rotation);
             obj.SetActive(true);
             obj.GetComponent<NetworkObject>().Spawn();
             GameAnimalsController gameAnimal = obj.GetComponent<GameAnimalsController>();
