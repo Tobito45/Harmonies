@@ -4,19 +4,31 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerInfoElement : MonoBehaviour
+public class PlayerInfoElement
 {
-    [field: SerializeField]
-    public TextMeshProUGUI TextScore { get; private set; }
+    public PlayerInfoElement(TextMeshProUGUI textScore, string name, Image image, Color color, bool isMain)
+    {
+        TextScore = textScore;
+        Name = name;
+        Image = image;
+        Color = color;
+        IsMain = isMain;
 
-    [field: SerializeField]
-    public TextMeshProUGUI TextName { get; private set; }
-    [field: SerializeField]
+        image.color = color;
+        textScore.color = color;
+    }
+
+    public bool IsMain { get; private set; }
+    public TextMeshProUGUI TextScore { get; private set; }
+    public string Name { get; private set; }
+    public Color Color { get; private set; }
     public Image Image { get; private set; }
 
     public void UpdateInfo(ulong id, int score)
     {
-        TextScore.text = score.ToString();
-        TextName.text = $"Player {id}";
+        if(IsMain)
+            TextScore.text = $" : {score.ToString()}";
+        else
+            TextScore.text = $"{score.ToString()} : ";
     }
 }

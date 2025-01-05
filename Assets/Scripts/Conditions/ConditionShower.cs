@@ -8,6 +8,8 @@ public class ConditionShower : MonoBehaviour
 {
     [SerializeField]
     private Vector3 _offset;
+    [SerializeField]
+    private Vector3 _offsetRotation;
     private EnvironmentController _environmentController;
     private AnimalType _animalType;
     private GameObject _showObject;
@@ -21,7 +23,11 @@ public class ConditionShower : MonoBehaviour
     private void OnMouseEnter()
     {
         if(_showObject == null)
-            _showObject = Instantiate(_environmentController.GetPrefabCondition((int)_animalType), _offset, Quaternion.identity);
+        {
+            _showObject = Instantiate(_environmentController.GetPrefabCondition((int)_animalType), Vector3.zero, Quaternion.identity, transform);
+            _showObject.transform.localPosition = _offset;
+            _showObject.transform.localEulerAngles = _offsetRotation;
+        }
     
         _showObject.SetActive(true);
     }

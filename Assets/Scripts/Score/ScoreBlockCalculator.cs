@@ -21,7 +21,6 @@ namespace Harmonies.Score
         }
         public static int CalculateChangesOnMap(BoardNode<BlockType> node)
         {
-            Debug.Log(node.Id + " " + node.IndexesCount);
             foreach (BoardNode<BlockType> neighBoard in node)
             {
                 if (neighBoard == null || neighBoard.IndexesCount == 0)
