@@ -38,6 +38,8 @@ public class TurnManager : NetworkBehaviour
     public Action<ulong, ulong> OnRoundEnded;
     public Action<ulong> OnGameStarted;
     public PlayerInfo GetActualPlayerInfo => _playerInfo[_indexActualPlayer];
+    public PlayerInfo GetPlayerInfo(int index) => _playerInfo[index];
+    public int GetPlayerNumberById(ulong id) => _playersId.IndexOf(id);
     public IEnumerable<BoardSceneGenerator> GetAllBoardSceneGenerators => _playerInfo.Select(n => n.Board);
 
     [Inject]
@@ -78,10 +80,10 @@ public class TurnManager : NetworkBehaviour
         _networkPlayersController.SyncAllPlayersInfoServerRpc();
         for (int i = 0; i < _playerInfo.Length; i++)
             _playerInfo[i].Board.Init(i);
-
-        _stateMachine.BlocksSelectState();
-
         StartGameForAllClientRpc();
+
+        _stateMachine.StartRoundState();
+
     }
 
     [ClientRpc]
@@ -128,12 +130,12 @@ public class TurnManager : NetworkBehaviour
         _indexActualPlayer = index;
         OnRoundEnded?.Invoke(prev, next);
 
-        _networkPlayersController.ShowPlayerElement(next, true);
         _networkPlayersController.ShowPlayerElement(prev, false);
+        _networkPlayersController.ShowPlayerElement(next, true);
         
         if (next == NetworkManager.Singleton.LocalClientId)
         {
-            _stateMachine.BlocksSelectState();
+            _stateMachine.StartRoundState();
             _turnNumber++;
         }
         else
@@ -163,7 +165,7 @@ public class TurnManager : NetworkBehaviour
             Debug.Log($"Other players has other turn");
     }
 
-    //public void SpawnEnvironmentToPlayerZone() => _environmentController.CreatePlayerSelectableEnvironment();
+    public void SpawnSelectEnvironmentToPlayerZone() => _environmentController.CreatePlayerSelectebleEnviroments();
     public void WasSelectedBlocksSelector() => _stateMachine.BlocksPlaceState();
     public bool IsAnyEnviroment() => _environmentController.IsAnyEnviroment();
     public bool IsPlayerEnded() => _scoreController.IsGameEnd;
@@ -180,4 +182,5 @@ public class PlayerInfo
     public BoardSceneGenerator Board { get; private set; }
     public Transform GetEnvironmentSpawn(int index) => _environmnetsSpawns[index];
     public Transform GetEnvironmentSelectSpawn(int index) => _enviromentsSelectSpawn[index];
+    public int GetEnvironmentSelectSpawnCount => _enviromentsSelectSpawn.Count();
 }

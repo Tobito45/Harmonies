@@ -25,7 +25,8 @@ namespace Harmonies.InitObjets
                 new GameCellObject(boardSceneGenerator, turnManager, spawnBlocksController, environmentController),
                 new GameAnimalObject(environmentController, turnManager),
                 new BlockSelectorControllerObject(spawnBlocksController, turnManager, scoreController),
-                new AnimalSelectorControllerObject(turnManager, scoreController)
+                new AnimalSelectorControllerObject(turnManager, scoreController),
+                new EnvironmentSelectObject(environmentController, turnManager)
             };
 
             InitAllDictionaries(initObjectBases);

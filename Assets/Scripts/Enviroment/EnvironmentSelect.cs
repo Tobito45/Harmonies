@@ -1,4 +1,5 @@
 using Harmonies.Enums;
+using Harmonies.InitObjets;
 using Harmonies.States;
 using System;
 using Unity.Netcode;
@@ -17,17 +18,28 @@ namespace Harmonies.Enviroment
         [SerializeField]
         private AnimalType _animalType;
 
-        [Inject]
-        public void Construct(TurnManager turnManager, EnvironmentController environmentController)
+        public void Init(TurnManager turnManager, EnvironmentController environmentController)
         {
             _turnManager = turnManager;
             _environmentController = environmentController;
-        }
-
-        private void Start() //in future Init();
-        {
             _turnManager.SubsribeOnStateMachine(OnStatusChange);
         }
+
+        public void Init() => InitClientRpc();
+
+        [ClientRpc]
+        private void InitClientRpc()
+        {
+            if (InitObjectsFactory.InitObject.TryGetValue(GetType(), out Action<object> method))
+                method(this);
+        }
+
+        //[Inject]
+        //public void Construct(TurnManager turnManager, EnvironmentController environmentController)
+        //{
+        //    _turnManager = turnManager;
+        //    _environmentController = environmentController;
+        //}
 
         private void OnMouseDown()
         {
@@ -38,7 +50,7 @@ namespace Harmonies.Enviroment
 
             if (_environmentController.CanCreate())
             {
-                _environmentController.CreatePlayerSelectableEnvironment(_animalType);
+                _environmentController.CreatePlayerSelectedEnvironment(_animalType, this);
                 DespawnServerRpc();
             }
         }

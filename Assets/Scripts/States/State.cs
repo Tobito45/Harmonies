@@ -17,6 +17,19 @@ namespace Harmonies.States
         public abstract void Entry();
         public abstract void Exit();
     }
+    public class StartRoundState : BaseState
+    {
+        public StartRoundState(StateMachine stateMachine) : base(stateMachine) { }
+
+        public override void Entry()
+        {
+            Debug.Log(nameof(StartRoundState) + " entry");
+            TurnManager.SpawnSelectEnvironmentToPlayerZone();
+            _stateMachine.BlocksSelectState();
+        }
+
+        public override void Exit() { }
+    }
 
     public class BlocksPlaceSelectState : BaseState
     {
