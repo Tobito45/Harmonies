@@ -23,6 +23,7 @@ public class NetworkPlayersController : NetworkBehaviour
     private void Start()
     {
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
+        NetworkManager.Singleton.OnClientDisconnectCallback += OnClientConnected;
     }
 
     private void OnClientConnected(ulong clientId)
@@ -56,7 +57,12 @@ public class NetworkPlayersController : NetworkBehaviour
 
     private void OnDisable()
     {
-        NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+
+        if(NetworkManager.Singleton != null)
+        {
+            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientConnected;
+        }
     }
 
     public void ShowPlayerElement(ulong id, bool enabled) => _networkManagerUI.MakePlayerSelected(id, enabled);

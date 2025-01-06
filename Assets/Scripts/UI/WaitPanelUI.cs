@@ -27,5 +27,12 @@ public class WaitPanelUI : MonoBehaviour
             StartCoroutine(turnManager.StartGame());
             _buttonPlayHost.interactable = false;
         });
+
+        turnManager.OnGameStarted += (id) =>
+        {
+            _waitPanelClient.SetActive(false);
+            _waitPanelHost.SetActive(false);
+        };
     }
+
 }

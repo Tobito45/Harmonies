@@ -51,8 +51,8 @@ public class FreeCameraMovement : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        _basePosition += new Vector3(56, 0, 0) * NetworkManager.Singleton.LocalClientId;
-        _center += new Vector3(56, 0, 0) * NetworkManager.Singleton.LocalClientId;
+        _basePosition += new Vector3(180, 0, 0) * NetworkManager.Singleton.LocalClientId;
+        _center += new Vector3(180, 0, 0) * NetworkManager.Singleton.LocalClientId;
 
         transform.position = _basePosition;
         transform.eulerAngles = _baseRotation;

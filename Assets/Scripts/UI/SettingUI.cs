@@ -22,7 +22,17 @@ public class SettingUI : MonoBehaviour
     private void Start()
     {
         ResolutionSetup();
+        Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+
         _audioSource = FindObjectOfType<AudioSourceDontDestroy>().GetComponent<AudioSource>();
+
+        if (PlayerPrefs.HasKey("Sound"))
+            _audioSource.volume = PlayerPrefs.GetFloat("Sound");
+        else
+        {
+            PlayerPrefs.SetFloat("Sound", _audioSource.volume);
+            PlayerPrefs.Save();
+        }
 
         _volumeSlider.value = _audioSource.volume;
         _volumeSlider.onValueChanged.AddListener(SetVolume);
@@ -71,5 +81,10 @@ public class SettingUI : MonoBehaviour
             Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
     }
 
-    private void SetVolume(float volume) => _audioSource.volume = volume;
+    private void SetVolume(float volume)
+    {
+        PlayerPrefs.SetFloat("Sound", _audioSource.volume);
+        PlayerPrefs.Save();
+        _audioSource.volume = volume;
+    }
 }

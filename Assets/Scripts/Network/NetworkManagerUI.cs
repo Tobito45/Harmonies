@@ -27,9 +27,17 @@ public class NetworkManagerUI : NetworkBehaviour
     private Image _iconMainPlayer;
 
     [SerializeField]
+    private GameObject _otherPlayersPanel;
+    [SerializeField]
     private TextMeshProUGUI[] _scoreOtherPlayer;
     [SerializeField]
     private Image[] _iconOtherPlayer;
+
+    [SerializeField]
+    private Image _secondPlayerIcon;
+    [SerializeField]
+    private TextMeshProUGUI _secondPlayerText;
+
 
     [SerializeField]
     private Color[] _playerColors;
@@ -59,6 +67,7 @@ public class NetworkManagerUI : NetworkBehaviour
             _scoreOtherPlayer[i].text = string.Empty;
             SetActivePlayer(i, false);
         }
+        _otherPlayersPanel.SetActive(false);
 
         if (userType == UserType.None)
         {
@@ -73,7 +82,7 @@ public class NetworkManagerUI : NetworkBehaviour
             });
         } else
         {
-            _textIpAdress.text += GetLocalIPAddress();
+            _textIpAdress.text += "\n" + GetLocalIPAddress();
             _hostButton.gameObject.SetActive(false);
             _clientButton.gameObject.SetActive(false);    
 
@@ -139,6 +148,8 @@ public class NetworkManagerUI : NetworkBehaviour
     public void CreateNewPrefabPlayer(ulong id, int count)
     {
         count--;
+        _otherPlayersPanel.SetActive(count > 0);
+
         for (int i = 0; i < _scoreOtherPlayer.Length; i++)
         {
             if(i < count)
@@ -173,8 +184,18 @@ public class NetworkManagerUI : NetworkBehaviour
 
             TextMeshProUGUI text = _scoreOtherPlayer[actual];
             Image image = _iconOtherPlayer[actual];
+            if(ids.Count == 2)
+            {
+                for (int i = 0; i < _scoreOtherPlayer.Length; i++)
+                {
+                    _scoreOtherPlayer[i].text = string.Empty;
+                    SetActivePlayer(i, false);
+                }
+                image = _secondPlayerIcon;
+                text = _secondPlayerText;
+            }
+
             Color color = _playerColors[i];
-            image.sprite = _spritesColors[i];
 
             if (NetworkManager.Singleton.LocalClientId == ids[i])
             {
@@ -184,6 +205,7 @@ public class NetworkManagerUI : NetworkBehaviour
             else
                 actual++;
 
+            image.sprite = _spritesColors[i];
             _playersElements.Add(ids[i], new PlayerInfoElement(text, "Player " + ids[i], image,
                 color, NetworkManager.Singleton.LocalClientId == ids[i]));
             _playersElements[ids[i]].UpdateInfo(ids[i], 0);
