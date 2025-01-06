@@ -64,13 +64,13 @@ public class TurnManager : NetworkBehaviour
 
     private void Update()
     {
-        if (_stateMachine.ActualState is AnimalsEnvironmentSelectState)
-            if (Input.GetKeyUp(KeyCode.E))
-                WasSelectedOrSkipedAnimalsEnviroment();
+        //if (_stateMachine.ActualState is AnimalsEnvironmentSelectState)
+        //    if (Input.GetKeyUp(KeyCode.E))
+        //        WasSelectedOrSkipedAnimalsEnviroment();
 
-        if (_stateMachine.ActualState is AnimalsSelectState)
-            if (Input.GetKeyUp(KeyCode.R))
-                WasAnimalsSkiped();
+        //if (_stateMachine.ActualState is AnimalsSelectState)
+        //    if (Input.GetKeyUp(KeyCode.R))
+        //        WasAnimalsSkiped();
 
         //if (Input.GetKeyDown(KeyCode.O) && IsOwner)
         //    StartCoroutine(StartGame());

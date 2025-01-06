@@ -14,6 +14,7 @@ public class PlayerInfoElement
         Color = color;
         IsMain = isMain;
 
+        TextScore.text = " : 0";
         textScore.color = color;
     }
 

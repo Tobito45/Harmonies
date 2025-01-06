@@ -50,12 +50,5 @@ public class SceneInstaller : MonoInstaller
 
     }
 
-    private void FindAllObjects()
-    {
-        if (_turnManager == null) _turnManager = FindObjectOfType<TurnManager>();
-        if (_spawnBlocksController == null) _spawnBlocksController = FindObjectOfType<SpawnBlocksController>();
-        if (_environmentController == null) _environmentController = FindObjectOfType<EnvironmentController>();
-    }
-
     private void OnDisable() => InitObjectsFactory.ClearDictionaries();
 }

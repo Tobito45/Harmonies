@@ -45,6 +45,7 @@ namespace Harmonies.Score.AnimalCard
                 AnimalCardInfo cardInfo = info.GetComponent<AnimalCardInfo>();
                 cardInfo.Image.sprite = _environmentController.GetImageIcon((int)animal.Index);
                 cardInfo.Score.text = i.ToString();
+                infos.Add(cardInfo);    
             }
 
             animal.OnSeleted += (i) =>

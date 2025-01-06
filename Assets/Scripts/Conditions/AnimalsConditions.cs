@@ -1,5 +1,6 @@
 using Harmonies.Enums;
 using Harmonies.Structures;
+using UnityEngine;
 
 
 namespace Harmonies.Conditions
@@ -18,6 +19,7 @@ namespace Harmonies.Conditions
 
         private static bool BoarCondition(BoardNode<BlockType> node)
         {
+            Debug.Log("??21");
             if (node.IndexesCount == 2 && node.GetIndex(1) == BlockType.Building)
             {
                 foreach (BoardNode<BlockType> neighbour in node)
@@ -105,9 +107,12 @@ namespace Harmonies.Conditions
                 for (int i = 1; i < node.GetMaxNeighbours + 1; i++)
                 {
                     BoardNode<BlockType> first = node.GetNode(i);
+                    if (first == null)
+                        continue;
+
                     BoardNode<BlockType> second = first.GetNode(i);
 
-                    if (first == null || second == null)
+                    if (second == null)
                         continue;
 
                     if (first.IndexesCount == 1 && second.IndexesCount == 1 &&
