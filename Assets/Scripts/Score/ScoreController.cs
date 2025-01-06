@@ -1,3 +1,5 @@
+using Harmonies.Enviroment;
+using Harmonies.Score.AnimalCard;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -28,7 +30,6 @@ namespace Harmonies.Score
         [ServerRpc(RequireOwnership = false)]
         private void UpdateServerRpc(ulong id, int newScore) => ChangeScoreClientRpc(id, newScore);
 
-
         [ClientRpc]
         private void ChangeScoreClientRpc(ulong id, int newScore)
         {
@@ -43,6 +44,6 @@ namespace Harmonies.Score
             foreach (ulong id in ids)
                 score.Add(id, 0);
         }
-        public bool IsGameEnd => CountFreeCells < 15; 
+        public bool IsGameEnd => CountFreeCells < 3; 
     }
 }

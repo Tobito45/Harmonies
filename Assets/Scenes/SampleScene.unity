@@ -6827,6 +6827,13 @@ MonoBehaviour:
   - {fileID: 8550901951964162857, guid: f7a73816fd138714a9aeeb3e20ab9524, type: 3}
   - {fileID: 7113878923625861038, guid: a6eb3bb90bcd3d94f9df8bfb771552e1, type: 3}
   - {fileID: 439081154004895185, guid: c9f55890cc4da194aaa17679488831fa, type: 3}
+  _animalImages:
+  - {fileID: 21300000, guid: b166e4defd2570043b7721681592e50d, type: 3}
+  - {fileID: 21300000, guid: c198b3f09a38f3a4cb055da656543829, type: 3}
+  - {fileID: 21300000, guid: 6a6022dd88fe6784c9480cb036f64cbe, type: 3}
+  - {fileID: 21300000, guid: 55fe74bb1453796488560c06263a000c, type: 3}
+  - {fileID: 21300000, guid: e2fe17d6b3aafb048b3abe865b965b46, type: 3}
+  - {fileID: 21300000, guid: 97135ebb4a91ce44c807b707460578f6, type: 3}
 --- !u!4 &836851122
 Transform:
   m_ObjectHideFlags: 0
@@ -7233,7 +7240,8 @@ MonoBehaviour:
   _networkManagerUI: {fileID: 173732142}
   _networkPlayersController: {fileID: 173732140}
   _scoreController: {fileID: 1874731821}
-  _endScore: {fileID: 0}
+  _endScore: {fileID: 1874731823}
+  _animalCardUI: {fileID: 1874731824}
 --- !u!114 &920382862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15187,6 +15195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prefab: {fileID: 2708822827851006213, guid: 2dd0c51d7d2fe404ea656ebbaf6950f6, type: 3}
+  _prefabInfo: {fileID: 8654097716099387849, guid: 8adf1604201f65747be7a3a28de44777, type: 3}
   _positionSpawn: {fileID: 875955348}
   _canvasParent: {fileID: 1298498435}
 --- !u!1001 &1887236208

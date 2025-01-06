@@ -32,11 +32,7 @@ public class NetworkPlayersController : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void OnClientConnectClientRpc(ulong clientId, int countClients)
-    {
-        Debug.Log(clientId  + " " + countClients);
-        _networkManagerUI.CreateNewPrefabPlayer(clientId, countClients);
-    }
+    private void OnClientConnectClientRpc(ulong clientId, int countClients) => _networkManagerUI.CreateNewPrefabPlayer(clientId, countClients);
 
     [ServerRpc]
     public void SyncAllPlayersInfoServerRpc()

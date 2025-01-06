@@ -1,48 +1,61 @@
+using Harmonies.Enviroment;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
-public class AnimalsCardsUI : MonoBehaviour
+namespace Harmonies.Score.AnimalCard
 {
-    [SerializeField]
-    private GameObject _prefab;
-    [SerializeField]
-    private Transform _positionSpawn;
-    [SerializeField]
-    private GameObject _canvasParent;
-
-    private List<GameObject> _cards = new();
-    private void Update()
+    public class AnimalsCardsUI : MonoBehaviour
     {
-        if(Input.GetKeyDown(KeyCode.M))
-            SummonNewAnimalCard();
+        [SerializeField]
+        private GameObject _prefab, _prefabInfo;
+        [SerializeField]
+        private Transform _positionSpawn;
+        [SerializeField]
+        private GameObject _canvasParent;
 
-    }
+        private List<GameObject> _cards = new();
+        private EnvironmentController _environmentController;
 
-    public void SummonNewAnimalCard()
-    {
-        GameObject obj = Instantiate(_prefab, _positionSpawn.transform.position, Quaternion.identity, _canvasParent.transform);
-        RectTransform rectTransform = obj.GetComponent<RectTransform>();
-        RectTransform prefabRectTransform = _prefab.GetComponent<RectTransform>();
+        [Inject]
+        private void Construct(EnvironmentController environmentController) => _environmentController = environmentController;
 
-        rectTransform.sizeDelta = new Vector2(
-            prefabRectTransform.rect.width - 10 *_cards.Count, 
-            prefabRectTransform.rect.height
-        );
+        public void SummonNewAnimalCard(GameAnimal animal)
+        {
+            GameObject obj = Instantiate(_prefab, _positionSpawn.transform.position, Quaternion.identity, _canvasParent.transform);
+            RectTransform rectTransform = obj.GetComponent<RectTransform>();
+            RectTransform prefabRectTransform = _prefab.GetComponent<RectTransform>();
 
-        obj.transform.localPosition = new Vector3(
-            _positionSpawn.transform.localPosition.x + (prefabRectTransform.rect.width - rectTransform.rect.width) / 2,
-            _positionSpawn.transform.localPosition.y + rectTransform.rect.height * _cards.Count,
-            0
-        );
+            rectTransform.sizeDelta = new Vector2(
+                prefabRectTransform.rect.width - 10 * _cards.Count,
+                prefabRectTransform.rect.height
+            );
 
-        // Добавляем в список карт
-        _cards.Add(obj);
+            obj.transform.localPosition = new Vector3(
+                _positionSpawn.transform.localPosition.x + (prefabRectTransform.rect.width - rectTransform.rect.width) / 2,
+                _positionSpawn.transform.localPosition.y + rectTransform.rect.height * _cards.Count,
+                0
+            );
 
-        //GameObject obj = Instantiate(_prefab, _positionSpawn.transform.position, Quaternion.identity, _canvasParent.transform);
-        //obj.transform.localScale = new Vector2(_prefab.transform.localScale.x - 0.1f * _cards.Count,
-        //        _prefab.transform.localScale.y);
-        //obj.transform.position += new Vector3(0.1f * _cards.Count, _prefab.GetComponent<RectTransform>().height * _cards.Count, 0);
-        //_cards.Add(obj);
+            List<AnimalCardInfo> infos = new();
+            foreach(int i in animal.Scores)
+            {
+                GameObject info = Instantiate(_prefabInfo, obj.transform);
+                AnimalCardInfo cardInfo = info.GetComponent<AnimalCardInfo>();
+                cardInfo.Image.sprite = _environmentController.GetImageIcon((int)animal.Index);
+                cardInfo.Score.text = i.ToString();
+            }
+
+            animal.OnSeleted += (i) =>
+            {
+                if(i != 0)
+                    infos[i - 1].Active(false);
+
+                infos[i].Active(true);
+            };
+
+            _cards.Add(obj);
+        }
     }
 }

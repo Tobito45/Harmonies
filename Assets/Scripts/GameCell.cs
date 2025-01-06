@@ -43,7 +43,6 @@ public class GameCell : NetworkBehaviour
     private void Start() => _selecter.SetActive(false);
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(NetworkManager.Singleton.LocalClientId + " " + _turnManager);
         if (_isAnimalOn || _turnManager.IndexActualPlayer != NetworkManager.Singleton.LocalClientId)
             return;
 

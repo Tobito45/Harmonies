@@ -295,6 +295,7 @@ GameObject:
   - component: {fileID: 5597602371808560807}
   - component: {fileID: 1289572879565042079}
   - component: {fileID: 3353024307962069791}
+  - component: {fileID: 4347910652336933144}
   m_Layer: 5
   m_Name: AnimalInfo
   m_TagString: Untagged
@@ -362,3 +363,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4347910652336933144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8654097716099387849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaa21589c72c20d4ea71d4118a636528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Score>k__BackingField: {fileID: 7904470464366274234}
+  <Image>k__BackingField: {fileID: 325421982746986023}
+  _check: {fileID: 1362065410674859108}

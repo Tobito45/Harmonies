@@ -1,6 +1,7 @@
 using Harmonies.Enviroment;
 using Harmonies.InitObjets;
 using Harmonies.Score;
+using Harmonies.Score.AnimalCard;
 using Harmonies.Selectors;
 using Harmonies.States;
 using System.Linq;
@@ -29,6 +30,8 @@ public class SceneInstaller : MonoInstaller
 
     [SerializeField]
     private EndScoreUI _endScore;
+    [SerializeField]
+    private AnimalsCardsUI _animalCardUI;
 
     public override void InstallBindings()
     {
@@ -39,10 +42,11 @@ public class SceneInstaller : MonoInstaller
         Container.Bind<NetworkManagerUI>().FromComponentInHierarchy(_networkManagerUI).AsSingle();
         Container.Bind<NetworkPlayersController>().FromComponentInHierarchy(_networkPlayersController).AsSingle();
         Container.Bind<ScoreController>().FromComponentInHierarchy(_scoreController).AsSingle();
-        Container.Bind<EndScoreUI>().FromComponentInHierarchy(_scoreController).AsSingle();
+        Container.Bind<EndScoreUI>().FromComponentInHierarchy(_endScore).AsSingle();
+        Container.Bind<AnimalsCardsUI>().FromComponentInHierarchy(_animalCardUI).AsSingle();
 
         InitObjectsFactory.Init(_turnManager, _environmentController, 
-            _spawnBlocksController, _turnManager.GetAllBoardSceneGenerators.ToArray(), _scoreController);
+            _spawnBlocksController, _turnManager.GetAllBoardSceneGenerators.ToArray(), _scoreController, _animalCardUI);
 
     }
 

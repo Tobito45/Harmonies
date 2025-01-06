@@ -1,4 +1,5 @@
 using Harmonies.InitObjets;
+using Harmonies.Score.AnimalCard;
 using Harmonies.Selectors;
 using System;
 using System.Collections;
@@ -31,13 +32,16 @@ namespace Harmonies.Enviroment
         private int _index;
 
         public int Index => _index;
-        public void Init(EnvironmentController environmentController, TurnManager turnManager)
+        public void Init(EnvironmentController environmentController, TurnManager turnManager, AnimalsCardsUI animalsCardsUI)
         {
             _environmentController = environmentController;
             _turnManager = turnManager;
 
             if (GameAnimal == null)
                 GameAnimal = GetComponent<GameAnimal>();
+
+            if (_turnManager.IndexActualPlayer == NetworkManager.Singleton.LocalClientId)
+                animalsCardsUI.SummonNewAnimalCard(GameAnimal);
 
             GetComponent<ConditionShower>().Init(environmentController, GameAnimal.Index);
         }

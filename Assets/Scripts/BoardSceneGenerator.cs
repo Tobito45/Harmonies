@@ -55,7 +55,6 @@ public class BoardSceneGenerator : NetworkBehaviour
 
     [ClientRpc]
     private void CreateBoardGraphClientRpc(int _height, int _width) {
-        Debug.Log("?");
         BoardGraph<BlockType> boardGraph = new BoardGraph<BlockType>(_height, _width);
         BoardGraph = boardGraph;
         _scoreController.CountFreeCells = boardGraph.Count;

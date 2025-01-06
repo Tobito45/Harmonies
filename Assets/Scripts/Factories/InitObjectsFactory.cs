@@ -1,5 +1,6 @@
 using Harmonies.Enviroment;
 using Harmonies.Score;
+using Harmonies.Score.AnimalCard;
 using Harmonies.Selectors;
 using System;
 using System.Collections;
@@ -17,12 +18,13 @@ namespace Harmonies.InitObjets
             EnvironmentController environmentController,
             SpawnBlocksController spawnBlocksController,
             BoardSceneGenerator[] boardSceneGenerator,
-            ScoreController scoreController)
+            ScoreController scoreController,
+            AnimalsCardsUI animalsCardsUI)
         {
             List<InitObjectBase> initObjectBases = new()
             {
                 new GameCellObject(boardSceneGenerator, turnManager, spawnBlocksController, environmentController),
-                new GameAnimalObject(environmentController, turnManager),
+                new GameAnimalObject(environmentController, turnManager, animalsCardsUI),
                 new BlockSelectorControllerObject(spawnBlocksController, turnManager, scoreController),
                 new AnimalSelectorControllerObject(turnManager, scoreController),
                 new EnvironmentSelectObject(environmentController, turnManager)

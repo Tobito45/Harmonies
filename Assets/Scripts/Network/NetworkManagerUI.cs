@@ -53,7 +53,7 @@ public class NetworkManagerUI : NetworkBehaviour
         textActualId.text = string.Empty;
         (UserType userType, string ip, ushort port) = DataConnecterController.Singlton.GetData;
 
-        _scoreMainPlayer.text = string.Empty;
+        _scoreMainPlayer.text = " : 0";
         for (int i = 0; i < _scoreOtherPlayer.Length; i++)
         {
             _scoreOtherPlayer[i].text = string.Empty;

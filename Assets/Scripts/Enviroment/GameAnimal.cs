@@ -1,4 +1,5 @@
 using Harmonies.Enums;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -18,13 +19,16 @@ namespace Harmonies.Enviroment
         /// </summary>
         [SerializeField]
         private List<int> scores = new List<int>();
-        
+        public IEnumerable<int> Scores => scores;
+        public Action<int> OnSeleted;
         public int GetNewScore(int index)
         {
+            OnSeleted?.Invoke(index);
             if (index == 0)
                 return scores[index];
             else
                 return scores[index] - scores[index - 1]; 
+            
         }
         
     }

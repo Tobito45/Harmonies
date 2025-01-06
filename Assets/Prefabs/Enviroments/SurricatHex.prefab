@@ -113,6 +113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _offset: {x: 0, y: 1.08, z: -2.29}
+  _offsetRotation: {x: 0, y: -30, z: 0}
 --- !u!65 &3991719125569873417
 BoxCollider:
   m_ObjectHideFlags: 0
