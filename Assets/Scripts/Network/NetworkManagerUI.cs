@@ -67,6 +67,8 @@ public class NetworkManagerUI : NetworkBehaviour
             _scoreOtherPlayer[i].text = string.Empty;
             SetActivePlayer(i, false);
         }
+        _secondPlayerText.gameObject.SetActive(false);
+        _secondPlayerIcon.gameObject.SetActive(false);
         _otherPlayersPanel.SetActive(false);
 
         if (userType == UserType.None)
@@ -186,13 +188,12 @@ public class NetworkManagerUI : NetworkBehaviour
             Image image = _iconOtherPlayer[actual];
             if(ids.Count == 2)
             {
-                for (int i = 0; i < _scoreOtherPlayer.Length; i++)
-                {
-                    _scoreOtherPlayer[i].text = string.Empty;
-                    SetActivePlayer(i, false);
-                }
+                _scoreOtherPlayer[actual].gameObject.SetActive(false);
+                _iconOtherPlayer[actual].gameObject.SetActive(false);    
                 image = _secondPlayerIcon;
                 text = _secondPlayerText;
+                _secondPlayerIcon.gameObject.SetActive(true);
+                _secondPlayerText.gameObject.SetActive(true);
             }
 
             Color color = _playerColors[i];
