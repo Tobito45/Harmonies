@@ -46,6 +46,7 @@ public class NetworkManagerUI : NetworkBehaviour
 
     private Dictionary<ulong, PlayerInfoElement> _playersElements = new Dictionary<ulong, PlayerInfoElement>();
     public List<PlayerInfoElement> GetListPlayerInfoElement => _playersElements.Values.ToList();
+    public PlayerInfoElement PlayerInfoById(ulong id) => _playersElements[id];
 
     [Inject]
     public void Construct(TurnManager turnManager, NetworkPlayersController networkPlayersController)
