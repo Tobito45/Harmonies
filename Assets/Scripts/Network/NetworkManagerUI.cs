@@ -208,7 +208,7 @@ public class NetworkManagerUI : NetworkBehaviour
 
             image.sprite = _spritesColors[i];
             _playersElements.Add(ids[i], new PlayerInfoElement(text, "Player " + ids[i], image,
-                color, NetworkManager.Singleton.LocalClientId == ids[i]));
+                color, NetworkManager.Singleton.LocalClientId == ids[i] || image == _secondPlayerIcon));
             _playersElements[ids[i]].UpdateInfo(ids[i], 0);
         }
     }

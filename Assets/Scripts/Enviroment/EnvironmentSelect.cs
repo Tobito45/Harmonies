@@ -47,9 +47,11 @@ namespace Harmonies.Enviroment
         {
             if (_turnManager.IndexActualPlayer != NetworkManager.Singleton.LocalClientId)
                 return;
+            Debug.Log(_unableInteraction);
 
             if (_unableInteraction) return;
 
+            Debug.Log(_unableInteraction);
             if (_environmentController.CanCreate())
             {
                 _environmentController.CreatePlayerSelectedEnvironment(_animalType, this);
@@ -60,6 +62,10 @@ namespace Harmonies.Enviroment
         [ServerRpc(RequireOwnership = false)]
         private void DespawnServerRpc() => GetComponent<NetworkObject>().Despawn();
 
-        private void OnStatusChange(IState newState) => _unableInteraction = newState is not AnimalsEnvironmentSelectState;
+        private void OnStatusChange(IState newState)
+        {
+            Debug.Log(newState + " " + (newState is not AnimalsEnvironmentSelectState));
+            _unableInteraction = newState is not AnimalsEnvironmentSelectState;
+        }
     }
 }

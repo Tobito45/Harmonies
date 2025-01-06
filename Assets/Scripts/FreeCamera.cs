@@ -148,8 +148,8 @@ public class FreeCameraMovement : NetworkBehaviour
         }
         else if (IsMainCamera()) */
         {
-            HandleRotationInput(KeyCode.E, 90f);
-            HandleRotationInput(KeyCode.Q, -90f);
+           // HandleRotationInput(KeyCode.E, 90f);
+           // HandleRotationInput(KeyCode.Q, -90f);
         }
     }
 
