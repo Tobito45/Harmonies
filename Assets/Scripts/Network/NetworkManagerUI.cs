@@ -99,7 +99,7 @@ public class NetworkManagerUI : NetworkBehaviour
 
     private IEnumerator ConnectTimer(Action action)
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.2f);
         action();
     }
 

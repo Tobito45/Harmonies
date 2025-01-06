@@ -27,5 +27,6 @@ public class DataConnecterController
         _ip = ip;
     }
 
+    public UserType UserType => _userType;
     public (UserType userType, string ip, ushort port) GetData => (_userType, _ip, _port);
 }

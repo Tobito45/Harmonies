@@ -23,17 +23,8 @@ public class ScoreUIPanel : MonoBehaviour
 
     private void Start()
     {
-        _okButton.onClick.AddListener(() =>
-        {
-            NetworkManager.Singleton.Shutdown();
-            SceneManager.LoadScene("mainScene");
-        });
-
-        _retryButton.onClick.AddListener(() =>
-        {
-            NetworkManager.Singleton.Shutdown();
-            SceneManager.LoadScene("mainScene");
-        });
+        _okButton.onClick.AddListener(NetworkTools.CloseAndGoToMain);
+        _retryButton.onClick.AddListener(NetworkTools.CloseAndGoToMain);
     }
 
     public void SetInfo(List<PlayerInfoElement> infoElements,int rounds)

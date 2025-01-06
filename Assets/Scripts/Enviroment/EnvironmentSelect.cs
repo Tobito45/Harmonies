@@ -31,7 +31,7 @@ namespace Harmonies.Enviroment
         [ClientRpc]
         private void InitClientRpc()
         {
-            if (InitObjectsFactory.InitObject.TryGetValue(GetType(), out Action<object> method))
+            if (InitObjectsFactory.InitObjects.TryGetValue(GetType(), out Action<object> method))
                 method(this);
         }
 

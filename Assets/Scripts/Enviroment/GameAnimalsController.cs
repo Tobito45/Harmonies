@@ -47,14 +47,14 @@ namespace Harmonies.Enviroment
         [ClientRpc]
         private void InitClientRpc()
         {
-            if (InitObjectsFactory.InitObject.TryGetValue(GetType(), out Action<object> method))
+            if (InitObjectsFactory.InitObjects.TryGetValue(GetType(), out Action<object> method))
                 method(this);
 
             _basicMaterials = new Material[_animalsMeshRenders.Length];
             _index = -1;
             for (int i = 0; i < _animalsMeshRenders.Length; i++)
             {
-                if (InitObjectsFactory.InitObject.TryGetValue(typeof(AnimalSelectorController), out Action<object> methodAnimal))
+                if (InitObjectsFactory.InitObjects.TryGetValue(typeof(AnimalSelectorController), out Action<object> methodAnimal))
                     methodAnimal(_animalsObjects[i].GetComponent<AnimalSelectorController>());
 
                 _animalsObjects[i].gameObject.SetActive(true);

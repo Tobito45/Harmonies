@@ -32,7 +32,11 @@ public class NetworkPlayersController : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void OnClientConnectClientRpc(ulong clientId, int countClients) => _networkManagerUI.CreateNewPrefabPlayer(clientId, countClients);
+    private void OnClientConnectClientRpc(ulong clientId, int countClients)
+    {
+        Debug.Log(clientId  + " " + countClients);
+        _networkManagerUI.CreateNewPrefabPlayer(clientId, countClients);
+    }
 
     [ServerRpc]
     public void SyncAllPlayersInfoServerRpc()
@@ -52,6 +56,11 @@ public class NetworkPlayersController : NetworkBehaviour
         OnIdPlayersCreate(_idPlayers);
         //_networkManagerUI.CreatePlayersElements(_idPlayers);
         //_turnManager.PlayersId = _idPlayers;
+    }
+
+    private void OnDisable()
+    {
+        NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
     }
 
     public void ShowPlayerElement(ulong id, bool enabled) => _networkManagerUI.MakePlayerSelected(id, enabled);

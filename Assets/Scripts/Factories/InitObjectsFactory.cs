@@ -11,9 +11,8 @@ namespace Harmonies.InitObjets
 {
     public static class InitObjectsFactory
     {
-        public static Dictionary<Type, Action<object>> InitObject = new();
-        public static Dictionary<Type, Predicate<object>> InitPredicateObject = new();
-
+        public static Dictionary<Type, Action<object>> InitObjects = new();
+        public static Dictionary<Type, Predicate<object>> InitPredicateObjects = new();
         public static void Init(TurnManager turnManager,
             EnvironmentController environmentController,
             SpawnBlocksController spawnBlocksController,
@@ -36,16 +35,16 @@ namespace Harmonies.InitObjets
             foreach (InitObjectBase item in initObjectBases)
             {
                 if (item is IInitObject iinit)
-                    InitObject.Add(item.MainType, iinit.Init);
+                    InitObjects.Add(item.MainType, iinit.Init);
                 if (item is IPredicateObject ipred)
-                    InitPredicateObject.Add(item.MainType, ipred.PredicateGameCell);
+                    InitPredicateObjects.Add(item.MainType, ipred.PredicateGameCell);
             }
         }
 
         public static IEnumerator WaitForCallbackWithPredicate(Type type, object obj, Action callback)
         {
             float timer = 0f;
-            Predicate<object> predicate = InitPredicateObject[type];
+            Predicate<object> predicate = InitPredicateObjects[type];
             while (!predicate.Invoke(obj))
             {
                 timer += 0.1f;
@@ -58,6 +57,12 @@ namespace Harmonies.InitObjets
                 throw new Exception("Problem in predicate");
 
             callback.Invoke();
+        }
+
+        public static void ClearDictionaries()
+        {
+            InitObjects.Clear();
+            InitPredicateObjects.Clear();
         }
     }
 }

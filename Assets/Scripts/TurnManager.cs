@@ -72,20 +72,22 @@ public class TurnManager : NetworkBehaviour
             if (Input.GetKeyUp(KeyCode.R))
                 WasAnimalsSkiped();
 
-        if (Input.GetKeyDown(KeyCode.O) && IsOwner)
-            StartCoroutine(StartGame());
+        //if (Input.GetKeyDown(KeyCode.O) && IsOwner)
+        //    StartCoroutine(StartGame());
     }
 
     public IEnumerator StartGame()
     {
-        yield return new WaitForSeconds(1);
-        _networkPlayersController.SyncAllPlayersInfoServerRpc();
-        for (int i = 0; i < _playerInfo.Length; i++)
-            _playerInfo[i].Board.Init(i);
-        StartGameForAllClientRpc();
+        if (IsOwner)
+        {
+            yield return new WaitForSeconds(0.4f);
+            _networkPlayersController.SyncAllPlayersInfoServerRpc();
+            for (int i = 0; i < _playerInfo.Length; i++)
+                _playerInfo[i].Board.Init(i);
+            StartGameForAllClientRpc();
 
-        _stateMachine.StartRoundState();
-
+            _stateMachine.StartRoundState();
+        }
     }
 
     [ClientRpc]

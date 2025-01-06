@@ -27,7 +27,7 @@ namespace Harmonies.Selectors
         {
             _blockInfo = GetComponent<GameBlock>();
 
-            if (InitObjectsFactory.InitObject.TryGetValue(GetType(), out Action<object> method))
+            if (InitObjectsFactory.InitObjects.TryGetValue(GetType(), out Action<object> method))
                 method(this);
             InitBase();
         }

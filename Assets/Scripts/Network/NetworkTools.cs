@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public static class NetworkTools 
 {
@@ -11,5 +12,11 @@ public static class NetworkTools
             action(networkObject);
         else
             Debug.LogError("ERROR");
+    }
+
+    public static void CloseAndGoToMain()
+    {
+        NetworkManager.Singleton.Shutdown();
+        SceneManager.LoadScene("mainScene");
     }
 }

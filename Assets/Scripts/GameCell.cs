@@ -36,13 +36,14 @@ public class GameCell : NetworkBehaviour
     [ClientRpc]
     private void InitClientRpc(int index, int i)
     {
-        if (InitObjectsFactory.InitObject.TryGetValue(GetType(), out Action<object> method))
+        if (InitObjectsFactory.InitObjects.TryGetValue(GetType(), out Action<object> method))
             method((this, index, i));
     }
 
     private void Start() => _selecter.SetActive(false);
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(NetworkManager.Singleton.LocalClientId + " " + _turnManager);
         if (_isAnimalOn || _turnManager.IndexActualPlayer != NetworkManager.Singleton.LocalClientId)
             return;
 

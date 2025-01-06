@@ -52,4 +52,6 @@ public class SceneInstaller : MonoInstaller
         if (_spawnBlocksController == null) _spawnBlocksController = FindObjectOfType<SpawnBlocksController>();
         if (_environmentController == null) _environmentController = FindObjectOfType<EnvironmentController>();
     }
+
+    private void OnDisable() => InitObjectsFactory.ClearDictionaries();
 }
