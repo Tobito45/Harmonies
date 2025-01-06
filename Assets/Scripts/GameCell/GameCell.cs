@@ -87,22 +87,23 @@ namespace Harmonies.Cells
             _selecter.SetActive(false);
             _node.AddNewIndex(block.Index);
             Vector3 sync = _selecter.transform.position + new Vector3(0, block.Prefab.transform.localScale.y * 2, 0);
-            CreateBlockServerRpc((int)block.Index);
+            CreateBlockServerRpc((int)block.Index, (int)GameCellChanger.GetType(Node));
 
             if (_selecter.transform.position != sync)
                 _selecter.transform.position += new Vector3(0, block.Prefab.transform.localScale.y * 2, 0);
 
-            ChangeTypeClientRpc((int)GameCellChanger.GetType(Node));
             block.DisableServerRpc();
         }
 
         [ServerRpc(RequireOwnership = false)]
-        private void CreateBlockServerRpc(int index)
+        private void CreateBlockServerRpc(int index, int indexCellType)
         {
             GameObject block = _spawnBlocksController.GetSpawnedBlock(index);
             var obj = Instantiate(block, _selecter.transform.position, block.transform.rotation);
             _selecter.transform.position += new Vector3(0, block.transform.localScale.y * 2, 0);
             obj.GetComponent<NetworkObject>().Spawn();
+
+            ChangeTypeClientRpc(indexCellType);
         }
 
         [ClientRpc]

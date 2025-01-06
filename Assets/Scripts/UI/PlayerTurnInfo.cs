@@ -11,14 +11,17 @@ public class PlayerTurnInfo : MonoBehaviour
     private Image _icon;
 
     [SerializeField]
-    private TextMeshProUGUI _name;
+    private TextMeshProUGUI _name, _text;
 
     [SerializeField]
     private GameObject _panel;
 
     [SerializeField]
     private float _speedFloat = 0.05f, _timer = 0.01f, _timerBetween = 1f;
-    
+
+    [SerializeField]
+    private string _startGame, _nextRound, _solo;
+
     private TurnManager _turnManager;
     private NetworkManagerUI _networkManagerUI;
 
@@ -58,10 +61,25 @@ public class PlayerTurnInfo : MonoBehaviour
         }
     }
 
-    private void OnGameStart(ulong next) => OnRoundBegin(0, next);
+    private void OnGameStart(ulong next)
+    {
+        _text.text = _startGame;
+        OnRoundBegin(ulong.MaxValue, next);
+    }
 
     private void OnRoundBegin(ulong prev, ulong next)
     {
+        if (prev != ulong.MaxValue)
+        {
+            if (prev == next)
+            {
+                _text.text = _solo;
+                _name.gameObject.SetActive(false);
+            }
+            else
+                _text.text = _nextRound;
+        }
+
         PlayerInfoElement playerInfo = _networkManagerUI.PlayerInfoById(next);
         _name.text = playerInfo.Name;
         _icon.sprite = playerInfo.Image.sprite;
