@@ -1,3 +1,4 @@
+using Harmonies.Cells;
 using Harmonies.Enums;
 using Harmonies.Score;
 using Harmonies.Structures;
