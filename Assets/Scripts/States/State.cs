@@ -80,7 +80,7 @@ namespace Harmonies.States
 
         public override void Entry()
         {
-            Debug.Log(nameof(EndGameState) + " entry");
+            Debug.Log(nameof(EndRoundState) + " entry");
             if (TurnManager.IsPlayerEnded())
                 TurnManager.PlayerEndsPlay();
             else
@@ -92,9 +92,20 @@ namespace Harmonies.States
 
     public class EndGameState : BlocksPlaceSelectState
     {
-        public EndGameState(StateMachine stateMachine) : base(stateMachine) { }
+        private NetworkManagerUI _managerUI;
+        private EndScoreUI _endScoreUI;
+        public EndGameState(StateMachine stateMachine, NetworkManagerUI managerUI, EndScoreUI endScoreUI)
+       : base(stateMachine)
+        {
+            _managerUI = managerUI;
+            _endScoreUI = endScoreUI;
+        }
 
-        public override void Entry() => Debug.Log(nameof(EndGameState) + " entry");
+        public override void Entry()
+        {
+            Debug.Log(nameof(EndGameState) + " entry");
+            _endScoreUI.ShowPanel(_managerUI.GetListPlayerInfoElement, TurnManager.TurnNumber);
+        }
 
         public override void Exit() { }
     }

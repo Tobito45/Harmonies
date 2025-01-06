@@ -2,6 +2,7 @@ using Harmonies.Enums;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using TMPro;
@@ -20,8 +21,6 @@ public class NetworkManagerUI : NetworkBehaviour
     [SerializeField]
     private TextMeshProUGUI textId, textActualId, _textIpAdress;
 
-    //[SerializeField]
-    //private Transform _panelPlayers;
     [SerializeField]
     private TextMeshProUGUI _scoreMainPlayer;
     [SerializeField]
@@ -31,14 +30,14 @@ public class NetworkManagerUI : NetworkBehaviour
     private TextMeshProUGUI[] _scoreOtherPlayer;
     [SerializeField]
     private Image[] _iconOtherPlayer;
-    private int _count = 0;
 
     [SerializeField]
     private Color[] _playerColors;
-    //[SerializeField]
-    //private GameObject _prefabPlayer;
+    [SerializeField]
+    private Sprite[] _spritesColors;
 
     private Dictionary<ulong, PlayerInfoElement> _playersElements = new Dictionary<ulong, PlayerInfoElement>();
+    public List<PlayerInfoElement> GetListPlayerInfoElement => _playersElements.Values.ToList();
 
     [Inject]
     public void Construct(TurnManager turnManager, NetworkPlayersController networkPlayersController)
@@ -175,6 +174,7 @@ public class NetworkManagerUI : NetworkBehaviour
             TextMeshProUGUI text = _scoreOtherPlayer[actual];
             Image image = _iconOtherPlayer[actual];
             Color color = _playerColors[i];
+            image.sprite = _spritesColors[i];
 
             if (NetworkManager.Singleton.LocalClientId == ids[i])
             {
@@ -188,8 +188,6 @@ public class NetworkManagerUI : NetworkBehaviour
                 color, NetworkManager.Singleton.LocalClientId == ids[i]));
             _playersElements[ids[i]].UpdateInfo(ids[i], 0);
         }
-
-        //_playersElements[NetworkManager.Singleton.LocalClientId].Image.color = Color.green;
     }
 
     public void MakePlayerSelected(ulong id, bool enable)

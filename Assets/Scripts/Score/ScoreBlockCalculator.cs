@@ -38,10 +38,7 @@ namespace Harmonies.Score
                     if (was && !newHas)
                         return -5;
                     else if (!was && newHas)
-                    {
-                        Debug.Log(5);
                         return 5;
-                    }
                     else
                         return 0;
                 }

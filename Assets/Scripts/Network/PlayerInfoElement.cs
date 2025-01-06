@@ -14,7 +14,6 @@ public class PlayerInfoElement
         Color = color;
         IsMain = isMain;
 
-        image.color = color;
         textScore.color = color;
     }
 
@@ -23,9 +22,10 @@ public class PlayerInfoElement
     public string Name { get; private set; }
     public Color Color { get; private set; }
     public Image Image { get; private set; }
-
+    public int Score { get; private set; }
     public void UpdateInfo(ulong id, int score)
     {
+        Score = score;
         if(IsMain)
             TextScore.text = $" : {score.ToString()}";
         else

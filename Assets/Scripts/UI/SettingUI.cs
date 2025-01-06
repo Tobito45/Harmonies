@@ -14,18 +14,17 @@ public class SettingUI : MonoBehaviour
     private TMP_Dropdown _resolutionDropdown;
     private Resolution[] _resolutions;
 
-    //public AudioMixer audioMixer; // Привяжите ваш AudioMixer через инспектор
     [SerializeField]
     private Slider _volumeSlider; 
 
+    private AudioSource _audioSource;
 
     private void Start()
     {
         ResolutionSetup();
+        _audioSource = FindObjectOfType<AudioSourceDontDestroy>().GetComponent<AudioSource>();
 
-        float volume;
-        //audioMixer.GetFloat("MasterVolume", out volume);
-        //volumeSlider.value = Mathf.Pow(10, volume / 20); // Преобразуем из логарифмической шкалы
+        _volumeSlider.value = _audioSource.volume;
         _volumeSlider.onValueChanged.AddListener(SetVolume);
 
         _toggleWindow.onValueChanged.AddListener((x) => ToggleFullscreen());
@@ -72,9 +71,5 @@ public class SettingUI : MonoBehaviour
             Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
     }
 
-    private void SetVolume(float volume)
-    {
-        // Устанавливаем громкость (логарифмическая шкала для точности)
-        //audioMixer.SetFloat("MasterVolume", Mathf.Log10(volume) * 20);
-    }
+    private void SetVolume(float volume) => _audioSource.volume = volume;
 }

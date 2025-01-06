@@ -43,6 +43,6 @@ namespace Harmonies.Score
             foreach (ulong id in ids)
                 score.Add(id, 0);
         }
-        public bool IsGameEnd => CountFreeCells < 3; 
+        public bool IsGameEnd => CountFreeCells < 15; 
     }
 }

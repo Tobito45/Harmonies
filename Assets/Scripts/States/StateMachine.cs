@@ -19,14 +19,14 @@ namespace Harmonies.States {
 
         public IState ActualState { get; private set; }
 
-        public StateMachine()
+        public StateMachine(EndScoreUI endScore, NetworkManagerUI networkManager)
         {
             _blocksPlaceState = new BlocksPlaceSelectState(this);
             _animalsSelectState = new AnimalsSelectState(this);
             _environmentSelectState = new AnimalsEnvironmentSelectState(this);
             _blockSelectState = new BlockSelectState(this);
             _endRoundState = new EndRoundState(this);
-            _endGameState = new EndGameState(this);
+            _endGameState = new EndGameState(this, networkManager, endScore);
             _startRoundState = new StartRoundState(this);
         }
 

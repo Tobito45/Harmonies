@@ -28,6 +28,8 @@ public class TurnManager : NetworkBehaviour
     public int PlayersCount => _playersId.Count;
 
     private int _turnNumber = 0;
+    public int TurnNumber => _turnNumber;
+    private bool _lastTurn = false;
 
     [SerializeField]
     private PlayerInfo[] _playerInfo;
@@ -158,17 +160,25 @@ public class TurnManager : NetworkBehaviour
         Debug.Log($"{id} ends his game");
         if (wasLast)
         {
-            _stateMachine.EndGameState();
+            ShowEndClientRpc();
             Debug.Log($"The game is over");
         }
         else
+        {
+            OnePlayerEndedClientRpc();
             Debug.Log($"Other players has other turn");
+        }
     }
 
+    [ClientRpc]
+    public void OnePlayerEndedClientRpc() => _lastTurn = true;
+
+    [ClientRpc]
+    public void ShowEndClientRpc() => _stateMachine.EndGameState();
     public void SpawnSelectEnvironmentToPlayerZone() => _environmentController.CreatePlayerSelectebleEnviroments();
     public void WasSelectedBlocksSelector() => _stateMachine.BlocksPlaceState();
     public bool IsAnyEnviroment() => _environmentController.IsAnyEnviroment();
-    public bool IsPlayerEnded() => _scoreController.IsGameEnd;
+    public bool IsPlayerEnded() => _scoreController.IsGameEnd || _lastTurn;
 }
 
 
