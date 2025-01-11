@@ -1,3 +1,4 @@
+using ModestTree;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +17,13 @@ public class SettingUI : MonoBehaviour
     private Resolution[] _resolutions;
 
     [SerializeField]
-    private Slider _volumeSlider; 
+    private Slider _volumeSlider;
 
     private AudioSource _audioSource;
 
     private void Start()
     {
-        //ResolutionSetup();
+        ResolutionSetup();
         Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
 
         _audioSource = FindObjectOfType<AudioSourceDontDestroy>().GetComponent<AudioSource>();
@@ -40,7 +41,6 @@ public class SettingUI : MonoBehaviour
 
         _toggleWindow.onValueChanged.AddListener((x) => ToggleFullscreen());
 
-        //SetResolution(_resolutions.Max(n => n.height));
     }
 
     private void ResolutionSetup()
@@ -57,14 +57,15 @@ public class SettingUI : MonoBehaviour
         }
 
         _resolutionDropdown.AddOptions(options);
+        _resolutionDropdown.onValueChanged.AddListener(SetResolution);
 
-        int currentResolutionIndex = System.Array.FindIndex(_resolutions, r =>
-            r.width == Screen.currentResolution.width &&
-            r.height == Screen.currentResolution.height);
+        //int currentResolutionIndex = System.Array.FindIndex(_resolutions, r =>
+        //    r.width == Screen.currentResolution.width &&
+        //    r.height == Screen.currentResolution.height);
+        int currentResolutionIndex = _resolutions.Length - 1;//System.Array.IndexOf(_resolutions, _resolutions.Where(n => n.width == Screen.width));
         _resolutionDropdown.value = currentResolutionIndex;
         _resolutionDropdown.RefreshShownValue();
-
-        _resolutionDropdown.onValueChanged.AddListener(SetResolution);
+        SetResolution(currentResolutionIndex);
     }
 
     private void SetResolution(int resolutionIndex)
