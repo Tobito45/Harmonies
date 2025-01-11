@@ -22,7 +22,7 @@ public class SettingUI : MonoBehaviour
 
     private void Start()
     {
-        ResolutionSetup();
+        //ResolutionSetup();
         Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
 
         _audioSource = FindObjectOfType<AudioSourceDontDestroy>().GetComponent<AudioSource>();
@@ -40,7 +40,7 @@ public class SettingUI : MonoBehaviour
 
         _toggleWindow.onValueChanged.AddListener((x) => ToggleFullscreen());
 
-        SetResolution(_resolutions.Max(n => n.height));
+        //SetResolution(_resolutions.Max(n => n.height));
     }
 
     private void ResolutionSetup()
