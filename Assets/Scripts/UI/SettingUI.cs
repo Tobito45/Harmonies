@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -39,7 +40,7 @@ public class SettingUI : MonoBehaviour
 
         _toggleWindow.onValueChanged.AddListener((x) => ToggleFullscreen());
 
-        SetResolution(_resolutions.Length - 1);
+        SetResolution(_resolutions.Max(n => n.height));
     }
 
     private void ResolutionSetup()
