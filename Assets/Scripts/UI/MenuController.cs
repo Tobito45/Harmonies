@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class MenuController : MonoBehaviour
 {
-    public GameObject SettingsWindow; 
+    [SerializeField]
+    private GameObject SettingsWindow;
 
-    public void OpenSettings()
-    {
-        SettingsWindow.SetActive(true); 
-    }
+    public void OpenSettings() => SettingsWindow.SetActive(true);
 
-    public void CloseSettings()
-    {
-        SettingsWindow.SetActive(false); 
-    }
+    public void CloseSettings() => SettingsWindow.SetActive(false);
 }
