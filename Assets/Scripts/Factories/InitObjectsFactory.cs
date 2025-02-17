@@ -23,7 +23,7 @@ namespace Harmonies.InitObjets
         {
             List<InitObjectBase> initObjectBases = new()
             {
-                new GameCellObject(boardSceneGenerator, turnManager, spawnBlocksController, environmentController),
+                new GameCellObject(boardSceneGenerator, turnManager, spawnBlocksController),
                 new GameAnimalObject(environmentController, turnManager, animalsCardsUI),
                 new BlockSelectorControllerObject(spawnBlocksController, turnManager, scoreController),
                 new AnimalSelectorControllerObject(turnManager, scoreController),

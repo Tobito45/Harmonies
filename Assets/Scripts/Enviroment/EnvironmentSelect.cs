@@ -24,7 +24,7 @@ namespace Harmonies.Enviroment
             _turnManager = turnManager;
             _environmentController = environmentController;
             _turnManager.SubsribeOnStateMachine(OnStatusChange);
-            GetComponent<ConditionShower>().Init(environmentController, _animalType);
+            GetComponent<ConditionShower>().Init(_animalType);
         }
 
         public void Init() => InitClientRpc();

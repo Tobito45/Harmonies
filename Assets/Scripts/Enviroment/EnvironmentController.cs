@@ -1,5 +1,6 @@
 using Harmonies.Enums;
 using Harmonies.InitObjets;
+using Harmonies.ScroptableObjects;
 using Harmonies.Selectors;
 using System.Linq;
 using Unity.Netcode;
@@ -13,20 +14,11 @@ namespace Harmonies.Enviroment
         private const int MAX_PLAYERS = 4; //TODO: other way
         private TurnManager _turnManager;
 
-        [SerializeField]
-        private GameObject[] _prefabEnviroments;
-        [SerializeField]
-        private GameObject[] _prefabAnimalsSpawn;
-        [SerializeField]
-        private GameObject[] _prefabEnviromentsSelectSpawn;
-        [SerializeField]
-        private GameObject[] _prefabConditions;
-        [SerializeField]
-        private Sprite[] _animalImages;
-
         //can be one size
         private GameAnimalsController[][] _environments;
         private EnvironmentSelect[] _eviromentsSelect;
+
+        private EnviromentDataConfig _enviromentDataConfig;
 
         [Inject]
         public void Construct(TurnManager turnManager)
@@ -37,6 +29,7 @@ namespace Harmonies.Enviroment
                 _environments[i] = new GameAnimalsController[MAX_PLAYERS];
 
             _eviromentsSelect = new EnvironmentSelect[_turnManager.GetPlayerInfo(0).GetEnvironmentSelectSpawnCount];
+            _enviromentDataConfig = Resources.Load<EnviromentDataConfig>("EnviromentDataConfig");
         }
 
         public void CreatePlayerSelectedEnvironment(AnimalType animal, EnvironmentSelect environmentSelect)
@@ -72,16 +65,16 @@ namespace Harmonies.Enviroment
 
         public void CreatePlayerSelectebleEnviroments()
         {
-            for(int i = 0; i < _eviromentsSelect.Count(); i++)
+            for (int i = 0; i < _eviromentsSelect.Count(); i++)
                 if (_eviromentsSelect[i] == null)
                     CreateSelectEnviromentServerRpc(i, _turnManager.GetPlayerNumberById(NetworkManager.Singleton.LocalClientId),
-                        Random.Range(0, _prefabEnviromentsSelectSpawn.Length));
+                        _enviromentDataConfig.GetRandomIndexSelectSpawnEnviroment);
         }
 
         [ServerRpc(RequireOwnership = false)]
         private void CreateSelectEnviromentServerRpc(int indexArray, int actualPlayer, int animalIndex)
         {
-            GameObject obj = Instantiate(_prefabEnviromentsSelectSpawn[animalIndex],
+            GameObject obj = Instantiate(_enviromentDataConfig.GetEnviromentsSelectSpawn(animalIndex),
                 _turnManager.GetPlayerInfo(actualPlayer).GetEnvironmentSelectSpawn(indexArray).position,
                 _turnManager.GetPlayerInfo(actualPlayer).GetEnvironmentSelectSpawn(indexArray).rotation);
             obj.SetActive(true);
@@ -95,7 +88,7 @@ namespace Harmonies.Enviroment
         [ServerRpc(RequireOwnership = false)]
         private void CreateEnveromentServerRpc(int index, int actual, int animalIndex)
         {
-            GameObject obj = Instantiate(_prefabEnviroments[animalIndex],
+            GameObject obj = Instantiate(_enviromentDataConfig.GetEnviroments(animalIndex),
                 _turnManager.GetActualPlayerInfo.GetEnvironmentSpawn(index).position,
                 _turnManager.GetActualPlayerInfo.GetEnvironmentSpawn(index).rotation);// _prefabEnviroments[randomIndex].transform.rotation);
             obj.SetActive(true);
@@ -156,8 +149,5 @@ namespace Harmonies.Enviroment
             return false;
         }
 
-        public GameObject GetAnimalByIndex(int index) => _prefabAnimalsSpawn[index];
-        public GameObject GetPrefabCondition(int index) => _prefabConditions[index];
-        public Sprite GetImageIcon(int index) => _animalImages[index];
     }
 }

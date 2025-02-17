@@ -20,23 +20,12 @@ public class NetworkManagerUI : NetworkBehaviour
     private Button _clientButton;
     [SerializeField]
     private TextMeshProUGUI textId, textActualId, _textIpAdress;
-
-    [SerializeField]
-    private TextMeshProUGUI _scoreMainPlayer;
-    [SerializeField]
-    private Image _iconMainPlayer;
-
     [SerializeField]
     private GameObject _otherPlayersPanel;
-    [SerializeField]
-    private TextMeshProUGUI[] _scoreOtherPlayer;
-    [SerializeField]
-    private Image[] _iconOtherPlayer;
 
+    // 0 is main, 1 is big, other are other players
     [SerializeField]
-    private Image _secondPlayerIcon;
-    [SerializeField]
-    private TextMeshProUGUI _secondPlayerText;
+    private PlayerPanelElement[] _playerPanelElements;
 
 
     [SerializeField]
@@ -62,14 +51,15 @@ public class NetworkManagerUI : NetworkBehaviour
         textActualId.text = string.Empty;
         (UserType userType, string ip, ushort port) = DataConnecterController.Singlton.GetData;
 
-        _scoreMainPlayer.text = " : 0";
-        for (int i = 0; i < _scoreOtherPlayer.Length; i++)
+        //_scoreMainPlayer.text = " : 0";
+        for (int i = 0; i < _playerPanelElements.Length; i++)
         {
-            _scoreOtherPlayer[i].text = string.Empty;
+            if (i == 0)
+                _playerPanelElements[i].Text.text = " : 0";
+            else
+                _playerPanelElements[i].Text.text = string.Empty;
             SetActivePlayer(i, false);
         }
-        _secondPlayerText.gameObject.SetActive(false);
-        _secondPlayerIcon.gameObject.SetActive(false);
         _otherPlayersPanel.SetActive(false);
 
         if (userType == UserType.None)
@@ -150,11 +140,17 @@ public class NetworkManagerUI : NetworkBehaviour
 
     public void CreateNewPrefabPlayer(ulong id, int count)
     {
-        count--;
-        _otherPlayersPanel.SetActive(count > 0);
+        //count--;
+        _otherPlayersPanel.SetActive(count > 1);
 
-        for (int i = 0; i < _scoreOtherPlayer.Length; i++)
+        for (int i = 0; i < _playerPanelElements.Length; i++)
         {
+            if(i == 1)
+            {
+                count++;
+                continue;
+            }
+
             if(i < count)
                 SetActivePlayer(i, true);
             else
@@ -169,8 +165,8 @@ public class NetworkManagerUI : NetworkBehaviour
   
     public void SetActivePlayer(int index, bool enabled)
     {
-        _scoreOtherPlayer[index].gameObject.SetActive(enabled);
-        _iconOtherPlayer[index].gameObject.SetActive(enabled);
+        _playerPanelElements[index].Text.gameObject.SetActive(enabled);
+        _playerPanelElements[index].Image.gameObject.SetActive(enabled);
     }
     public override void OnNetworkSpawn() => textId.text = $"Player ID: {NetworkManager.Singleton.LocalClientId}";
 
@@ -179,37 +175,39 @@ public class NetworkManagerUI : NetworkBehaviour
 
     public void CreatePlayersElements(List<ulong> ids)
     {
-        int actual = 0;
+        FreeCameraMovement freeCameraMovement = FindObjectOfType<FreeCameraMovement>();
+        int actual = 2;
         for(int i = 0; i < ids.Count; i++)
         {
-            if (actual >= _scoreOtherPlayer.Length)
-                actual = 0;
+            //if (actual >= _scoreOtherPlayer.Length)
+            //    actual = 0;
 
-            TextMeshProUGUI text = _scoreOtherPlayer[actual];
-            Image image = _iconOtherPlayer[actual];
+            TextMeshProUGUI text = _playerPanelElements[actual].Text;
+            Image image = _playerPanelElements[actual].Image;
             if(ids.Count == 2)
             {
-                _scoreOtherPlayer[actual].gameObject.SetActive(false);
-                _iconOtherPlayer[actual].gameObject.SetActive(false);    
-                image = _secondPlayerIcon;
-                text = _secondPlayerText;
-                _secondPlayerIcon.gameObject.SetActive(true);
-                _secondPlayerText.gameObject.SetActive(true);
+                SetActivePlayer(actual, false);
+                SetActivePlayer(1, true);
+                image = _playerPanelElements[1].Image;
+                text = _playerPanelElements[1].Text;
+                _playerPanelElements[1].Button.onClick.AddListener(() => freeCameraMovement.SetPositionAndCenter(1));
             }
 
             Color color = _playerColors[i];
 
             if (NetworkManager.Singleton.LocalClientId == ids[i])
             {
-                text = _scoreMainPlayer;
-                image = _iconMainPlayer;
+                text = _playerPanelElements[0].Text;
+                image = _playerPanelElements[0].Image;
+                _playerPanelElements[0].Button.onClick.AddListener(() => freeCameraMovement.SetPositionAndCenter(0));
             }
             else
                 actual++;
 
+            _playerPanelElements[actual].Button.onClick.AddListener(() => freeCameraMovement.SetPositionAndCenter((ulong)(actual - 1)));
             image.sprite = _spritesColors[i];
             _playersElements.Add(ids[i], new PlayerInfoElement(text, "Player " + ids[i], image,
-                color, NetworkManager.Singleton.LocalClientId == ids[i] || image == _secondPlayerIcon));
+                color, NetworkManager.Singleton.LocalClientId == ids[i] || image == _playerPanelElements[1].Image));
             _playersElements[ids[i]].UpdateInfo(ids[i], 0);
         }
     }
@@ -227,5 +225,19 @@ public class NetworkManagerUI : NetworkBehaviour
         }
     }
 
-    public void UpdatePlayerInfo(ulong id, int newScore) => _playersElements[id].UpdateInfo(id, newScore);
+    public void UpdatePlayerInfo(ulong id, int newScore) => _playersElements[id].UpdateInfo(id, newScore);    
 }
+
+[System.Serializable]
+public class PlayerPanelElement
+{
+    [field: SerializeField]
+    public TextMeshProUGUI Text { get; set; }
+
+    [field: SerializeField]
+    public Image Image { get; set; }
+
+    [field: SerializeField]
+    public Button Button { get; set; }
+}
+

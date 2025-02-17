@@ -10,15 +10,13 @@ namespace Harmonies.InitObjets
     {
         private BoardSceneGenerator[] _boardSceneGenerator;
         private SpawnBlocksController _spawnBlocksController;
-        private EnvironmentController _environmentController;
         private TurnManager _turnManager;
 
-        public GameCellObject(BoardSceneGenerator[] boardSceneGenerator, TurnManager turnManager, SpawnBlocksController spawnBlocksController, EnvironmentController environmentController)
+        public GameCellObject(BoardSceneGenerator[] boardSceneGenerator, TurnManager turnManager, SpawnBlocksController spawnBlocksController)
         {
             _boardSceneGenerator = boardSceneGenerator;
             _turnManager = turnManager;
             _spawnBlocksController = spawnBlocksController;
-            _environmentController = environmentController;
             MainType = typeof(GameCell);
         }
 
@@ -27,7 +25,7 @@ namespace Harmonies.InitObjets
             if (obj is not (GameCell cell, int index, int i))
                 throw new Exception("Bad type action");
 
-            cell.Init(_boardSceneGenerator[i].BoardGraph.GetNodeByIndex(index), _turnManager, _spawnBlocksController, _environmentController);
+            cell.Init(_boardSceneGenerator[i].BoardGraph.GetNodeByIndex(index), _turnManager, _spawnBlocksController);
         }
 
         public bool PredicateGameCell(object obj)

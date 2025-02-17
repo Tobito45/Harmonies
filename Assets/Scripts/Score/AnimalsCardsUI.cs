@@ -1,4 +1,5 @@
 using Harmonies.Enviroment;
+using Harmonies.ScroptableObjects;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,10 +17,9 @@ namespace Harmonies.Score.AnimalCard
         private GameObject _canvasParent;
 
         private List<GameObject> _cards = new();
-        private EnvironmentController _environmentController;
+        private EnviromentDataConfig _enviromentDataConfig;
 
-        [Inject]
-        private void Construct(EnvironmentController environmentController) => _environmentController = environmentController;
+        private void Awake() => _enviromentDataConfig = Resources.Load<EnviromentDataConfig>("EnviromentDataConfig");
 
         public void SummonNewAnimalCard(GameAnimal animal)
         {
@@ -43,7 +43,7 @@ namespace Harmonies.Score.AnimalCard
             {
                 GameObject info = Instantiate(_prefabInfo, obj.transform);
                 AnimalCardInfo cardInfo = info.GetComponent<AnimalCardInfo>();
-                cardInfo.Image.sprite = _environmentController.GetImageIcon((int)animal.Index);
+                cardInfo.Image.sprite = _enviromentDataConfig.GetImageIcon((int)animal.Index);
                 cardInfo.Score.text = i.ToString();
                 infos.Add(cardInfo);    
             }

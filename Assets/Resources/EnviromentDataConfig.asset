@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f920eb622f8ce94ab91168a7d729e41, type: 3}
+  m_Name: EnviromentDataConfig
+  m_EditorClassIdentifier: 
+  _prefabEnviroments:
+  - {fileID: 7393877224800956310, guid: 77516dcc34580c5419b8a5763659f760, type: 3}
+  - {fileID: 4023398451545170073, guid: fe02d19bc0188fd468dd55d4c8c19b09, type: 3}
+  - {fileID: 2372793462050533248, guid: 51cd216327d94274ca8bf2a4c89d18d3, type: 3}
+  - {fileID: 6340177574479353997, guid: bbbfe5fb9fa7a1a4d9d57b1313db186b, type: 3}
+  - {fileID: 8314217118606396135, guid: b8287f77eb36a3745ba4125ac4b86e0b, type: 3}
+  - {fileID: 6335612916267391556, guid: 9448abbcabc7b974d90a10ee3b0111c9, type: 3}
+  _prefabAnimalsSpawn:
+  - {fileID: 7195391979424315117, guid: 131879d78b434d24d89516f337b23f6c, type: 3}
+  - {fileID: 7538641561153451587, guid: f9e689e9649309a45b50c5eaba998e56, type: 3}
+  - {fileID: 727127968725298657, guid: 28540ebd00891e1489c78115c002e692, type: 3}
+  - {fileID: 9173947353535811287, guid: f3fd1e01cff64224c96106b79ac998c1, type: 3}
+  - {fileID: 6123352748180278071, guid: a264aaa99cced384a8ee54fcc2301412, type: 3}
+  - {fileID: 2875580650538397743, guid: 9a57a5020908efe4ba7f87ada698ae13, type: 3}
+  _prefabEnviromentsSelectSpawn:
+  - {fileID: 8547145951678548541, guid: ec3245f1ee974eb4586f2558de23f0ef, type: 3}
+  - {fileID: 1094994333050045693, guid: 79639eb376a46ca4d849f45b63160880, type: 3}
+  - {fileID: 2678556651576810614, guid: 864103cb8eb208749958ad128fba6ee3, type: 3}
+  - {fileID: 3846860598853044191, guid: 172d6b121abba5044bddd673f592fe99, type: 3}
+  - {fileID: 3434560531640567886, guid: 25dea643fe5b4df449e400d2b8f61084, type: 3}
+  - {fileID: 6402809674303974443, guid: 4da64ad75a045e3419ada5a78a910f04, type: 3}
+  _prefabConditions:
+  - {fileID: 7243820514922518058, guid: 7ddbb31980e11f742ab5fb5e869b9482, type: 3}
+  - {fileID: 3163835427326015393, guid: 5234fc10e2643384694d9a502d83a007, type: 3}
+  - {fileID: 1493095842899554526, guid: c5df93160b7d95540b8c9a3cc837a51c, type: 3}
+  - {fileID: 8550901951964162857, guid: f7a73816fd138714a9aeeb3e20ab9524, type: 3}
+  - {fileID: 7113878923625861038, guid: a6eb3bb90bcd3d94f9df8bfb771552e1, type: 3}
+  - {fileID: 439081154004895185, guid: c9f55890cc4da194aaa17679488831fa, type: 3}
+  _animalImages:
+  - {fileID: 21300000, guid: b166e4defd2570043b7721681592e50d, type: 3}
+  - {fileID: 21300000, guid: c198b3f09a38f3a4cb055da656543829, type: 3}
+  - {fileID: 21300000, guid: 6a6022dd88fe6784c9480cb036f64cbe, type: 3}
+  - {fileID: 21300000, guid: 55fe74bb1453796488560c06263a000c, type: 3}
+  - {fileID: 21300000, guid: e2fe17d6b3aafb048b3abe865b965b46, type: 3}
+  - {fileID: 21300000, guid: 97135ebb4a91ce44c807b707460578f6, type: 3}

@@ -49,21 +49,32 @@ public class FreeCameraMovement : NetworkBehaviour
         _targetRotation = transform.rotation;
     }
 
-    public override void OnNetworkSpawn()
-    {
-        _basePosition += new Vector3(180, 0, 0) * NetworkManager.Singleton.LocalClientId;
-        _center += new Vector3(180, 0, 0) * NetworkManager.Singleton.LocalClientId;
-
-        transform.position = _basePosition;
-        transform.eulerAngles = _baseRotation;
-    }
-
+    public override void OnNetworkSpawn() => SetPositionAndCenter(NetworkManager.Singleton.LocalClientId);
     private void Update()
     {
         HandleMovement();
         HandleRotation();
         HandleZoom();
+
+        if (Input.GetKeyDown(KeyCode.V))
+            SetPositionAndCenter(1);
+
+        if (Input.GetKeyDown(KeyCode.M))
+            SetPositionAndCenter(2);
+
+        if (Input.GetKeyDown(KeyCode.N))
+            SetPositionAndCenter(0);
     }
+
+    public void SetPositionAndCenter(ulong clientId)
+    {
+        _basePosition = new Vector3(185, 0, 0) * clientId;
+        _center = new Vector3(185, 0, 0) * clientId;
+
+        transform.position = _basePosition;
+        transform.eulerAngles = _baseRotation;
+    }
+
 
     // Gets the difference vector between world coordinates at the center of the screen
     // and the camera position.
@@ -246,6 +257,7 @@ public class FreeCameraMovement : NetworkBehaviour
         return moved;
     }
 
+
     public void MoveCamera(Vector3 targetPosition)
     {
         _targetPosition = targetPosition;
@@ -271,6 +283,7 @@ public class FreeCameraMovement : NetworkBehaviour
             MoveCamera(position - diff);
         }
     }
+   
 
    /* public void MoveToSelectedCharacter()
     {

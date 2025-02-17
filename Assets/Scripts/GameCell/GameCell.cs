@@ -1,6 +1,7 @@
 using Harmonies.Enums;
 using Harmonies.Enviroment;
 using Harmonies.InitObjets;
+using Harmonies.ScroptableObjects;
 using Harmonies.Selectors;
 using Harmonies.Structures;
 using System;
@@ -23,19 +24,22 @@ namespace Harmonies.Cells
 
         private ElementSelectorController _actualBlock;
         private SpawnBlocksController _spawnBlocksController;
-        private EnvironmentController _environmentController;
         private TurnManager _turnManager;
         private BoardNode<BlockType> _node;
         private bool _isAnimalOn = false;
         public int HelperNumberScore { get; set; } = 0;
         public BoardNode<BlockType> Node => _node;
+
+        private EnviromentDataConfig _enviromentDataConfig;
+
+        private void Awake() => _enviromentDataConfig = Resources.Load<EnviromentDataConfig>("EnviromentDataConfig");
+
         public void Init(BoardNode<BlockType> node, TurnManager turnManager,
-            SpawnBlocksController spawnBlocksController, EnvironmentController environmentController)
+            SpawnBlocksController spawnBlocksController)
         {
             _turnManager = turnManager;
             _node = node;
             _spawnBlocksController = spawnBlocksController;
-            _environmentController = environmentController;
         }
 
         public void Init(int index, int i) =>
@@ -125,7 +129,7 @@ namespace Harmonies.Cells
         [ServerRpc(RequireOwnership = false)]
         private void CreateAnimalServerRpc(int index)
         {
-            GameObject randomObj = _environmentController.GetAnimalByIndex(index);
+            GameObject randomObj = _enviromentDataConfig.GetAnimal(index);
             var obj = Instantiate(randomObj, _selecter.transform.position, randomObj.transform.rotation);
             obj.GetComponent<NetworkObject>().Spawn();
         }

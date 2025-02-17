@@ -43,7 +43,7 @@ namespace Harmonies.Enviroment
             if (_turnManager.IndexActualPlayer == NetworkManager.Singleton.LocalClientId)
                 animalsCardsUI.SummonNewAnimalCard(GameAnimal);
 
-            GetComponent<ConditionShower>().Init(environmentController, GameAnimal.Index);
+            GetComponent<ConditionShower>().Init(GameAnimal.Index);
         }
 
         public void Init() => InitClientRpc();
