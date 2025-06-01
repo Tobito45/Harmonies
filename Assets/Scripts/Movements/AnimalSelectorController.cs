@@ -25,6 +25,8 @@ namespace Harmonies.Selectors
             _gameAnimalsController.AnimalWasSelected();
         }
 
+        public void SetNotInteractable() => _unableInteraction = true;
+
         protected override void OnStatusChange(IState newState) => _unableInteraction = newState is not AnimalsSelectState;
     }
 }

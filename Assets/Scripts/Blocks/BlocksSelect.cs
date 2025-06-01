@@ -8,6 +8,9 @@ namespace Harmonies.Blocks
 {
     public class BlocksSelect : NetworkBehaviour
     {
+        [field: SerializeField]
+        public bool IsControlled { get; set; } = false;
+
         [SerializeField]
         private MeshRenderer _meshRenderer;
         [SerializeField]
@@ -77,6 +80,8 @@ namespace Harmonies.Blocks
 
         private void OnMouseDown()
         {
+            if (!IsControlled) return;
+
             if (_turnManager.IndexActualPlayer != NetworkManager.Singleton.LocalClientId)
                 return;
 

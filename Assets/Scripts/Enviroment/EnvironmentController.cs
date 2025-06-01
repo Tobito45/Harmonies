@@ -102,7 +102,11 @@ namespace Harmonies.Enviroment
         private void SyncAnimalsForClientRpc(int index, int actual, ulong networkIndex)
         {
             NetworkTools.FindNetworkObjectAndMakeAction(networkIndex,
-                (networkObject) => _environments[index][actual] = networkObject.gameObject.GetComponent<GameAnimalsController>());
+                (networkObject) => {
+                    _environments[index][actual] = networkObject.gameObject.GetComponent<GameAnimalsController>();
+                    if (NetworkManager.Singleton.LocalClientId != _turnManager.IndexActualPlayer)
+                        _environments[index][actual].SetUnableInteracte();
+                });
         }
 
         [ClientRpc]
@@ -110,7 +114,10 @@ namespace Harmonies.Enviroment
         {
             if(NetworkManager.Singleton.LocalClientId == _turnManager.IndexActualPlayer)
                 NetworkTools.FindNetworkObjectAndMakeAction(networkIndex,
-                    (networkObject) => _eviromentsSelect[index] = networkObject.GetComponent<EnvironmentSelect>());
+                    (networkObject) => {
+                        _eviromentsSelect[index] = networkObject.GetComponent<EnvironmentSelect>();
+                        _eviromentsSelect[index].IsControlled = true;
+                    });
         }
 
         public void DeletePlayerSelectableEnviroment(GameAnimalsController animal)

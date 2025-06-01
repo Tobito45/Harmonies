@@ -12,6 +12,9 @@ namespace Harmonies.Enviroment
 {
     public class EnvironmentSelect : NetworkBehaviour
     {
+        [field: SerializeField]
+        public bool IsControlled { get; set; } = false;
+
         private EnvironmentController _environmentController;
         private TurnManager _turnManager;
         private bool _unableInteraction;
@@ -45,6 +48,8 @@ namespace Harmonies.Enviroment
 
         private void OnMouseDown()
         {
+            if (!IsControlled) return;
+
             if (_turnManager.IndexActualPlayer != NetworkManager.Singleton.LocalClientId)
                 return;
             Debug.Log(_unableInteraction);

@@ -151,7 +151,7 @@ MonoBehaviour:
   _zoomMax: 20.8
   _edgeDistance: 22.5
   _center: {x: 8, y: 0, z: 8}
-  _width: 20
-  _height: 20
+  _width: 25
+  _height: 30
   _basePosition: {x: 8.7, y: 12.06, z: -2.0500002}
   _baseRotation: {x: 60, y: 0, z: 0}

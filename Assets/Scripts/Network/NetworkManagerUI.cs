@@ -190,7 +190,6 @@ public class NetworkManagerUI : NetworkBehaviour
                 SetActivePlayer(1, true);
                 image = _playerPanelElements[1].Image;
                 text = _playerPanelElements[1].Text;
-                _playerPanelElements[1].Button.onClick.AddListener(() => freeCameraMovement.SetPositionAndCenter(1));
             }
 
             Color color = _playerColors[i];
@@ -199,12 +198,15 @@ public class NetworkManagerUI : NetworkBehaviour
             {
                 text = _playerPanelElements[0].Text;
                 image = _playerPanelElements[0].Image;
-                _playerPanelElements[0].Button.onClick.AddListener(() => freeCameraMovement.SetPositionAndCenter(0));
+                _playerPanelElements[0].Button.onClick.AddListener(() => freeCameraMovement.SetPositionAndCenter((ulong)i));
+                if (ids.Count == 2)
+                    _playerPanelElements[1].Button.onClick.AddListener(() => freeCameraMovement.SetPositionAndCenter((ulong)(i + 1) % 2));
             }
             else
                 actual++;
 
-            _playerPanelElements[actual].Button.onClick.AddListener(() => freeCameraMovement.SetPositionAndCenter((ulong)(actual - 1)));
+            if (ids.Count != 2)
+                _playerPanelElements[actual].Button.onClick.AddListener(() => freeCameraMovement.SetPositionAndCenter((ulong)(actual - 1)));
             image.sprite = _spritesColors[i];
             _playersElements.Add(ids[i], new PlayerInfoElement(text, "Player " + ids[i], image,
                 color, NetworkManager.Singleton.LocalClientId == ids[i] || image == _playerPanelElements[1].Image));

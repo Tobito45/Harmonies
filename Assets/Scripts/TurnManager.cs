@@ -1,3 +1,4 @@
+using Harmonies.Blocks;
 using Harmonies.Enviroment;
 using Harmonies.Score;
 using Harmonies.Selectors;
@@ -60,6 +61,16 @@ public class TurnManager : NetworkBehaviour
         _networkPlayersController = networkPlayersController;
         _scoreController = scoreController;
         _networkPlayersController.OnIdPlayersCreate += (ids) => _playersId = ids;
+    }
+
+    private void Start()
+    {
+        OnGameStarted += (index) =>
+        {
+            Debug.Log(index);
+            foreach (var item in _playerInfo[NetworkManager.Singleton.LocalClientId].BlockSelects)
+                item.IsControlled = true;
+        };
     }
 
     private void Update()
@@ -189,10 +200,13 @@ public class PlayerInfo
 {
     [SerializeField]
     private Transform[] _environmnetsSpawns, _enviromentsSelectSpawn;
+    [SerializeField]
+    private BlocksSelect[] _blockSelect;
 
     [field: SerializeField]
     public BoardSceneGenerator Board { get; private set; }
     public Transform GetEnvironmentSpawn(int index) => _environmnetsSpawns[index];
     public Transform GetEnvironmentSelectSpawn(int index) => _enviromentsSelectSpawn[index];
     public int GetEnvironmentSelectSpawnCount => _enviromentsSelectSpawn.Count();
+    public IEnumerable<BlocksSelect> BlockSelects => _blockSelect;
 }

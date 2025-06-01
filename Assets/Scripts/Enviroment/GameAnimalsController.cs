@@ -77,7 +77,11 @@ namespace Harmonies.Enviroment
                 ActiveNextAnimal();
         }
 
-
+        public void SetUnableInteracte()
+        {
+            foreach(AnimalSelectorController animalSelectorController in _animalsObjects)
+                animalSelectorController.SetNotInteractable();
+        }
         public void AnimalWasSelected()
         {
             _animalsMeshRenders[_index].material = _basicMaterials[_index];
